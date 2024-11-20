@@ -1,6 +1,7 @@
 "use client";
 
-import { useImageUploader } from "../hooks/useImageUploader";
+import { useImageUploader } from "@/hooks/useImageUploader";
+import { useImageAnalyzer } from "@/hooks/useImageAnalyzer";
 import ImagePreview from "./ImagePreview";
 import GroupedUnitsList from "./GroupedUnitsList";
 import PixelCanvas from "./PixelCanvas";
@@ -11,21 +12,15 @@ import {
   DialogTitle,
   DialogContent,
 } from "@/components/ui/dialog";
-import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 
 export function ImageUploader() {
-  const {
-    getRootProps,
-    getInputProps,
-    isDragActive,
-    pixelData,
-    groupedUnits,
-    redIntensities,
-    progress,
-    loading,
-    reset,
-  } = useImageUploader();
+  const { files, getRootProps, getInputProps, isDragActive } =
+    useImageUploader();
+
+  const { pixelData, groupedUnits, redIntensities, loading, progress, reset } =
+    useImageAnalyzer(files || []);
+
   return (
     <div>
       {pixelData.length > 0 ? (
