@@ -17,6 +17,7 @@ export function ImageUploader() {
     pixelData,
     highHueRedUnits,
     groupedUnits,
+    redIntensities,
     onDrop,
   } = useImageUploader();
 
@@ -55,11 +56,13 @@ export function ImageUploader() {
                   <ImagePreview file={file} onLoad={onDrop} />
                 </div>
                 <div className="flex-1 flex flex-col space-y-4">
-                  {pixelData.length > 0 && (
+                  {/* {pixelData.length > 0 && (
                     <PixelCanvas pixelData={pixelData} />
-                  )}
-                  <HighHueRedUnitsList units={highHueRedUnits} />
-                  <GroupedUnitsList groups={groupedUnits} />
+                  )} */}
+                  <GroupedUnitsList
+                    groupedUnits={groupedUnits}
+                    redIntensities={redIntensities}
+                  />
                 </div>
               </div>
             </Card>

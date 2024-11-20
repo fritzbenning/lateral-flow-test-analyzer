@@ -2,6 +2,7 @@ import {
   rgbToHsl,
   findHighHueAndRedUnits,
   groupUnitsByProximity,
+  rgbToLab,
 } from "./helpers";
 
 export function analyzeImage(imgElement: HTMLImageElement) {
@@ -12,46 +13,59 @@ export function analyzeImage(imgElement: HTMLImageElement) {
     throw new Error("Could not get canvas context");
   }
 
-  canvas.width = imgElement.naturalWidth;
-  canvas.height = imgElement.naturalHeight;
-  ctx.drawImage(imgElement, 0, 0, canvas.width, canvas.height);
+  const scaleFactor = 500 / imgElement.naturalWidth;
+  const newWidth = 500;
+  const newHeight = imgElement.naturalHeight * scaleFactor;
 
-  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  canvas.width = newWidth;
+  canvas.height = newHeight;
+  ctx.drawImage(imgElement, 0, 0, newWidth, newHeight);
+
+  const imageData = ctx.getImageData(0, 0, newWidth, newHeight);
   const data = imageData.data;
 
   const pixelData: PixelData[][] = [];
 
-  for (let y = 0; y < canvas.height; y += 4) {
-    pixelData[y / 4] = [];
-    for (let x = 0; x < canvas.width; x += 4) {
-      let red = 0,
-        green = 0,
-        blue = 0,
-        count = 0;
+  for (let y = 0; y < newHeight; y += 2) {
+    pixelData[y / 2] = [];
+    for (let x = 0; x < newWidth; x += 2) {
+      let maxRed = -1;
+      let selectedPixel = { red: 0, green: 0, blue: 0 };
 
-      for (let dy = 0; dy < 4; dy++) {
-        for (let dx = 0; dx < 4; dx++) {
+      for (let dy = 0; dy < 2; dy++) {
+        for (let dx = 0; dx < 2; dx++) {
           const nx = x + dx;
           const ny = y + dy;
-          if (nx < canvas.width && ny < canvas.height) {
-            const index = (ny * canvas.width + nx) * 4;
-            red += data[index];
-            green += data[index + 1];
-            blue += data[index + 2];
-            count++;
+          if (nx < newWidth && ny < newHeight) {
+            const index = (ny * newWidth + nx) * 4;
+            const red = data[index];
+            const green = data[index + 1];
+            const blue = data[index + 2];
+
+            if (red > maxRed) {
+              maxRed = red;
+              selectedPixel = { red, green, blue };
+            }
           }
         }
       }
 
-      red = Math.round(red / count);
-      green = Math.round(green / count);
-      blue = Math.round(blue / count);
-
-      pixelData[y / 4][x / 4] = {
-        x: x / 4,
-        y: y / 4,
-        red,
-        hsl: rgbToHsl(red, green, blue),
+      pixelData[y / 2][x / 2] = {
+        x: x / 2,
+        y: y / 2,
+        red: selectedPixel.red,
+        green: selectedPixel.green,
+        blue: selectedPixel.blue,
+        lab: rgbToLab(
+          selectedPixel.red,
+          selectedPixel.green,
+          selectedPixel.blue
+        ),
+        hsl: rgbToHsl(
+          selectedPixel.red,
+          selectedPixel.green,
+          selectedPixel.blue
+        ),
       };
     }
   }

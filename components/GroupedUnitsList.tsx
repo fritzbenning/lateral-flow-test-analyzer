@@ -1,25 +1,31 @@
 import React from "react";
 
 interface GroupedUnitsListProps {
-  groups: { x: number; y: number }[][];
+  groupedUnits: { x: number; y: number }[][];
+  redIntensities: number[];
 }
 
-const GroupedUnitsList: React.FC<GroupedUnitsListProps> = ({ groups }) => (
-  <div className="mt-4">
-    <h3 className="text-lg font-medium">Grouped Units by Proximity</h3>
-    {groups.map((group, groupIndex) => (
-      <div key={groupIndex}>
-        <h4 className="font-medium">Group {groupIndex + 1}</h4>
-        <ul className="list-disc pl-5">
-          {group.map((unit, index) => (
-            <li key={index}>
-              Row: {unit.y}, Start Column: {unit.x}
-            </li>
-          ))}
-        </ul>
-      </div>
-    ))}
-  </div>
-);
+const GroupedUnitsList: React.FC<GroupedUnitsListProps> = ({
+  groupedUnits,
+  redIntensities,
+}) => {
+  return (
+    <div>
+      {groupedUnits.map((group, index) => (
+        <div key={index}>
+          <h3>Group {index + 1}</h3>
+          <p>Red Intensity: {redIntensities[index].toFixed(2)}</p>
+          <ul>
+            {group.map((unit, unitIndex) => (
+              <li key={unitIndex}>
+                Coordinates: ({unit.x}, {unit.y})
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  );
+};
 
 export default GroupedUnitsList;

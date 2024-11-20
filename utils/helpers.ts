@@ -38,17 +38,29 @@ export function rgbToHsl(r: number, g: number, b: number) {
 }
 
 export function findHighHueAndRedUnits(pixelData: PixelData[][]) {
-  const thresholdHue = 200;
-  const thresholdRed = 150;
+  const hueLowerBound1 = 330;
+  const hueUpperBound1 = 360;
+  const hueLowerBound2 = 0;
+  const hueUpperBound2 = 20;
+  const saturationThreshold = 6;
+  const lightnessLowerBound = 50;
+  const lightnessUpperBound = 100;
   const results: { x: number; y: number }[] = [];
 
   for (let y = 0; y < pixelData.length; y++) {
     for (let x = 0; x <= pixelData[y].length - 4; x++) {
       const sequence = pixelData[y].slice(x, x + 4);
       if (
-        sequence.every(
-          (pixel) => pixel.hsl.h > thresholdHue && pixel.red > thresholdRed
-        )
+        sequence.every((pixel) => {
+          const { h, s, l } = pixel.hsl;
+          return (
+            ((h >= hueLowerBound1 && h <= hueUpperBound1) ||
+              (h >= hueLowerBound2 && h <= hueUpperBound2)) &&
+            s >= saturationThreshold &&
+            l >= lightnessLowerBound &&
+            l <= lightnessUpperBound
+          );
+        })
       ) {
         results.push({ x, y });
       }
@@ -81,4 +93,84 @@ export function groupUnitsByProximity(
   });
 
   return grouped;
+}
+
+export function rgbToXyz(
+  r: number,
+  g: number,
+  b: number
+): [number, number, number] {
+  // Log input RGB values
+  console.log(`Input RGB: r=${r}, g=${g}, b=${b}`); // Debugging line
+
+  // Normalize RGB values to [0, 1]
+  r = r / 255;
+  g = g / 255;
+  b = b / 255;
+
+  // Apply gamma correction
+  r = r > 0.04045 ? Math.pow((r + 0.055) / 1.055, 2.4) : r / 12.92;
+  g = g > 0.04045 ? Math.pow((g + 0.055) / 1.055, 2.4) : g / 12.92;
+  b = b > 0.04045 ? Math.pow((b + 0.055) / 1.055, 2.4) : b / 12.92;
+
+  console.log(`Gamma corrected RGB: r=${r}, g=${g}, b=${b}`); // Debugging line
+
+  // Convert to XYZ using the D65 illuminant
+  const x = r * 0.4124564 + g * 0.3575761 + b * 0.1804375;
+  const y = r * 0.2126729 + g * 0.7151522 + b * 0.072175;
+  const z = r * 0.0193339 + g * 0.119192 + b * 0.9503041;
+
+  console.log(`Converted XYZ: x=${x}, y=${y}, z=${z}`); // Debugging line
+
+  return [x, y, z];
+}
+
+export function xyzToLab(
+  x: number,
+  y: number,
+  z: number
+): [number, number, number] {
+  // Reference white point
+  const refX = 0.95047;
+  const refY = 1.0;
+  const refZ = 1.08883;
+
+  x = x / refX;
+  y = y / refY;
+  z = z / refZ;
+
+  console.log(`Normalized XYZ: x=${x}, y=${y}, z=${z}`); // Debugging line
+
+  x = x > 0.008856 ? Math.pow(x, 1 / 3) : 7.787 * x + 16 / 116;
+  y = y > 0.008856 ? Math.pow(y, 1 / 3) : 7.787 * y + 16 / 116;
+  z = z > 0.008856 ? Math.pow(z, 1 / 3) : 7.787 * z + 16 / 116;
+
+  console.log(`Transformed Lab: x=${x}, y=${y}, z=${z}`); // Debugging line
+
+  const l = 116 * y - 16;
+  const a = 500 * (x - y);
+  const b = 200 * (y - z);
+
+  console.log(`Final Lab: l=${l}, a=${a}, b=${b}`); // Debugging line
+
+  return [l, a, b];
+}
+
+export function rgbToLab(
+  r: number,
+  g: number,
+  b: number
+): { l: number; a: number; b: number } {
+  // Ensure RGB values are within the correct range
+  if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {
+    throw new Error("RGB values must be between 0 and 255");
+  }
+
+  const [x, y, z] = rgbToXyz(r, g, b);
+  console.log(`XYZ: x=${x}, y=${y}, z=${z}`); // Debugging line
+
+  const [l, a, bValue] = xyzToLab(x, y, z);
+  console.log(`Lab: l=${l}, a=${a}, b=${bValue}`); // Debugging line
+
+  return { l, a, b: bValue };
 }
