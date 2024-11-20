@@ -1,8 +1,9 @@
+import { PixelData } from "@/types";
 import { rgbToLab } from "./helpers";
 
 export function getTestLineIntensities(
   testLines: { x: number; y: number }[][],
-  pixelData: number[][]
+  pixelData: PixelData[][]
 ): number[] {
   const testLineIntensities = testLines.map((testLine) => {
     return testLine.reduce((sum, { x, y }) => {

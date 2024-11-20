@@ -1,3 +1,4 @@
+import { PixelData } from "@/types";
 import {
   rgbToHsl,
   findHighHueAndRedUnits,

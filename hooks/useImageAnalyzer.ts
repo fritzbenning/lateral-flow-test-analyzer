@@ -1,12 +1,13 @@
 import { analyzeImage } from "@/utils/analyzeImage";
 import { useState, useEffect } from "react";
 import { getTestLineIntensities } from "@/utils/getTestLineIntensities";
+import { PixelData } from "@/types";
 
 export function useImageAnalyzer(files: File[] | []) {
   const [loading, setLoading] = useState<boolean>(true);
   const [progress, setProgress] = useState<number>(0);
 
-  const [pixelData, setPixelData] = useState<number[][]>([]);
+  const [pixelData, setPixelData] = useState<PixelData[][]>([]);
   const [highHueRedUnits, setHighHueRedUnits] = useState<
     { x: number; y: number }[][]
   >([]);
@@ -17,27 +18,32 @@ export function useImageAnalyzer(files: File[] | []) {
     if (files.length > 0) {
       const imgElement = new Image();
       imgElement.src = URL.createObjectURL(files[0]);
+
+      const handleImageLoad = (imgElement: HTMLImageElement) => {
+        if (!files) return;
+
+        const { pixelData, testLines } = analyzeImage(
+          imgElement,
+          (percentage) => {
+            console.log(`Processing: ${percentage}%`);
+            setProgress(percentage);
+          }
+        );
+        setPixelData(pixelData);
+        setTestLines(testLines);
+
+        console.log(pixelData);
+
+        const newTestLineIntensities = getTestLineIntensities(
+          testLines,
+          pixelData
+        );
+        setTestLineIntensities(newTestLineIntensities);
+      };
+
       imgElement.onload = () => handleImageLoad(imgElement);
     }
   }, [files]);
-
-  const handleImageLoad = (imgElement: HTMLImageElement) => {
-    if (!files) return;
-
-    const { pixelData, highHueRedUnits, testLines } = analyzeImage(
-      imgElement,
-      (percentage) => {
-        console.log(`Processing: ${percentage}%`);
-        setProgress(percentage);
-      }
-    );
-    setPixelData(pixelData);
-    setHighHueRedUnits(highHueRedUnits);
-    setTestLines(testLines);
-
-    const newTestLineIntensities = getTestLineIntensities(testLines, pixelData);
-    setTestLineIntensities(newTestLineIntensities);
-  };
 
   useEffect(() => {
     if (pixelData.length > 0) {

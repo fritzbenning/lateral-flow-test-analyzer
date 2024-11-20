@@ -1,3 +1,5 @@
+import { PixelData } from "@/types";
+
 export function rgbToHsl(r: number, g: number, b: number) {
   r /= 255;
   g /= 255;

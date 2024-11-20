@@ -1,7 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Grid, GridCellProps } from "react-virtualized";
 import "react-virtualized/styles.css"; // Import default styles
 import { Info } from "lucide-react";
+import { PixelData } from "@/types";
 
 type HSLType = { h: number; s: number; l: number };
 interface PixelCanvasProps {
