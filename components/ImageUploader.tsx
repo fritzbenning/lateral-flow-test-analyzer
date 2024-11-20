@@ -55,47 +55,64 @@ export function ImageUploader() {
                           <div key={index}>
                             <h3 className="text-lg">
                               <strong>Test result {index + 1}:</strong>{" "}
-                              {test?.differenceLAB} % probability of a positive
+                              {test?.differenceLAB} % probability for a positive
                               test
                             </h3>
-                            <h4 className="font-bold">Control</h4>
-                            <p>Intensity: {test.controlLine.intensity}</p>
-                            <ul>
-                              {test.controlLine.units.map(
-                                (unit: PixelData, unitIndex: number) => (
-                                  <li key={unitIndex}>
-                                    Coordinates: ({unit.x}, {unit.y})<br />
-                                    <div
-                                      className="w-6 h-6 rounded-md"
-                                      style={{
-                                        backgroundColor: `hsl(${unit.hsl.h}, ${unit.hsl.s}%, ${unit.hsl.l}%)`,
-                                      }}
-                                    />
-                                    LAB: {unit.lab.l}, {unit.lab.a},{" "}
-                                    {unit.lab.b}
-                                  </li>
-                                )
-                              )}
-                            </ul>
-                            <h4 className="font-bold">Test</h4>
-                            <p>Intensity: {test.testLine.intensity}</p>
-                            <ul>
-                              {test.testLine.units.map(
-                                (unit: PixelData, unitIndex: number) => (
-                                  <li key={unitIndex}>
-                                    Coordinates: ({unit.x}, {unit.y})<br />
-                                    <div
-                                      className="w-6 h-6 rounded-md"
-                                      style={{
-                                        backgroundColor: `hsl(${unit.hsl.h}, ${unit.hsl.s}%, ${unit.hsl.l}%)`,
-                                      }}
-                                    />
-                                    LAB: {unit.lab.l}, {unit.lab.a},{" "}
-                                    {unit.lab.b}
-                                  </li>
-                                )
-                              )}
-                            </ul>
+                            <div className="flex gap-4">
+                              <div>
+                                <h4 className="font-bold">Control</h4>
+                                <p>
+                                  Highest intensity:{" "}
+                                  {test.controlLine.intensity}
+                                </p>
+                                <ul className="flex flex-col gap-2">
+                                  {test.controlLine.units.map(
+                                    (unit: PixelData, unitIndex: number) => (
+                                      <li
+                                        key={unitIndex}
+                                        className="flex items-center gap-2"
+                                      >
+                                        <div
+                                          className="w-6 h-6 rounded-md"
+                                          style={{
+                                            backgroundColor: `hsl(${unit.hsl.h}, ${unit.hsl.s}%, ${unit.hsl.l}%)`,
+                                          }}
+                                        />
+                                        x: {unit.x}, y: {unit.y}
+                                        {/* LAB: {unit.lab.l}, {unit.lab.a},{" "}
+                                    {unit.lab.b} */}
+                                      </li>
+                                    )
+                                  )}
+                                </ul>
+                              </div>
+                              <div>
+                                <h4 className="font-bold">Test</h4>
+                                <p>
+                                  Highest intensity: {test.testLine.intensity}
+                                </p>
+                                <ul className="flex flex-col gap-2">
+                                  {test.testLine.units.map(
+                                    (unit: PixelData, unitIndex: number) => (
+                                      <li
+                                        key={unitIndex}
+                                        className="flex items-center gap-2"
+                                      >
+                                        <div
+                                          className="w-6 h-6 rounded-md"
+                                          style={{
+                                            backgroundColor: `hsl(${unit.hsl.h}, ${unit.hsl.s}%, ${unit.hsl.l}%)`,
+                                          }}
+                                        />
+                                        x: {unit.x}, y: {unit.y}
+                                        {/* LAB: {unit.lab.l}, {unit.lab.a},{" "}
+                                    {unit.lab.b} */}
+                                      </li>
+                                    )
+                                  )}
+                                </ul>
+                              </div>
+                            </div>
                           </div>
                         )
                     )}

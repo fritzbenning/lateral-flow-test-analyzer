@@ -5,7 +5,7 @@ export const createTests = (testLines: PixelData[][]) => {
 
   console.log(testLines);
 
-  const sortedLines = testLines.sort((a, b) => b[0].x - a[0].x);
+  const sortedLines = testLines.sort((a, b) => a[0].y - b[0].y);
 
   const associatedLines = sortedLines.reduce(
     (acc: PixelData[][], line: any) => {
@@ -38,11 +38,11 @@ export const createTests = (testLines: PixelData[][]) => {
       console.warn("More than 2 lines found in a group");
     }
 
-    const controlIntensity = lines[1].sort(
+    const controlIntensity = lines[0].sort(
       (a: PixelData, b: PixelData) => b.lab.a - a.lab.a
     )[0].lab.a;
 
-    const testIntensity = lines[0].sort(
+    const testIntensity = lines[1].sort(
       (a: PixelData, b: PixelData) => b.lab.a - a.lab.a
     )[0].lab.a;
 
@@ -50,11 +50,11 @@ export const createTests = (testLines: PixelData[][]) => {
 
     return {
       controlLine: {
-        units: lines[1],
+        units: lines[0],
         intensity: controlIntensity,
       },
       testLine: {
-        units: lines[0],
+        units: lines[1],
         intensity: testIntensity,
       },
       differenceLAB,
