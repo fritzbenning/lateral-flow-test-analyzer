@@ -101,7 +101,6 @@ export function rgbToXyz(
   b: number
 ): [number, number, number] {
   // Log input RGB values
-  console.log(`Input RGB: r=${r}, g=${g}, b=${b}`); // Debugging line
 
   // Normalize RGB values to [0, 1]
   r = r / 255;
@@ -113,14 +112,10 @@ export function rgbToXyz(
   g = g > 0.04045 ? Math.pow((g + 0.055) / 1.055, 2.4) : g / 12.92;
   b = b > 0.04045 ? Math.pow((b + 0.055) / 1.055, 2.4) : b / 12.92;
 
-  console.log(`Gamma corrected RGB: r=${r}, g=${g}, b=${b}`); // Debugging line
-
   // Convert to XYZ using the D65 illuminant
   const x = r * 0.4124564 + g * 0.3575761 + b * 0.1804375;
   const y = r * 0.2126729 + g * 0.7151522 + b * 0.072175;
   const z = r * 0.0193339 + g * 0.119192 + b * 0.9503041;
-
-  console.log(`Converted XYZ: x=${x}, y=${y}, z=${z}`); // Debugging line
 
   return [x, y, z];
 }
@@ -139,19 +134,13 @@ export function xyzToLab(
   y = y / refY;
   z = z / refZ;
 
-  console.log(`Normalized XYZ: x=${x}, y=${y}, z=${z}`); // Debugging line
-
   x = x > 0.008856 ? Math.pow(x, 1 / 3) : 7.787 * x + 16 / 116;
   y = y > 0.008856 ? Math.pow(y, 1 / 3) : 7.787 * y + 16 / 116;
   z = z > 0.008856 ? Math.pow(z, 1 / 3) : 7.787 * z + 16 / 116;
 
-  console.log(`Transformed Lab: x=${x}, y=${y}, z=${z}`); // Debugging line
-
   const l = 116 * y - 16;
   const a = 500 * (x - y);
   const b = 200 * (y - z);
-
-  console.log(`Final Lab: l=${l}, a=${a}, b=${b}`); // Debugging line
 
   return [l, a, b];
 }
@@ -167,10 +156,8 @@ export function rgbToLab(
   }
 
   const [x, y, z] = rgbToXyz(r, g, b);
-  console.log(`XYZ: x=${x}, y=${y}, z=${z}`); // Debugging line
 
   const [l, a, bValue] = xyzToLab(x, y, z);
-  console.log(`Lab: l=${l}, a=${a}, b=${bValue}`); // Debugging line
 
   return { l, a, b: bValue };
 }

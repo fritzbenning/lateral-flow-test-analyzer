@@ -1,7 +1,7 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { analyzeImage } from "../utils/imageProcessing";
-import { rgbToLab } from "../utils/helpers";
+import { analyzeImage } from "@/utils/imageProcessing";
+import { rgbToLab } from "@/utils/helpers";
 
 export function useImageUploader() {
   const [files, setFiles] = useState<File[]>([]);
@@ -12,7 +12,7 @@ export function useImageUploader() {
   const [groupedUnits, setGroupedUnits] = useState<
     { x: number; y: number }[][]
   >([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [progress, setProgress] = useState<number>(0);
   const [redIntensities, setRedIntensities] = useState<number[]>([]);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
@@ -27,10 +27,22 @@ export function useImageUploader() {
     maxFiles: 1,
   });
 
+  useEffect(() => {
+    if (files.length > 0) {
+      const imgElement = new Image();
+      imgElement.src = URL.createObjectURL(files[0]);
+      imgElement.onload = () => handleImageLoad(imgElement);
+    }
+  }, [files]);
+
   const handleImageLoad = (imgElement: HTMLImageElement) => {
-    setLoading(true);
-    const { pixelData, highHueRedUnits, groupedUnits } =
-      analyzeImage(imgElement);
+    const { pixelData, highHueRedUnits, groupedUnits } = analyzeImage(
+      imgElement,
+      (percentage) => {
+        console.log(`Processing: ${percentage}%`);
+        setProgress(percentage);
+      }
+    );
     setPixelData(pixelData);
     setHighHueRedUnits(highHueRedUnits);
     setGroupedUnits(groupedUnits);
@@ -38,14 +50,12 @@ export function useImageUploader() {
     const intensities = groupedUnits.map((group) => {
       const totalRedIntensity = group.reduce((sum, { x, y }) => {
         const pixel = pixelData[y][x];
-        console.log(`Pixel: r=${pixel.red}, g=${pixel.green}, b=${pixel.blue}`); // Debugging line
         const { a } = rgbToLab(pixel.red, pixel.green, pixel.blue);
         return sum + a;
       }, 0);
       return totalRedIntensity / group.length;
     });
     setRedIntensities(intensities);
-    setLoading(false);
   };
 
   return {
@@ -56,8 +66,8 @@ export function useImageUploader() {
     pixelData,
     highHueRedUnits,
     groupedUnits,
-    loading,
+    progress,
     redIntensities,
-    onDrop: handleImageLoad,
+    onDrop,
   };
 }

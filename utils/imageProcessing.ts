@@ -5,7 +5,10 @@ import {
   rgbToLab,
 } from "./helpers";
 
-export function analyzeImage(imgElement: HTMLImageElement) {
+export function analyzeImage(
+  imgElement: HTMLImageElement,
+  onProgress: (percentage: number) => void
+) {
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
 
@@ -13,65 +16,85 @@ export function analyzeImage(imgElement: HTMLImageElement) {
     throw new Error("Could not get canvas context");
   }
 
-  const scaleFactor = 500 / imgElement.naturalWidth;
-  const newWidth = 500;
-  const newHeight = imgElement.naturalHeight * scaleFactor;
+  const scaleFactor = 520 / imgElement.naturalWidth;
+  const testImageWidth = 520;
+  const testImageHeight = imgElement.naturalHeight * scaleFactor;
 
-  canvas.width = newWidth;
-  canvas.height = newHeight;
-  ctx.drawImage(imgElement, 0, 0, newWidth, newHeight);
+  canvas.width = testImageWidth;
+  canvas.height = testImageHeight;
+  ctx.drawImage(imgElement, 0, 0, testImageWidth, testImageHeight);
 
-  const imageData = ctx.getImageData(0, 0, newWidth, newHeight);
+  const imageData = ctx.getImageData(0, 0, testImageWidth, testImageHeight);
   const data = imageData.data;
 
-  const pixelData: PixelData[][] = [];
+  const processBatch = (startY: number, endY: number) => {
+    const batchPixelData: PixelData[][] = [];
+    const totalRows = Math.ceil(testImageHeight / 2);
+    let processedRows = 0;
 
-  for (let y = 0; y < newHeight; y += 2) {
-    pixelData[y / 2] = [];
-    for (let x = 0; x < newWidth; x += 2) {
-      let maxRed = -1;
-      let selectedPixel = { red: 0, green: 0, blue: 0 };
+    for (let y = startY; y < endY; y += 2) {
+      const row: PixelData[] = [];
+      for (let x = 0; x < testImageWidth; x += 2) {
+        let maxRed = -1;
+        let selectedPixel = { red: 0, green: 0, blue: 0 };
 
-      for (let dy = 0; dy < 2; dy++) {
-        for (let dx = 0; dx < 2; dx++) {
-          const nx = x + dx;
-          const ny = y + dy;
-          if (nx < newWidth && ny < newHeight) {
-            const index = (ny * newWidth + nx) * 4;
-            const red = data[index];
-            const green = data[index + 1];
-            const blue = data[index + 2];
+        for (let dy = 0; dy < 2; dy++) {
+          for (let dx = 0; dx < 2; dx++) {
+            const nx = x + dx;
+            const ny = y + dy;
+            if (nx < testImageWidth && ny < testImageHeight) {
+              const index = (ny * testImageWidth + nx) * 4;
+              const red = data[index];
+              const green = data[index + 1];
+              const blue = data[index + 2];
 
-            if (red > maxRed) {
-              maxRed = red;
-              selectedPixel = { red, green, blue };
+              if (red > maxRed) {
+                maxRed = red;
+                selectedPixel = { red, green, blue };
+              }
             }
           }
         }
-      }
 
-      pixelData[y / 2][x / 2] = {
-        x: x / 2,
-        y: y / 2,
-        red: selectedPixel.red,
-        green: selectedPixel.green,
-        blue: selectedPixel.blue,
-        lab: rgbToLab(
-          selectedPixel.red,
-          selectedPixel.green,
-          selectedPixel.blue
-        ),
-        hsl: rgbToHsl(
-          selectedPixel.red,
-          selectedPixel.green,
-          selectedPixel.blue
-        ),
-      };
+        const { red, green, blue } = selectedPixel;
+        const lab = rgbToLab(red, green, blue);
+        const hsl = rgbToHsl(red, green, blue);
+
+        row.push({
+          x: x / 2,
+          y: y / 2,
+          red,
+          green,
+          blue,
+          lab,
+          hsl,
+        });
+      }
+      batchPixelData.push(row);
+
+      // Update progress after processing each row
+      processedRows++;
+      const percentage = Math.round((processedRows / totalRows) * 100);
+      onProgress(percentage);
     }
+    return batchPixelData;
+  };
+
+  const batchCount = 4;
+  const batchSize = Math.floor(testImageHeight / batchCount);
+  const batches: PixelData[][][] = [];
+
+  for (let i = 0; i < batchCount; i++) {
+    const startY = i * batchSize;
+    const endY = i === batchCount - 1 ? testImageHeight : (i + 1) * batchSize;
+    batches.push(processBatch(startY, endY));
   }
 
-  const highHueRedUnits = findHighHueAndRedUnits(pixelData);
+  // Combine results
+  const combinedPixelData = batches.flat();
+
+  const highHueRedUnits = findHighHueAndRedUnits(combinedPixelData);
   const groupedUnits = groupUnitsByProximity(highHueRedUnits);
 
-  return { pixelData, highHueRedUnits, groupedUnits };
+  return { pixelData: combinedPixelData, highHueRedUnits, groupedUnits };
 }

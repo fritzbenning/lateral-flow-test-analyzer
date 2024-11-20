@@ -15,10 +15,9 @@ export function ImageUploader() {
     getInputProps,
     isDragActive,
     pixelData,
-    highHueRedUnits,
     groupedUnits,
     redIntensities,
-    onDrop,
+    progress,
   } = useImageUploader();
 
   const [canvasLoading, setCanvasLoading] = useState(true);
@@ -53,12 +52,12 @@ export function ImageUploader() {
             <Card key={file.name} className="p-4">
               <div className="flex flex-col md:flex-row gap-4">
                 <div className="w-80">
-                  <ImagePreview file={file} onLoad={onDrop} />
+                  <ImagePreview file={file} />
                 </div>
                 <div className="flex-1 flex flex-col space-y-4">
-                  {/* {pixelData.length > 0 && (
+                  {pixelData.length > 0 && (
                     <PixelCanvas pixelData={pixelData} />
-                  )} */}
+                  )}
                   <GroupedUnitsList
                     groupedUnits={groupedUnits}
                     redIntensities={redIntensities}
