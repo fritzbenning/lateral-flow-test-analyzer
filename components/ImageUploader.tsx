@@ -2,7 +2,6 @@
 
 import { useImageUploader } from "../hooks/useImageUploader";
 import ImagePreview from "./ImagePreview";
-import HighHueRedUnitsList from "./HighHueRedUnitsList";
 import GroupedUnitsList from "./GroupedUnitsList";
 import PixelCanvas from "./PixelCanvas";
 import { Card } from "@/components/ui/card";
@@ -17,7 +16,6 @@ import { Button } from "./ui/button";
 
 export function ImageUploader() {
   const {
-    files,
     getRootProps,
     getInputProps,
     isDragActive,
@@ -26,36 +24,16 @@ export function ImageUploader() {
     redIntensities,
     progress,
     loading,
+    reset,
   } = useImageUploader();
-
-  const [canvasLoading, setCanvasLoading] = useState(true);
-
-  useEffect(() => {
-    if (pixelData.length > 0) {
-      // Simulate canvas preparation or any async operation
-      setCanvasLoading(false);
-    }
-  }, [pixelData]);
-
   return (
-    <div className="space-y-8">
-      <div
-        {...getRootProps()}
-        className={`relative border-2 border-dashed rounded-lg p-12 transition-colors duration-200 ease-in-out flex flex-col items-center justify-center gap-4 cursor-pointer hover:bg-accent/50 ${
-          isDragActive ? "border-primary bg-accent" : ""
-        }`}
-      >
-        <input {...getInputProps()} />
-        <div className="text-center space-y-2">
-          <p className="text-lg font-medium">Drag & drop your image</p>
-          <p className="text-md text-muted-foreground">
-            or click to select a file from your device
-          </p>
-        </div>
-      </div>
-
-      {files.length > 0 && (
-        <div className="space-y-4">
+    <div>
+      {pixelData.length > 0 ? (
+        <div className="flex flex-col gap-8">
+          <div className="flex justify-between items-center">
+            <h2 className="text-xl font-bold">Result</h2>
+            <Button onClick={reset}>Upload new image</Button>
+          </div>
           {files.map((file) => (
             <Card key={file.name} className="p-4">
               {loading ? (
@@ -75,6 +53,7 @@ export function ImageUploader() {
                     </Dialog>
                   </div>
                   <div className="flex-1 flex flex-col space-y-4">
+                    <h3 className="text-lg font-bold">Test result</h3>
                     <GroupedUnitsList
                       groupedUnits={groupedUnits}
                       redIntensities={redIntensities}
@@ -84,6 +63,21 @@ export function ImageUploader() {
               )}
             </Card>
           ))}
+        </div>
+      ) : (
+        <div
+          {...getRootProps()}
+          className={`relative border-2 border-dashed rounded-lg p-12 transition-colors duration-200 ease-in-out flex flex-col items-center justify-center gap-4 cursor-pointer hover:bg-accent/50 ${
+            isDragActive ? "border-primary bg-accent" : ""
+          }`}
+        >
+          <input {...getInputProps()} />
+          <div className="text-center space-y-2">
+            <p className="text-lg font-medium">Drag & drop your image</p>
+            <p className="text-md text-muted-foreground">
+              or click to select a file from your device
+            </p>
+          </div>
         </div>
       )}
     </div>

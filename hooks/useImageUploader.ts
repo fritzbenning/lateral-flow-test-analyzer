@@ -66,8 +66,20 @@ export function useImageUploader() {
     }
   }, [pixelData]);
 
+  // Add the reset function
+  const reset = useCallback(() => {
+    setFiles([]);
+    setPixelData([]);
+    setHighHueRedUnits([]);
+    setGroupedUnits([]);
+    setProgress(0);
+    setLoading(true);
+    setRedIntensities([]);
+  }, []);
+
+  //   const testResult = interpretTestResult(groupedUnits);
+
   return {
-    files,
     getRootProps,
     getInputProps,
     isDragActive,
@@ -78,5 +90,6 @@ export function useImageUploader() {
     loading,
     redIntensities,
     onDrop,
+    reset,
   };
 }
