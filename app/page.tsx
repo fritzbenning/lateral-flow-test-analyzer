@@ -1,5 +1,5 @@
-import { ImageUploader } from "@/components/ImageUploader";
 import { Header } from "@/components/header";
+import { ImageUploader } from "@/components/ImageUploader";
 
 export default function Home() {
   return (

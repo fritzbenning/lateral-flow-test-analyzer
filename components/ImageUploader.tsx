@@ -5,6 +5,8 @@ import ImagePreview from "./ImagePreview";
 import HighHueRedUnitsList from "./HighHueRedUnitsList";
 import GroupedUnitsList from "./GroupedUnitsList";
 import PixelCanvas from "./PixelCanvas";
+import { Card } from "@/components/ui/card";
+import { useState, useEffect } from "react";
 
 export function ImageUploader() {
   const {
@@ -15,10 +17,17 @@ export function ImageUploader() {
     pixelData,
     highHueRedUnits,
     groupedUnits,
-    scrollToPosition,
-    loading,
     onDrop,
   } = useImageUploader();
+
+  const [canvasLoading, setCanvasLoading] = useState(true);
+
+  useEffect(() => {
+    if (pixelData.length > 0) {
+      // Simulate canvas preparation or any async operation
+      setCanvasLoading(false);
+    }
+  }, [pixelData]);
 
   return (
     <div className="space-y-8">
@@ -40,23 +49,20 @@ export function ImageUploader() {
       {files.length > 0 && (
         <div className="space-y-4">
           {files.map((file) => (
-            <div key={file.name}>
-              <ImagePreview file={file} onLoad={onDrop} />
-              {loading ? (
-                <p>Loading...</p>
-              ) : (
-                <>
+            <Card key={file.name} className="p-4">
+              <div className="flex flex-col md:flex-row gap-4">
+                <div className="w-80">
+                  <ImagePreview file={file} onLoad={onDrop} />
+                </div>
+                <div className="flex-1 flex flex-col space-y-4">
                   {pixelData.length > 0 && (
-                    <PixelCanvas
-                      pixelData={pixelData}
-                      scrollToPosition={scrollToPosition}
-                    />
+                    <PixelCanvas pixelData={pixelData} />
                   )}
                   <HighHueRedUnitsList units={highHueRedUnits} />
                   <GroupedUnitsList groups={groupedUnits} />
-                </>
-              )}
-            </div>
+                </div>
+              </div>
+            </Card>
           ))}
         </div>
       )}

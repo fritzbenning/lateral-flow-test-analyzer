@@ -1,60 +1,58 @@
 import React, { useEffect, useRef } from "react";
+import { Grid, GridCellProps } from "react-virtualized";
+import "react-virtualized/styles.css"; // Import default styles
 
 interface PixelCanvasProps {
   pixelData: PixelData[][];
-  scrollToPosition: { x: number; y: number } | null;
 }
 
-const PixelCanvas: React.FC<PixelCanvasProps> = ({
-  pixelData,
-  scrollToPosition,
-}) => {
+const PixelCanvas: React.FC<PixelCanvasProps> = ({ pixelData }) => {
   const canvasRef = useRef<HTMLDivElement>(null);
-  const hasScrolledInitially = useRef(false);
 
-  useEffect(() => {
-    if (
-      scrollToPosition &&
-      canvasRef.current &&
-      !hasScrolledInitially.current
-    ) {
-      const { x, y } = scrollToPosition;
-      const cellSize = 16; // Assuming each cell is 16px (4px for padding and 12px for the div)
-      canvasRef.current.scrollTo({
-        top: y * cellSize,
-        left: x * cellSize,
-        behavior: "smooth",
-      });
-      hasScrolledInitially.current = true; // Mark as scrolled
-    }
-  }, [scrollToPosition]);
+  const cellRenderer = ({
+    columnIndex,
+    key,
+    rowIndex,
+    style,
+  }: GridCellProps) => {
+    const pixel = pixelData[rowIndex][columnIndex];
+    return (
+      <div
+        key={key}
+        className="animate-fade-in"
+        style={{
+          ...style,
+          backgroundColor: `hsl(${pixel.hsl.h}, ${pixel.hsl.s}%, ${pixel.hsl.l}%)`,
+          border: "1px solid #ccc",
+          boxSizing: "border-box",
+        }}
+        title={`
+          Position: (${columnIndex}, ${rowIndex})
+          Red: ${pixel.red}
+          HSL: ${pixel.hsl.h}°, ${pixel.hsl.s}%, ${pixel.hsl.l}%
+        `}
+      >
+        <div className="w-4 h-4" />
+      </div>
+    );
+  };
+
+  const columnCount = pixelData[0].length;
+  const rowCount = pixelData.length;
 
   return (
     <div ref={canvasRef} className="overflow-auto max-h-[500px]">
-      <table className="border-collapse text-xs">
-        <tbody>
-          {pixelData.map((row, y) => (
-            <tr key={y}>
-              {row.map((pixel, x) => (
-                <td
-                  key={`${x}-${y}`}
-                  className="border border-border p-1"
-                  style={{
-                    backgroundColor: `hsl(${pixel.hsl.h}, ${pixel.hsl.s}%, ${pixel.hsl.l}%)`,
-                  }}
-                  title={`
-                    Position: (${x}, ${y})
-                    Red: ${pixel.red}
-                    HSL: ${pixel.hsl.h}°, ${pixel.hsl.s}%, ${pixel.hsl.l}%
-                  `}
-                >
-                  <div className="w-4 h-4" />
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <Grid
+        cellRenderer={cellRenderer}
+        columnCount={columnCount}
+        columnWidth={20}
+        height={500}
+        rowCount={rowCount}
+        rowHeight={20}
+        width={canvasRef.current?.clientWidth}
+        scrollToColumn={Math.floor(columnCount / 2)}
+        scrollToRow={Math.floor(rowCount / 2)}
+      />
     </div>
   );
 };
