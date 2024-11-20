@@ -18,8 +18,14 @@ export function ImageUploader() {
   const { files, getRootProps, getInputProps, isDragActive } =
     useImageUploader();
 
-  const { pixelData, groupedUnits, redIntensities, loading, progress, reset } =
-    useImageAnalyzer(files || []);
+  const {
+    pixelData,
+    testLines,
+    testLineIntensities,
+    loading,
+    progress,
+    reset,
+  } = useImageAnalyzer(files || []);
 
   return (
     <div>
@@ -50,8 +56,8 @@ export function ImageUploader() {
                   <div className="flex-1 flex flex-col space-y-4">
                     <h3 className="text-lg font-bold">Test result</h3>
                     <GroupedUnitsList
-                      groupedUnits={groupedUnits}
-                      redIntensities={redIntensities}
+                      groupedUnits={testLines}
+                      redIntensities={testLineIntensities}
                     />
                   </div>
                 </div>

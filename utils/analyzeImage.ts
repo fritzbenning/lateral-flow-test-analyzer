@@ -94,7 +94,7 @@ export function analyzeImage(
   const combinedPixelData = batches.flat();
 
   const highHueRedUnits = findHighHueAndRedUnits(combinedPixelData);
-  const groupedUnits = groupUnitsByProximity(highHueRedUnits);
+  const testLines = groupUnitsByProximity(highHueRedUnits);
 
-  return { pixelData: combinedPixelData, highHueRedUnits, groupedUnits };
+  return { pixelData: combinedPixelData, highHueRedUnits, testLines };
 }

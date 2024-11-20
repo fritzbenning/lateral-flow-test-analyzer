@@ -1,15 +1,17 @@
-import { rgbToLab } from "@/utils/helpers";
-import { analyzeImage } from "@/utils/imageProcessing";
+import { analyzeImage } from "@/utils/analyzeImage";
 import { useState, useEffect } from "react";
+import { getTestLineIntensities } from "@/utils/getTestLineIntensities";
 
 export function useImageAnalyzer(files: File[] | []) {
   const [loading, setLoading] = useState<boolean>(true);
   const [progress, setProgress] = useState<number>(0);
 
   const [pixelData, setPixelData] = useState<number[][]>([]);
-  const [highHueRedUnits, setHighHueRedUnits] = useState<any[]>([]);
-  const [groupedUnits, setGroupedUnits] = useState<any[]>([]);
-  const [redIntensities, setRedIntensities] = useState<number[]>([]);
+  const [highHueRedUnits, setHighHueRedUnits] = useState<
+    { x: number; y: number }[][]
+  >([]);
+  const [testLines, setTestLines] = useState<{ x: number; y: number }[][]>([]);
+  const [testLineIntensities, setTestLineIntensities] = useState<number[]>([]);
 
   useEffect(() => {
     if (files.length > 0) {
@@ -22,7 +24,7 @@ export function useImageAnalyzer(files: File[] | []) {
   const handleImageLoad = (imgElement: HTMLImageElement) => {
     if (!files) return;
 
-    const { pixelData, highHueRedUnits, groupedUnits } = analyzeImage(
+    const { pixelData, highHueRedUnits, testLines } = analyzeImage(
       imgElement,
       (percentage) => {
         console.log(`Processing: ${percentage}%`);
@@ -31,19 +33,10 @@ export function useImageAnalyzer(files: File[] | []) {
     );
     setPixelData(pixelData);
     setHighHueRedUnits(highHueRedUnits);
-    setGroupedUnits(groupedUnits);
+    setTestLines(testLines);
 
-    console.log(groupedUnits);
-
-    const intensities = groupedUnits.map((group) => {
-      const totalRedIntensity = group.reduce((sum, { x, y }) => {
-        const pixel = pixelData[y][x];
-        const { a } = rgbToLab(pixel.red, pixel.green, pixel.blue);
-        return sum + a;
-      }, 0);
-      return totalRedIntensity / group.length;
-    });
-    setRedIntensities(intensities);
+    const newTestLineIntensities = getTestLineIntensities(testLines, pixelData);
+    setTestLineIntensities(newTestLineIntensities);
   };
 
   useEffect(() => {
@@ -57,14 +50,14 @@ export function useImageAnalyzer(files: File[] | []) {
     setProgress(0);
     setPixelData([]);
     setHighHueRedUnits([]);
-    setGroupedUnits([]);
-    setRedIntensities([]);
+    setTestLines([]);
+    setTestLineIntensities([]);
   };
 
   return {
     pixelData,
-    groupedUnits,
-    redIntensities,
+    testLines,
+    testLineIntensities,
     loading,
     progress,
     reset,
