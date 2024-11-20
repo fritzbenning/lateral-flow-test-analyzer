@@ -6,7 +6,14 @@ import HighHueRedUnitsList from "./HighHueRedUnitsList";
 import GroupedUnitsList from "./GroupedUnitsList";
 import PixelCanvas from "./PixelCanvas";
 import { Card } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogTitle,
+  DialogContent,
+} from "@/components/ui/dialog";
 import { useState, useEffect } from "react";
+import { Button } from "./ui/button";
 
 export function ImageUploader() {
   const {
@@ -18,6 +25,7 @@ export function ImageUploader() {
     groupedUnits,
     redIntensities,
     progress,
+    loading,
   } = useImageUploader();
 
   const [canvasLoading, setCanvasLoading] = useState(true);
@@ -40,7 +48,7 @@ export function ImageUploader() {
         <input {...getInputProps()} />
         <div className="text-center space-y-2">
           <p className="text-lg font-medium">Drag & drop your image</p>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-md text-muted-foreground">
             or click to select a file from your device
           </p>
         </div>
@@ -50,20 +58,30 @@ export function ImageUploader() {
         <div className="space-y-4">
           {files.map((file) => (
             <Card key={file.name} className="p-4">
-              <div className="flex flex-col md:flex-row gap-4">
-                <div className="w-80">
-                  <ImagePreview file={file} />
+              {loading ? (
+                <>{progress}</>
+              ) : (
+                <div className="flex flex-col md:flex-row gap-4">
+                  <div className="w-80 flex flex-col gap-3">
+                    <ImagePreview file={file} />
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button className="btn">Open Canvas</Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogTitle>Canvas Preview</DialogTitle>
+                        <PixelCanvas pixelData={pixelData} />
+                      </DialogContent>
+                    </Dialog>
+                  </div>
+                  <div className="flex-1 flex flex-col space-y-4">
+                    <GroupedUnitsList
+                      groupedUnits={groupedUnits}
+                      redIntensities={redIntensities}
+                    />
+                  </div>
                 </div>
-                <div className="flex-1 flex flex-col space-y-4">
-                  {pixelData.length > 0 && (
-                    <PixelCanvas pixelData={pixelData} />
-                  )}
-                  <GroupedUnitsList
-                    groupedUnits={groupedUnits}
-                    redIntensities={redIntensities}
-                  />
-                </div>
-              </div>
+              )}
             </Card>
           ))}
         </div>

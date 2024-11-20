@@ -13,6 +13,7 @@ export function useImageUploader() {
     { x: number; y: number }[][]
   >([]);
   const [progress, setProgress] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(true);
   const [redIntensities, setRedIntensities] = useState<number[]>([]);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
@@ -36,6 +37,7 @@ export function useImageUploader() {
   }, [files]);
 
   const handleImageLoad = (imgElement: HTMLImageElement) => {
+    setLoading(true);
     const { pixelData, highHueRedUnits, groupedUnits } = analyzeImage(
       imgElement,
       (percentage) => {
@@ -58,6 +60,12 @@ export function useImageUploader() {
     setRedIntensities(intensities);
   };
 
+  useEffect(() => {
+    if (pixelData.length > 0) {
+      setLoading(false);
+    }
+  }, [pixelData]);
+
   return {
     files,
     getRootProps,
@@ -67,6 +75,7 @@ export function useImageUploader() {
     highHueRedUnits,
     groupedUnits,
     progress,
+    loading,
     redIntensities,
     onDrop,
   };

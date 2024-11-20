@@ -6,7 +6,7 @@ interface ImagePreviewProps {
 }
 
 const ImagePreview: React.FC<ImagePreviewProps> = ({ file }) => (
-  <div className="relative w-[320px] h-[320px] overflow-hidden">
+  <div className="relative w-[320px] h-[320px] rounded-md overflow-hidden">
     <Image
       src={URL.createObjectURL(file)}
       alt={file.name}
