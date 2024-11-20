@@ -3,7 +3,6 @@
 import { useImageUploader } from "@/hooks/useImageUploader";
 import { useImageAnalyzer } from "@/hooks/useImageAnalyzer";
 import ImagePreview from "./ImagePreview";
-import TestLinesList from "./TestLinesList";
 import PixelCanvas from "./PixelCanvas";
 import { Card } from "@/components/ui/card";
 import {
@@ -13,23 +12,19 @@ import {
   DialogContent,
 } from "@/components/ui/dialog";
 import { Button } from "./ui/button";
+import { PixelData } from "@/types";
 
 export function ImageUploader() {
   const { files, getRootProps, getInputProps, isDragActive } =
     useImageUploader();
 
-  const {
-    pixelData,
-    testLines,
-    testLineIntensities,
-    loading,
-    progress,
-    reset,
-  } = useImageAnalyzer(files || []);
+  const { pixelData, tests, loading, progress, reset } = useImageAnalyzer(
+    files || []
+  );
 
   return (
     <div>
-      {pixelData.length > 0 ? (
+      {tests.length > 0 ? (
         <div className="flex flex-col gap-8">
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-bold">Result</h2>
@@ -54,11 +49,56 @@ export function ImageUploader() {
                     </Dialog>
                   </div>
                   <div className="flex-1 flex flex-col space-y-4">
-                    <h3 className="text-lg font-bold">Test result</h3>
-                    <TestLinesList
-                      testLines={testLines}
-                      intensities={testLineIntensities}
-                    />
+                    {tests.map(
+                      (test, index) =>
+                        test && (
+                          <div key={index}>
+                            <h3 className="text-lg">
+                              <strong>Test result {index + 1}:</strong>{" "}
+                              {test?.differenceLAB} % probability of a positive
+                              test
+                            </h3>
+                            <h4 className="font-bold">Control</h4>
+                            <p>Intensity: {test.controlLine.intensity}</p>
+                            <ul>
+                              {test.controlLine.units.map(
+                                (unit: PixelData, unitIndex: number) => (
+                                  <li key={unitIndex}>
+                                    Coordinates: ({unit.x}, {unit.y})<br />
+                                    <div
+                                      className="w-6 h-6 rounded-md"
+                                      style={{
+                                        backgroundColor: `hsl(${unit.hsl.h}, ${unit.hsl.s}%, ${unit.hsl.l}%)`,
+                                      }}
+                                    />
+                                    LAB: {unit.lab.l}, {unit.lab.a},{" "}
+                                    {unit.lab.b}
+                                  </li>
+                                )
+                              )}
+                            </ul>
+                            <h4 className="font-bold">Test</h4>
+                            <p>Intensity: {test.testLine.intensity}</p>
+                            <ul>
+                              {test.testLine.units.map(
+                                (unit: PixelData, unitIndex: number) => (
+                                  <li key={unitIndex}>
+                                    Coordinates: ({unit.x}, {unit.y})<br />
+                                    <div
+                                      className="w-6 h-6 rounded-md"
+                                      style={{
+                                        backgroundColor: `hsl(${unit.hsl.h}, ${unit.hsl.s}%, ${unit.hsl.l}%)`,
+                                      }}
+                                    />
+                                    LAB: {unit.lab.l}, {unit.lab.a},{" "}
+                                    {unit.lab.b}
+                                  </li>
+                                )
+                              )}
+                            </ul>
+                          </div>
+                        )
+                    )}
                   </div>
                 </div>
               )}

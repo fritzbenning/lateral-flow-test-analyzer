@@ -1,11 +1,11 @@
 import { PixelData } from "@/types";
 import {
   rgbToHsl,
-  findTestLineUnits,
-  groupTestLineUnitsByProximity,
+  findPixelDatas,
+  groupPixelDatasByProximity,
   rgbToLab,
 } from "./helpers";
-import { matchTestLinesToTest } from "./matchTestLinesToTest";
+import { createTests } from "@/utils/createTests";
 
 export function analyzeImage(
   imgElement: HTMLImageElement,
@@ -65,9 +65,7 @@ export function analyzeImage(
         row.push({
           x: x / 2,
           y: y / 2,
-          red,
-          green,
-          blue,
+          rgb: { r: red, g: green, b: blue },
           lab,
           hsl,
         });
@@ -95,9 +93,9 @@ export function analyzeImage(
   // Combine results
   const combinedPixelData = batches.flat();
 
-  const testLineUnits = findTestLineUnits(combinedPixelData);
-  const testLines = groupTestLineUnitsByProximity(testLineUnits);
-  const tests = matchTestLinesToTest(testLines);
+  const PixelDatas = findPixelDatas(combinedPixelData);
+  const testLines = groupPixelDatasByProximity(PixelDatas);
+  const tests = createTests(testLines);
 
   return { pixelData: combinedPixelData, testLines, tests };
 }

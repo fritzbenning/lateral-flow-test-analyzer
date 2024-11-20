@@ -1,3 +1,9 @@
+export interface RgbColor {
+  r: number;
+  g: number;
+  b: number;
+}
+
 export interface LabColor {
   l: number;
   a: number;
@@ -13,15 +19,7 @@ export interface HslColor {
 export interface PixelData {
   x: number;
   y: number;
-  red: number;
-  green: number;
-  blue: number;
+  rgb: RgbColor;
   lab: LabColor;
   hsl: HslColor;
-}
-
-export interface TestLineUnit {
-  x: number;
-  y: number;
-  hsl: { h: number; s: number; l: number };
 }

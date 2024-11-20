@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { Grid, GridCellProps } from "react-virtualized";
 import "react-virtualized/styles.css"; // Import default styles
 import { Info } from "lucide-react";
-import { PixelData } from "@/types";
+import { LabColor, PixelData, RgbColor } from "@/types";
 
 type HSLType = { h: number; s: number; l: number };
 interface PixelCanvasProps {
@@ -14,7 +14,9 @@ const PixelCanvas: React.FC<PixelCanvasProps> = ({ pixelData }) => {
 
   const [columnPosition, setColumnPosition] = useState<number | null>(null);
   const [rowPosition, setRowPosition] = useState<number | null>(null);
+  const [selectedRGB, setSelectedRGB] = useState<RgbColor | null>(null);
   const [selectedHSL, setSelectedHSL] = useState<HSLType | null>(null);
+  const [selectedLAB, setSelectedLAB] = useState<LabColor | null>(null);
 
   const cellRenderer = ({
     columnIndex,
@@ -24,10 +26,18 @@ const PixelCanvas: React.FC<PixelCanvasProps> = ({ pixelData }) => {
   }: GridCellProps) => {
     const pixel = pixelData[rowIndex][columnIndex];
 
-    const setUnitDetails = (column: number, row: number, hsl: HSLType) => {
+    const setUnitDetails = (
+      column: number,
+      row: number,
+      rgb: RgbColor,
+      hsl: HSLType,
+      lab: LabColor
+    ) => {
       setColumnPosition(column);
       setRowPosition(row);
+      setSelectedRGB(rgb);
       setSelectedHSL(hsl);
+      setSelectedLAB(lab);
     };
 
     return (
@@ -38,7 +48,9 @@ const PixelCanvas: React.FC<PixelCanvasProps> = ({ pixelData }) => {
           ...style,
           backgroundColor: `hsl(${pixel.hsl.h}, ${pixel.hsl.s}%, ${pixel.hsl.l}%)`,
         }}
-        onMouseEnter={() => setUnitDetails(columnIndex, rowIndex, pixel.hsl)}
+        onMouseEnter={() =>
+          setUnitDetails(columnIndex, rowIndex, pixel.rgb, pixel.hsl, pixel.lab)
+        }
       />
     );
   };
@@ -60,23 +72,35 @@ const PixelCanvas: React.FC<PixelCanvasProps> = ({ pixelData }) => {
         scrollToRow={Math.floor(rowCount / 2)}
         className="rounded-lg overflow-hidden"
       />
-      <figcaption className="text-sm flex items-center gap-6 leading-4">
+      <figcaption className="w-full text-sm flex items-center justify-between leading-4 text-left gap-4">
         <div
           className="w-6 h-6 rounded-md"
           style={{
             backgroundColor: `hsl(${selectedHSL?.h}, ${selectedHSL?.s}%, ${selectedHSL?.l}%)`,
           }}
         />
-        <div className="w-20">
-          <strong>Row:</strong> {rowPosition}
+        <div className="flex-1">
+          <strong>Position:</strong> {rowPosition} / {columnPosition}
         </div>
-        <div className="w-24">
-          <strong>Column:</strong> {columnPosition}
+
+        <div className="flex-1">
+          <strong>RGB:</strong>{" "}
+          {selectedRGB
+            ? `${selectedRGB.r}, ${selectedRGB.g}, ${selectedRGB.b}`
+            : "N/A"}
         </div>
-        <div>
+        <div className="flex-1">
           <strong>HSL:</strong>{" "}
           {selectedHSL
             ? `${selectedHSL.h}°, ${selectedHSL.s}%, ${selectedHSL.l}%`
+            : "N/A"}
+        </div>
+        <div className="flex-1">
+          <strong>LAB:</strong>{" "}
+          {selectedLAB
+            ? `${Math.floor(selectedLAB.l)}, ${Math.floor(
+                selectedLAB.a
+              )}, ${Math.floor(selectedLAB.b)}`
             : "N/A"}
         </div>
       </figcaption>

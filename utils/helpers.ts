@@ -1,4 +1,4 @@
-import { PixelData, TestLineUnit } from "@/types";
+import { PixelData } from "@/types";
 
 export function rgbToHsl(r: number, g: number, b: number) {
   r /= 255;
@@ -39,7 +39,7 @@ export function rgbToHsl(r: number, g: number, b: number) {
   };
 }
 
-export function findTestLineUnits(pixelData: PixelData[][]) {
+export function findPixelDatas(pixelData: PixelData[][]) {
   const hueLowerBound1 = 330;
   const hueUpperBound1 = 360;
   const hueLowerBound2 = 0;
@@ -47,7 +47,7 @@ export function findTestLineUnits(pixelData: PixelData[][]) {
   const saturationThreshold = 6;
   const lightnessLowerBound = 50;
   const lightnessUpperBound = 100;
-  const results: TestLineUnit[] = [];
+  const results: PixelData[] = [];
 
   for (let y = 0; y < pixelData.length; y++) {
     for (let x = 0; x <= pixelData[y].length - 4; x++) {
@@ -55,32 +55,55 @@ export function findTestLineUnits(pixelData: PixelData[][]) {
       if (
         sequence.every((pixel) => {
           const { h, s, l } = pixel.hsl;
+          const { l: lLab, a: aLab, b: bLab } = pixel.lab;
           return (
             ((h >= hueLowerBound1 && h <= hueUpperBound1) ||
               (h >= hueLowerBound2 && h <= hueUpperBound2)) &&
             s >= saturationThreshold &&
             l >= lightnessLowerBound &&
-            l <= lightnessUpperBound
+            l <= lightnessUpperBound &&
+            Math.floor(aLab) >= 4
           );
         })
       ) {
         results.push({
           x,
           y,
+          rgb: sequence[0].rgb,
           hsl: sequence[0].hsl,
+          lab: sequence[0].lab,
         });
       }
     }
   }
 
+  // for (let y = 0; y < pixelData.length; y++) {
+  //   for (let x = 0; x <= pixelData[y].length - 4; x++) {
+  //     const sequence = pixelData[y].slice(x, x + 4);
+  //     if (
+  //       sequence.every((pixel: PixelData) => {
+  //         const { l, a, b } = pixel.lab;
+  //         return (
+  //           Math.floor(l) < 60 &&
+  //           Math.floor(l) > 25 &&
+  //           Math.floor(a) > 4 &&
+  //           Math.floor(b) > -5
+  //         );
+  //       })
+  //     ) {
+  //       results.push(sequence[0]);
+  //     }
+  //   }
+  // }
+
   return results;
 }
 
-export function groupTestLineUnitsByProximity(
-  units: TestLineUnit[],
+export function groupPixelDatasByProximity(
+  units: PixelData[],
   proximity: number = 3
 ) {
-  const grouped: TestLineUnit[][] = [];
+  const grouped: PixelData[][] = [];
 
   units.sort((a, b) => a.y - b.y);
 

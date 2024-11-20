@@ -1,8 +1,8 @@
-import { TestLineUnit } from "@/types";
+import { PixelData } from "@/types";
 import React from "react";
 
 interface HighHueRedUnitsListProps {
-  units: TestLineUnit[];
+  units: PixelData[];
 }
 
 const HighHueRedUnitsList: React.FC<HighHueRedUnitsListProps> = ({ units }) => (

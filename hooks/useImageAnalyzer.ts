@@ -1,15 +1,14 @@
 import { analyzeImage } from "@/utils/analyzeImage";
 import { useState, useEffect } from "react";
-import { getTestLineIntensities } from "@/utils/getTestLineIntensities";
-import { PixelData, TestLineUnit } from "@/types";
+import { PixelData } from "@/types";
 
 export function useImageAnalyzer(files: File[] | []) {
   const [loading, setLoading] = useState<boolean>(true);
   const [progress, setProgress] = useState<number>(0);
 
   const [pixelData, setPixelData] = useState<PixelData[][]>([]);
-  const [testLines, setTestLines] = useState<TestLineUnit[][]>([]);
-  const [testLineIntensities, setTestLineIntensities] = useState<number[]>([]);
+  const [testLines, setTestLines] = useState<PixelData[][]>([]);
+  const [tests, setTests] = useState<any[]>([]);
 
   useEffect(() => {
     if (files.length > 0) {
@@ -19,7 +18,7 @@ export function useImageAnalyzer(files: File[] | []) {
       const handleImageLoad = (imgElement: HTMLImageElement) => {
         if (!files) return;
 
-        const { pixelData, testLines } = analyzeImage(
+        const { pixelData, testLines, tests } = analyzeImage(
           imgElement,
           (percentage) => {
             console.log(`Processing: ${percentage}%`);
@@ -28,12 +27,7 @@ export function useImageAnalyzer(files: File[] | []) {
         );
         setPixelData(pixelData);
         setTestLines(testLines);
-
-        const newTestLineIntensities = getTestLineIntensities(
-          testLines,
-          pixelData
-        );
-        setTestLineIntensities(newTestLineIntensities);
+        setTests(tests);
       };
 
       imgElement.onload = () => handleImageLoad(imgElement);
@@ -51,13 +45,12 @@ export function useImageAnalyzer(files: File[] | []) {
     setProgress(0);
     setPixelData([]);
     setTestLines([]);
-    setTestLineIntensities([]);
   };
 
   return {
     pixelData,
+    tests,
     testLines,
-    testLineIntensities,
     loading,
     progress,
     reset,

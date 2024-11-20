@@ -1,8 +1,8 @@
-import { TestLineUnit } from "@/types";
+import { PixelData } from "@/types";
 import React from "react";
 
 interface TestLinesListProps {
-  testLines: TestLineUnit[][];
+  testLines: PixelData[][];
   intensities: number[];
 }
 
