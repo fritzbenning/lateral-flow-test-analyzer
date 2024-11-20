@@ -1,8 +1,8 @@
-import { PixelData } from "@/types";
+import { PixelData, TestLineUnit } from "@/types";
 import { rgbToLab } from "./helpers";
 
 export function getTestLineIntensities(
-  testLines: { x: number; y: number }[][],
+  testLines: TestLineUnit[][],
   pixelData: PixelData[][]
 ): number[] {
   const testLineIntensities = testLines.map((testLine) => {

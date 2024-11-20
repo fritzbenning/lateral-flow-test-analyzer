@@ -3,7 +3,7 @@
 import { useImageUploader } from "@/hooks/useImageUploader";
 import { useImageAnalyzer } from "@/hooks/useImageAnalyzer";
 import ImagePreview from "./ImagePreview";
-import GroupedUnitsList from "./GroupedUnitsList";
+import TestLinesList from "./TestLinesList";
 import PixelCanvas from "./PixelCanvas";
 import { Card } from "@/components/ui/card";
 import {
@@ -55,9 +55,9 @@ export function ImageUploader() {
                   </div>
                   <div className="flex-1 flex flex-col space-y-4">
                     <h3 className="text-lg font-bold">Test result</h3>
-                    <GroupedUnitsList
-                      groupedUnits={testLines}
-                      redIntensities={testLineIntensities}
+                    <TestLinesList
+                      testLines={testLines}
+                      intensities={testLineIntensities}
                     />
                   </div>
                 </div>

@@ -1,17 +1,14 @@
 import { analyzeImage } from "@/utils/analyzeImage";
 import { useState, useEffect } from "react";
 import { getTestLineIntensities } from "@/utils/getTestLineIntensities";
-import { PixelData } from "@/types";
+import { PixelData, TestLineUnit } from "@/types";
 
 export function useImageAnalyzer(files: File[] | []) {
   const [loading, setLoading] = useState<boolean>(true);
   const [progress, setProgress] = useState<number>(0);
 
   const [pixelData, setPixelData] = useState<PixelData[][]>([]);
-  const [highHueRedUnits, setHighHueRedUnits] = useState<
-    { x: number; y: number }[][]
-  >([]);
-  const [testLines, setTestLines] = useState<{ x: number; y: number }[][]>([]);
+  const [testLines, setTestLines] = useState<TestLineUnit[][]>([]);
   const [testLineIntensities, setTestLineIntensities] = useState<number[]>([]);
 
   useEffect(() => {
@@ -31,8 +28,6 @@ export function useImageAnalyzer(files: File[] | []) {
         );
         setPixelData(pixelData);
         setTestLines(testLines);
-
-        console.log(pixelData);
 
         const newTestLineIntensities = getTestLineIntensities(
           testLines,
@@ -55,7 +50,6 @@ export function useImageAnalyzer(files: File[] | []) {
     setLoading(true);
     setProgress(0);
     setPixelData([]);
-    setHighHueRedUnits([]);
     setTestLines([]);
     setTestLineIntensities([]);
   };

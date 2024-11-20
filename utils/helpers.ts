@@ -1,4 +1,4 @@
-import { PixelData } from "@/types";
+import { PixelData, TestLineUnit } from "@/types";
 
 export function rgbToHsl(r: number, g: number, b: number) {
   r /= 255;
@@ -39,7 +39,7 @@ export function rgbToHsl(r: number, g: number, b: number) {
   };
 }
 
-export function findHighHueAndRedUnits(pixelData: PixelData[][]) {
+export function findTestLineUnits(pixelData: PixelData[][]) {
   const hueLowerBound1 = 330;
   const hueUpperBound1 = 360;
   const hueLowerBound2 = 0;
@@ -47,7 +47,7 @@ export function findHighHueAndRedUnits(pixelData: PixelData[][]) {
   const saturationThreshold = 6;
   const lightnessLowerBound = 50;
   const lightnessUpperBound = 100;
-  const results: { x: number; y: number }[] = [];
+  const results: TestLineUnit[] = [];
 
   for (let y = 0; y < pixelData.length; y++) {
     for (let x = 0; x <= pixelData[y].length - 4; x++) {
@@ -64,7 +64,11 @@ export function findHighHueAndRedUnits(pixelData: PixelData[][]) {
           );
         })
       ) {
-        results.push({ x, y });
+        results.push({
+          x,
+          y,
+          hsl: sequence[0].hsl,
+        });
       }
     }
   }
@@ -72,11 +76,11 @@ export function findHighHueAndRedUnits(pixelData: PixelData[][]) {
   return results;
 }
 
-export function groupUnitsByProximity(
-  units: { x: number; y: number }[],
+export function groupTestLineUnitsByProximity(
+  units: TestLineUnit[],
   proximity: number = 3
 ) {
-  const grouped: { x: number; y: number }[][] = [];
+  const grouped: TestLineUnit[][] = [];
 
   units.sort((a, b) => a.y - b.y);
 

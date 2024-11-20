@@ -1,7 +1,8 @@
+import { TestLineUnit } from "@/types";
 import React from "react";
 
 interface HighHueRedUnitsListProps {
-  units: { x: number; y: number }[];
+  units: TestLineUnit[];
 }
 
 const HighHueRedUnitsList: React.FC<HighHueRedUnitsListProps> = ({ units }) => (

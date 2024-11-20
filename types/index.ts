@@ -19,3 +19,9 @@ export interface PixelData {
   lab: LabColor;
   hsl: HslColor;
 }
+
+export interface TestLineUnit {
+  x: number;
+  y: number;
+  hsl: { h: number; s: number; l: number };
+}
