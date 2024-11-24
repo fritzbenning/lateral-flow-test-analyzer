@@ -13,23 +13,33 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "./ui/button";
 import { PixelData } from "@/types";
+import ResultHeader from "./ResultHeader";
+import { useState } from "react";
+import { ImageUpload } from "./ImageUpload";
 
 export function ImageUploader() {
-  const { files, getRootProps, getInputProps, isDragActive } =
-    useImageUploader();
+  const config = {
+    batchCount: 4,
+    imageSize: 800,
+  };
+
+  const [files, setFiles] = useState<File[]>([]);
 
   const { pixelData, tests, loading, progress, reset } = useImageAnalyzer(
-    files || []
+    files || [],
+    config.batchCount,
+    config.imageSize
   );
+
+  const handleFiles = (files: File[]) => {
+    setFiles(files);
+  };
 
   return (
     <div>
       {tests.length > 0 ? (
         <div className="flex flex-col gap-8">
-          <div className="flex justify-between items-center">
-            <h2 className="text-xl font-bold">Result</h2>
-            <Button onClick={reset}>Upload new image</Button>
-          </div>
+          <ResultHeader onReset={reset} />
           {files.map((file) => (
             <Card key={file.name} className="p-4">
               {loading ? (
@@ -123,20 +133,7 @@ export function ImageUploader() {
           ))}
         </div>
       ) : (
-        <div
-          {...getRootProps()}
-          className={`relative border-2 border-dashed rounded-lg p-12 transition-colors duration-200 ease-in-out flex flex-col items-center justify-center gap-4 cursor-pointer hover:bg-accent/50 ${
-            isDragActive ? "border-primary bg-accent" : ""
-          }`}
-        >
-          <input {...getInputProps()} />
-          <div className="text-center space-y-2">
-            <p className="text-lg font-medium">Drag & drop your image</p>
-            <p className="text-md text-muted-foreground">
-              or click to select a file from your device
-            </p>
-          </div>
-        </div>
+        <ImageUpload handleFiles={handleFiles} />
       )}
     </div>
   );
