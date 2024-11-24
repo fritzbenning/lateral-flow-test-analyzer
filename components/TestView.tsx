@@ -17,7 +17,7 @@ import ResultHeader from "./ResultHeader";
 import { useState } from "react";
 import { ImageUpload } from "./ImageUpload";
 
-export function ImageUploader() {
+export function TestView() {
   const config = {
     batchCount: 4,
     imageSize: 800,

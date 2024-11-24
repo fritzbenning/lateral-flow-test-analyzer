@@ -1,9 +1,9 @@
-import { createTests } from "@/utils/createTests";
-import { createCanvas } from "./createCanvas";
-import { calcTestImageDimensions } from "./calcTestImageDimensions";
-import { groupPixelDatasByProximity } from "./groupPixelDatasByProximity";
-import { findTestPixels } from "./findTestPixels";
-import { getPixelDataFromImage } from "./getPixelDataFromImage";
+import { createTests } from "@/lib/createTests";
+import { createCanvas } from "@/lib/createCanvas";
+import { calcTestImageDimensions } from "@/lib/calcTestImageDimensions";
+import { groupPixelDatasByProximity } from "@/lib/groupPixelDatasByProximity";
+import { findTestPixels } from "@/lib/findTestPixels";
+import { getPixelDataFromImage } from "@/lib/getPixelDataFromImage";
 export function analyzeImage(
   imgElement: HTMLImageElement,
   batchCount: number,

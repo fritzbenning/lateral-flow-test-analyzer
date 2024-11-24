@@ -1,4 +1,9 @@
-import { PixelData } from "@/types";
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
 
 export function rgbToHsl(r: number, g: number, b: number) {
   r /= 255;

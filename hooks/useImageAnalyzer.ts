@@ -1,7 +1,7 @@
-import { analyzeImage } from "@/utils/analyzeImage";
+import { analyzeImage } from "@/lib/analyzeImage";
 import { useState, useEffect } from "react";
 import { PixelData } from "@/types";
-import { createImgElement } from "@/utils/createImgElement";
+import { createImgElement } from "@/lib/createImgElement";
 
 export function useImageAnalyzer(
   files: File[] | [],

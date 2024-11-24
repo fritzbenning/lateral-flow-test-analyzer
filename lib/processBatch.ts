@@ -1,5 +1,5 @@
 import { PixelData } from "@/types";
-import { rgbToHsl, rgbToLab } from "./helpers";
+import { rgbToHsl, rgbToLab } from "../utils/helpers";
 
 export const processBatch = (
   startY: number,

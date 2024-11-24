@@ -1,5 +1,5 @@
 import { Header } from "@/components/header";
-import { ImageUploader } from "@/components/ImageUploader";
+import { TestView } from "@/components/TestView";
 
 export default function Home() {
   return (
@@ -7,7 +7,7 @@ export default function Home() {
       <div className="container mx-auto px-4 py-8">
         <Header />
         <div className="mt-12">
-          <ImageUploader />
+          <TestView />
         </div>
       </div>
     </main>
