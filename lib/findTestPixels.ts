@@ -1,7 +1,7 @@
 import { PixelData } from "@/types";
 
 export function findTestPixels(pixelData: PixelData[][]) {
-  const hueLowerBound1 = 330;
+  const hueLowerBound1 = 240;
   const hueUpperBound1 = 360;
   const hueLowerBound2 = 0;
   const hueUpperBound2 = 20;

@@ -13,8 +13,6 @@ export const calcIntensity = (lines: any) => {
   const controlPercentile = getPercentile(sortedControlLine);
   const testPercentile = getPercentile(sortedTestLine);
 
-  console.log("p", getPercentile(sortedControlLine));
-
   const controlIntensityLAB = sortedControlLine[controlPercentile].lab.a;
   const testIntensityLAB = sortedTestLine[testPercentile].lab.a;
   const differenceLAB = (testIntensityLAB / controlIntensityLAB) * 100;

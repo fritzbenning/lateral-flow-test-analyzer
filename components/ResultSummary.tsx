@@ -31,17 +31,17 @@ interface ResultSummaryProps {
 }
 
 const ResultSummary = ({ index, test, pixelData }: ResultSummaryProps) => {
-  const controlIndex = test.intensities.controlIndex;
-  const testIndex = test.intensities.testIndex;
+  const controlIndex = test?.intensities.controlIndex;
+  const testIndex = test?.intensities.testIndex;
 
-  const controlHSL = test.controlLine.units[controlIndex].hsl;
-  const testHSL = test.testLine.units[testIndex].hsl;
+  const controlHSL = test?.controlLine.units[controlIndex].hsl;
+  const testHSL = test?.testLine.units[testIndex].hsl;
 
   return (
     <div className="flex flex-col gap-5">
       <h3 className="flex gap-2 text-lg">
         <div className="flex items-center gap-1.5 text-red-500">
-          <ShieldAlert width="20" height="20" /> {test.result}
+          <ShieldAlert width="20" height="20" /> {test?.result}
         </div>
       </h3>
       <div className="flex flex-col gap-2">
@@ -51,64 +51,70 @@ const ResultSummary = ({ index, test, pixelData }: ResultSummaryProps) => {
               <CircleCheck width="20" height="20" /> Control line (C) and test
               line (T) detected
             </span>
-            <div className="flex gap-1">
-              <div
-                className="h-6 w-6 rounded-full"
-                style={{
-                  backgroundColor: `hsl(${controlHSL.h}, ${controlHSL.s}%, ${controlHSL.l}%)`,
-                }}
-              />
-              <div
-                className="h-6 w-6 rounded-full"
-                style={{
-                  backgroundColor: `hsl(${testHSL.h}, ${testHSL.s}%, ${testHSL.l}%)`,
-                }}
-              />
-            </div>
+            {test?.intensities && (
+              <div className="flex gap-1">
+                <div
+                  className="h-6 w-6 rounded-full"
+                  style={{
+                    backgroundColor: `hsl(${controlHSL.h}, ${controlHSL.s}%, ${controlHSL.l}%)`,
+                  }}
+                />
+                <div
+                  className="h-6 w-6 rounded-full"
+                  style={{
+                    backgroundColor: `hsl(${testHSL.h}, ${testHSL.s}%, ${testHSL.l}%)`,
+                  }}
+                />
+              </div>
+            )}
           </AlertTitle>
         </Alert>
-        <Alert>
-          <AlertTitle>
-            <div className="flex w-full items-center justify-between">
-              <span>
-                <strong>{test?.intensities?.LAB.difference} %</strong> intensity
-                relative to control line
-              </span>
-              <span className="flex items-center gap-1.5 text-sm font-bold">
-                <SwatchBook width="16" height="16" /> LAB{" "}
-                <span className="font-normal">
-                  (90p
-                  <sup>th</sup>)
-                </span>
-              </span>
-            </div>
-          </AlertTitle>
-          <AlertDescription>
-            (C) {test?.intensities?.LAB.control} a* axis ・ (T){" "}
-            {test?.intensities?.LAB.test} a* axis
-          </AlertDescription>
-        </Alert>
-        <Alert>
-          <AlertTitle>
-            <div className="flex w-full items-center justify-between">
-              <span>
-                <strong>{test?.intensities?.HSL.difference} %</strong> intensity
-                relative to control line
-              </span>
-              <span className="flex items-center gap-1.5 text-sm font-bold">
-                <SwatchBook width="16" height="16" /> HSL{" "}
-                <span className="font-normal">
-                  (90p
-                  <sup>th</sup>)
-                </span>
-              </span>
-            </div>
-          </AlertTitle>
-          <AlertDescription>
-            (C) {test?.intensities?.HSL.control}% saturation ・ (T){" "}
-            {test?.intensities?.HSL.test}% saturation
-          </AlertDescription>
-        </Alert>
+        {test?.intensities && (
+          <>
+            <Alert>
+              <AlertTitle>
+                <div className="flex w-full items-center justify-between">
+                  <span>
+                    <strong>{test?.intensities?.LAB.difference} %</strong>{" "}
+                    intensity relative to control line
+                  </span>
+                  <span className="flex items-center gap-1.5 text-sm font-bold">
+                    <SwatchBook width="16" height="16" /> LAB{" "}
+                    <span className="font-normal">
+                      (90p
+                      <sup>th</sup>)
+                    </span>
+                  </span>
+                </div>
+              </AlertTitle>
+              <AlertDescription>
+                (C) {test?.intensities?.LAB.control} a* axis ・ (T){" "}
+                {test?.intensities?.LAB.test} a* axis
+              </AlertDescription>
+            </Alert>
+            <Alert>
+              <AlertTitle>
+                <div className="flex w-full items-center justify-between">
+                  <span>
+                    <strong>{test?.intensities?.HSL.difference} %</strong>{" "}
+                    intensity relative to control line
+                  </span>
+                  <span className="flex items-center gap-1.5 text-sm font-bold">
+                    <SwatchBook width="16" height="16" /> HSL{" "}
+                    <span className="font-normal">
+                      (90p
+                      <sup>th</sup>)
+                    </span>
+                  </span>
+                </div>
+              </AlertTitle>
+              <AlertDescription>
+                (C) {test?.intensities?.HSL.control}% saturation ・ (T){" "}
+                {test?.intensities?.HSL.test}% saturation
+              </AlertDescription>
+            </Alert>
+          </>
+        )}
       </div>
       <div className="flex gap-2">
         <Dialog>
@@ -121,7 +127,7 @@ const ResultSummary = ({ index, test, pixelData }: ResultSummaryProps) => {
               <div className="flex flex-col gap-3">
                 <h4 className="text-md">Control</h4>
                 <ul className="flex w-[760px] flex-wrap gap-2">
-                  {test.controlLine.units.map(
+                  {test?.controlLine.units.map(
                     (unit: PixelData, unitIndex: number) => (
                       <li
                         key={unitIndex}
@@ -157,7 +163,7 @@ const ResultSummary = ({ index, test, pixelData }: ResultSummaryProps) => {
               <div className="flex flex-col gap-3">
                 <h4 className="text-md">Test</h4>
                 <ul className="flex w-[760px] flex-wrap gap-2">
-                  {test.testLine.units.map(
+                  {test?.testLine.units.map(
                     (unit: PixelData, unitIndex: number) => (
                       <li
                         key={unitIndex}

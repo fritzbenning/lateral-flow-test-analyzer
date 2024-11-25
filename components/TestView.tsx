@@ -1,21 +1,14 @@
 "use client";
+
 import { useImageAnalyzer } from "@/hooks/useImageAnalyzer";
 import ImagePreview from "@/components/ImagePreview";
-import PixelCanvas from "@/components/PixelCanvas";
 import { Card } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogTrigger,
-  DialogTitle,
-  DialogContent,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import ResultHeader from "@/components/ResultHeader";
 import { useEffect, useState } from "react";
 import { ImageUpload } from "@/components/ImageUpload";
 import ResultSummary from "@/components/ResultSummary";
-import { AnimatePresence } from "framer-motion";
 import { Image } from "lucide-react";
+import { ImageOptimizer } from "./ImageOptimizer";
 
 export function TestView() {
   const config = {
@@ -25,20 +18,19 @@ export function TestView() {
 
   const [files, setFiles] = useState<File[]>([]);
 
-  const { pixelData, tests, loading, progress, reset } = useImageAnalyzer(
-    files || [],
-    config.batchCount,
-    config.imageSize,
-  );
+  const {
+    pixelData,
+    tests,
+    loading,
+    progress,
+    reset,
+    imgElement,
+    optImgElement,
+  } = useImageAnalyzer(files || [], config.batchCount, config.imageSize);
 
   const handleFiles = (files: File[]) => {
     setFiles(files);
-    console.log(files);
   };
-
-  useEffect(() => {
-    console.log(tests);
-  }, [tests]);
 
   return (
     <>
@@ -57,7 +49,8 @@ export function TestView() {
                   </div>
                   <div className="flex flex-col md:flex-row">
                     <aside className="flex w-80 flex-col gap-3 p-7">
-                      <ImagePreview file={file} />
+                      <ImagePreview image={imgElement} />
+                      <ImagePreview image={optImgElement} />
                     </aside>
                     <div className="flex flex-1 flex-col space-y-4 p-7">
                       {tests.map((test, index) => (

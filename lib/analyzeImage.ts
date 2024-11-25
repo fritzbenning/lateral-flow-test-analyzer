@@ -4,11 +4,12 @@ import { calcTestImageDimensions } from "@/lib/calcTestImageDimensions";
 import { groupPixelDatasByProximity } from "@/lib/groupPixelDatasByProximity";
 import { findTestPixels } from "@/lib/findTestPixels";
 import { getPixelDataFromImage } from "@/lib/getPixelDataFromImage";
+
 export function analyzeImage(
   imgElement: HTMLImageElement,
   batchCount: number,
   imageSize: number,
-  onProgress: (progress: number) => void
+  onProgress: (progress: number) => void,
 ) {
   const { width, height } = calcTestImageDimensions(imgElement, imageSize);
   const { ctx } = createCanvas(width, height);
@@ -21,7 +22,7 @@ export function analyzeImage(
     width,
     height,
     batchCount,
-    onProgress
+    onProgress,
   );
 
   const identifiedTestPixels = findTestPixels(pixelData);

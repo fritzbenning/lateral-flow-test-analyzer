@@ -5,8 +5,6 @@ import { getResultMessage } from "./getResultMessage";
 export const createTests = (testLines: PixelData[][]) => {
   const threshold = 10;
 
-  console.log(testLines);
-
   const sortedLines = testLines.sort((a, b) => a[0].y - b[0].y);
 
   const associatedLines = sortedLines.reduce(
