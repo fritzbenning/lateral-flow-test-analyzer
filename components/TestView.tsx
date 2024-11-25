@@ -1,9 +1,7 @@
 "use client";
-
-import { useImageUploader } from "@/hooks/useImageUploader";
 import { useImageAnalyzer } from "@/hooks/useImageAnalyzer";
-import ImagePreview from "./ImagePreview";
-import PixelCanvas from "./PixelCanvas";
+import ImagePreview from "@/components/ImagePreview";
+import PixelCanvas from "@/components/PixelCanvas";
 import { Card } from "@/components/ui/card";
 import {
   Dialog,
@@ -11,11 +9,13 @@ import {
   DialogTitle,
   DialogContent,
 } from "@/components/ui/dialog";
-import { Button } from "./ui/button";
-import { PixelData } from "@/types";
-import ResultHeader from "./ResultHeader";
-import { useState } from "react";
-import { ImageUpload } from "./ImageUpload";
+import { Button } from "@/components/ui/button";
+import ResultHeader from "@/components/ResultHeader";
+import { useEffect, useState } from "react";
+import { ImageUpload } from "@/components/ImageUpload";
+import ResultSummary from "@/components/ResultSummary";
+import { AnimatePresence } from "framer-motion";
+import { Image } from "lucide-react";
 
 export function TestView() {
   const config = {
@@ -28,106 +28,49 @@ export function TestView() {
   const { pixelData, tests, loading, progress, reset } = useImageAnalyzer(
     files || [],
     config.batchCount,
-    config.imageSize
+    config.imageSize,
   );
 
   const handleFiles = (files: File[]) => {
     setFiles(files);
+    console.log(files);
   };
 
+  useEffect(() => {
+    console.log(tests);
+  }, [tests]);
+
   return (
-    <div>
+    <>
       {tests.length > 0 ? (
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-5">
           <ResultHeader onReset={reset} />
           {files.map((file) => (
-            <Card key={file.name} className="p-4">
+            <Card key={file.name}>
               {loading ? (
                 <>{progress}</>
               ) : (
-                <div className="flex flex-col md:flex-row gap-4">
-                  <div className="w-80 flex flex-col gap-3">
-                    <ImagePreview file={file} />
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <Button className="btn">Open Canvas</Button>
-                      </DialogTrigger>
-                      <DialogContent>
-                        <DialogTitle>Canvas Preview</DialogTitle>
-                        <PixelCanvas pixelData={pixelData} />
-                      </DialogContent>
-                    </Dialog>
+                <>
+                  <div className="border-slate-150 align-items text-md flex gap-2 border-b px-6 py-4 font-medium leading-tight">
+                    <Image width="20px" height="20px" />
+                    {file.name}
                   </div>
-                  <div className="flex-1 flex flex-col space-y-4">
-                    {tests.map(
-                      (test, index) =>
-                        test && (
-                          <div key={index}>
-                            <h3 className="text-lg">
-                              <strong>Test result {index + 1}:</strong>{" "}
-                              {test?.differenceLAB} % probability for a positive
-                              test
-                            </h3>
-                            <div className="flex gap-4">
-                              <div>
-                                <h4 className="font-bold">Control</h4>
-                                <p>
-                                  Highest intensity:{" "}
-                                  {test.controlLine.intensity}
-                                </p>
-                                <ul className="flex flex-col gap-2">
-                                  {test.controlLine.units.map(
-                                    (unit: PixelData, unitIndex: number) => (
-                                      <li
-                                        key={unitIndex}
-                                        className="flex items-center gap-2"
-                                      >
-                                        <div
-                                          className="w-6 h-6 rounded-md"
-                                          style={{
-                                            backgroundColor: `hsl(${unit.hsl.h}, ${unit.hsl.s}%, ${unit.hsl.l}%)`,
-                                          }}
-                                        />
-                                        x: {unit.x}, y: {unit.y}
-                                        {/* LAB: {unit.lab.l}, {unit.lab.a},{" "}
-                                    {unit.lab.b} */}
-                                      </li>
-                                    )
-                                  )}
-                                </ul>
-                              </div>
-                              <div>
-                                <h4 className="font-bold">Test</h4>
-                                <p>
-                                  Highest intensity: {test.testLine.intensity}
-                                </p>
-                                <ul className="flex flex-col gap-2">
-                                  {test.testLine.units.map(
-                                    (unit: PixelData, unitIndex: number) => (
-                                      <li
-                                        key={unitIndex}
-                                        className="flex items-center gap-2"
-                                      >
-                                        <div
-                                          className="w-6 h-6 rounded-md"
-                                          style={{
-                                            backgroundColor: `hsl(${unit.hsl.h}, ${unit.hsl.s}%, ${unit.hsl.l}%)`,
-                                          }}
-                                        />
-                                        x: {unit.x}, y: {unit.y}
-                                        {/* LAB: {unit.lab.l}, {unit.lab.a},{" "}
-                                    {unit.lab.b} */}
-                                      </li>
-                                    )
-                                  )}
-                                </ul>
-                              </div>
-                            </div>
-                          </div>
-                        )
-                    )}
+                  <div className="flex flex-col md:flex-row">
+                    <aside className="flex w-80 flex-col gap-3 p-7">
+                      <ImagePreview file={file} />
+                    </aside>
+                    <div className="flex flex-1 flex-col space-y-4 p-7">
+                      {tests.map((test, index) => (
+                        <ResultSummary
+                          key={index}
+                          test={test}
+                          index={index}
+                          pixelData={pixelData}
+                        />
+                      ))}
+                    </div>
                   </div>
-                </div>
+                </>
               )}
             </Card>
           ))}
@@ -135,6 +78,6 @@ export function TestView() {
       ) : (
         <ImageUpload handleFiles={handleFiles} />
       )}
-    </div>
+    </>
   );
 }

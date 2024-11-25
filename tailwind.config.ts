@@ -1,5 +1,7 @@
 import type { Config } from "tailwindcss";
 
+const pxToRem = (px: number, base: number = 16) => `${px / base}rem`;
+
 const config: Config = {
   darkMode: ["class"],
   content: [
@@ -8,6 +10,18 @@ const config: Config = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    fontSize: {
+      xs: pxToRem(12),
+      sm: pxToRem(14),
+      md: pxToRem(15),
+      base: pxToRem(16),
+      lg: pxToRem(17),
+      xl: pxToRem(20),
+      "2xl": pxToRem(24),
+      "3xl": pxToRem(30),
+      "4xl": pxToRem(36),
+      "5xl": pxToRem(48),
+    },
     extend: {
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
@@ -60,6 +74,16 @@ const config: Config = {
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
         },
+        sidebar: {
+          DEFAULT: "hsl(var(--sidebar-background))",
+          foreground: "hsl(var(--sidebar-foreground))",
+          primary: "hsl(var(--sidebar-primary))",
+          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
+          accent: "hsl(var(--sidebar-accent))",
+          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
+          border: "hsl(var(--sidebar-border))",
+          ring: "hsl(var(--sidebar-ring))",
+        },
       },
       keyframes: {
         "accordion-down": {
@@ -79,8 +103,12 @@ const config: Config = {
           },
         },
         fadeIn: {
-          "0%": { opacity: "0" },
-          "100%": { opacity: "1" },
+          "0%": {
+            opacity: "0",
+          },
+          "100%": {
+            opacity: "1",
+          },
         },
       },
       animation: {

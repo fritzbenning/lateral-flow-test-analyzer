@@ -1,26 +1,29 @@
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 
-export function useImageUploader() {
-  const [files, setFiles] = useState<File[]>([]);
+interface UseImageUploaderProps {
+  onFilesSelected: (files: File[]) => void;
+}
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    setFiles(acceptedFiles);
-  }, []);
+export function useImageUploader({ onFilesSelected }: UseImageUploaderProps) {
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      onFilesSelected(acceptedFiles);
+    },
+    [onFilesSelected]
+  );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
-      "image/*": [],
+      "image/*": [".jpeg", ".jpg", ".png"],
     },
-    maxFiles: 1,
+    multiple: false,
   });
 
   return {
-    files,
     getRootProps,
     getInputProps,
     isDragActive,
-    onDrop,
   };
 }

@@ -6,7 +6,7 @@ import { createImgElement } from "@/lib/createImgElement";
 export function useImageAnalyzer(
   files: File[] | [],
   batchCount: number = 4,
-  imageSize: number = 800
+  imageSize: number = 800,
 ) {
   const [loading, setLoading] = useState<boolean>(true);
   const [progress, setProgress] = useState<number>(0);
@@ -27,7 +27,7 @@ export function useImageAnalyzer(
           imageSize,
           (newProgress) => {
             setProgress(newProgress);
-          }
+          },
         );
 
         setPixelData(pixelData);
@@ -43,6 +43,7 @@ export function useImageAnalyzer(
     setLoading(true);
     setProgress(0);
     setPixelData([]);
+    setTests([]);
   };
 
   return {

@@ -1,7 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Grid, GridCellProps } from "react-virtualized";
 import "react-virtualized/styles.css"; // Import default styles
-import { Info } from "lucide-react";
 import { LabColor, PixelData, RgbColor } from "@/types";
 
 type HSLType = { h: number; s: number; l: number };
@@ -10,6 +9,9 @@ interface PixelCanvasProps {
 }
 
 const PixelCanvas: React.FC<PixelCanvasProps> = ({ pixelData }) => {
+  const width = 780;
+  const height = 640;
+
   const canvasRef = useRef<HTMLDivElement>(null);
 
   const [columnPosition, setColumnPosition] = useState<number | null>(null);
@@ -31,7 +33,7 @@ const PixelCanvas: React.FC<PixelCanvasProps> = ({ pixelData }) => {
       row: number,
       rgb: RgbColor,
       hsl: HSLType,
-      lab: LabColor
+      lab: LabColor,
     ) => {
       setColumnPosition(column);
       setRowPosition(row);
@@ -43,7 +45,7 @@ const PixelCanvas: React.FC<PixelCanvasProps> = ({ pixelData }) => {
     return (
       <button
         key={key}
-        className="animate-fade-in border-white w-4 h-4 hover:border-2"
+        className="h-4 w-4 animate-fade-in border-white hover:border-2"
         style={{
           ...style,
           backgroundColor: `hsl(${pixel.hsl.h}, ${pixel.hsl.s}%, ${pixel.hsl.l}%)`,
@@ -59,22 +61,22 @@ const PixelCanvas: React.FC<PixelCanvasProps> = ({ pixelData }) => {
   const rowCount = pixelData.length;
 
   return (
-    <div ref={canvasRef} className="flex flex-col gap-4 w-full">
+    <div ref={canvasRef} className="flex w-full flex-col gap-4">
       <Grid
         cellRenderer={cellRenderer}
         columnCount={columnCount}
         columnWidth={20}
-        height={640}
         rowCount={rowCount}
         rowHeight={20}
-        width={780}
+        width={width}
+        height={height}
         scrollToColumn={Math.floor(columnCount / 2)}
         scrollToRow={Math.floor(rowCount / 2)}
-        className="rounded-lg overflow-hidden"
+        className="overflow-hidden rounded-lg"
       />
-      <figcaption className="w-full text-sm flex items-center justify-between leading-4 text-left gap-4">
+      <figcaption className="flex w-full items-center justify-between gap-4 text-left text-sm leading-4">
         <div
-          className="w-6 h-6 rounded-md"
+          className="h-6 w-6 rounded-md"
           style={{
             backgroundColor: `hsl(${selectedHSL?.h}, ${selectedHSL?.s}%, ${selectedHSL?.l}%)`,
           }}
@@ -99,7 +101,7 @@ const PixelCanvas: React.FC<PixelCanvasProps> = ({ pixelData }) => {
           <strong>LAB:</strong>{" "}
           {selectedLAB
             ? `${Math.floor(selectedLAB.l)}, ${Math.floor(
-                selectedLAB.a
+                selectedLAB.a,
               )}, ${Math.floor(selectedLAB.b)}`
             : "N/A"}
         </div>

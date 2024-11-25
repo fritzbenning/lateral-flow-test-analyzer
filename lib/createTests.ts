@@ -1,4 +1,6 @@
 import { PixelData } from "@/types";
+import { calcIntensity } from "@/lib/calcIntensity";
+import { getResultMessage } from "./getResultMessage";
 
 export const createTests = (testLines: PixelData[][]) => {
   const threshold = 10;
@@ -12,7 +14,7 @@ export const createTests = (testLines: PixelData[][]) => {
       const x = line[0].x;
       const found = acc.find(
         (group: any) =>
-          group[0][0].x >= x - threshold && group[0][0].x <= x + threshold
+          group[0][0].x >= x - threshold && group[0][0].x <= x + threshold,
       );
       if (found) {
         found.push(line);
@@ -21,7 +23,7 @@ export const createTests = (testLines: PixelData[][]) => {
       }
       return acc;
     },
-    []
+    [],
   );
 
   const tests = associatedLines.map((lines: any) => {
@@ -38,26 +40,19 @@ export const createTests = (testLines: PixelData[][]) => {
       console.warn("More than 2 lines found in a group");
     }
 
-    const controlIntensity = lines[0].sort(
-      (a: PixelData, b: PixelData) => b.lab.a - a.lab.a
-    )[0].lab.a;
+    const intensities = calcIntensity(lines);
 
-    const testIntensity = lines[1].sort(
-      (a: PixelData, b: PixelData) => b.lab.a - a.lab.a
-    )[0].lab.a;
-
-    const differenceLAB = Math.floor((testIntensity / controlIntensity) * 100);
+    const resultMessage = getResultMessage(intensities.merged);
 
     return {
       controlLine: {
         units: lines[0],
-        intensity: controlIntensity,
       },
       testLine: {
         units: lines[1],
-        intensity: testIntensity,
       },
-      differenceLAB,
+      intensities,
+      result: resultMessage,
     };
   });
 
