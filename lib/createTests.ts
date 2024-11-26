@@ -3,11 +3,17 @@ import { calcIntensity } from "@/lib/calcIntensity";
 import { getResultMessage } from "./getResultMessage";
 
 export const createTests = (testLines: PixelData[][]) => {
-  const threshold = 10;
+  const threshold = 80;
 
-  const sortedLines = testLines.sort((a, b) => a[0].y - b[0].y);
+  const linesSortedByLength = testLines
+    .sort((a, b) => b.length - a.length)
+    .slice(0, 2);
 
-  const associatedLines = sortedLines.reduce(
+  console.log(linesSortedByLength);
+
+  const linesSortedByY = linesSortedByLength.sort((a, b) => a[0].y - b[0].y);
+
+  const associatedLines = linesSortedByY.reduce(
     (acc: PixelData[][], line: any) => {
       const x = line[0].x;
       const found = acc.find(
@@ -24,7 +30,11 @@ export const createTests = (testLines: PixelData[][]) => {
     [],
   );
 
+  console.log(associatedLines);
+
   const tests = associatedLines.map((lines: any) => {
+    console.log(lines);
+
     if (lines.length === 0) {
       console.warn("Group has no lines");
       return null;
@@ -42,6 +52,8 @@ export const createTests = (testLines: PixelData[][]) => {
 
     const resultMessage = getResultMessage(intensities.merged);
 
+    console.log(lines);
+
     return {
       controlLine: {
         units: lines[0],
@@ -53,6 +65,8 @@ export const createTests = (testLines: PixelData[][]) => {
       result: resultMessage,
     };
   });
+
+  console.log(tests);
 
   return tests;
 };

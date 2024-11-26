@@ -6,6 +6,7 @@ import { findTestPixels } from "@/lib/findTestPixels";
 import { getPixelDataFromImage } from "@/lib/getPixelDataFromImage";
 
 export function analyzeImage(
+  index: number,
   imgElement: HTMLImageElement,
   batchCount: number,
   imageSize: number,
@@ -18,6 +19,7 @@ export function analyzeImage(
   const imageData = ctx.getImageData(0, 0, width, height);
 
   const pixelData = getPixelDataFromImage(
+    index,
     imageData,
     width,
     height,

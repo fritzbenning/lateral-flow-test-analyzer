@@ -2,7 +2,7 @@ import { PixelData } from "@/types";
 
 export function groupPixelDatasByProximity(
   units: PixelData[],
-  proximity: number = 3
+  proximity: number = 3,
 ) {
   const grouped: PixelData[][] = [];
 
@@ -22,5 +22,9 @@ export function groupPixelDatasByProximity(
     }
   });
 
-  return grouped;
+  const groups = grouped.filter((group) => group.length > 3);
+
+  console.log(groups);
+
+  return groups;
 }

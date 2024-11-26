@@ -11,6 +11,8 @@ import {
 } from "@/components/ui/tooltip";
 import PixelCanvas from "./PixelCanvas";
 import { Separator } from "./ui/separator";
+import { useTestStore } from "@/stores/testStore";
+import { useEffect } from "react";
 
 interface ResultSummaryProps {
   index: number;
@@ -27,12 +29,18 @@ interface ResultSummaryProps {
     LAB: any;
     HSL: any;
   };
-  pixelData: PixelData[][];
 }
 
-const ResultSummary = ({ index, test, pixelData }: ResultSummaryProps) => {
-  const controlIndex = test?.intensities.controlIndex;
-  const testIndex = test?.intensities.testIndex;
+const ResultSummary = ({ index, test }: ResultSummaryProps) => {
+  const tests = useTestStore((state) => state.tests);
+  const allPixels = tests[index].allPixels;
+
+  useEffect(() => {
+    console.log(allPixels);
+  }, [allPixels]);
+
+  const controlIndex = test?.intensities?.controlIndex;
+  const testIndex = test?.intensities?.testIndex;
 
   const controlHSL = test?.controlLine.units[controlIndex].hsl;
   const testHSL = test?.testLine.units[testIndex].hsl;
@@ -205,7 +213,7 @@ const ResultSummary = ({ index, test, pixelData }: ResultSummaryProps) => {
           </DialogTrigger>
           <DialogContent>
             <DialogTitle>Canvas Preview</DialogTitle>
-            <PixelCanvas pixelData={pixelData} />
+            <PixelCanvas pixelData={allPixels} />
           </DialogContent>
         </Dialog>
       </div>

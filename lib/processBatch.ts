@@ -8,7 +8,7 @@ export const processBatch = (
   width: number,
   height: number,
   onProgress: (progress: number) => void,
-  pixelBinding: number = 2
+  pixelBinding: number = 2,
 ) => {
   const totalRows = Math.ceil(height / 2);
   let processedRows = 0;
