@@ -20,7 +20,7 @@ export function trimTransparentEdges(blob: Blob): Promise<Blob> {
       // Copy original data to result
       result.set(data);
 
-      const blockSize = 4; // Process 5x5 blocks at a time
+      const blockSize = 4; // Process 4x4 blocks at a time
       const threshold = Math.floor(img.width / 100); // Distance threshold to transparency
 
       // Process in blocks

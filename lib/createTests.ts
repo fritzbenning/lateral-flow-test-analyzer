@@ -1,8 +1,13 @@
 import { PixelData } from "@/types";
 import { calcIntensity } from "@/lib/calcIntensity";
 import { getResultMessage } from "./getResultMessage";
+import {
+  setControlLineIntensity,
+  setControlLinePixels,
+  setTestLinePixels,
+} from "@/stores/testStore";
 
-export const createTests = (testLines: PixelData[][]) => {
+export const createTests = (index: number, testLines: PixelData[][]) => {
   const threshold = 80;
 
   const linesSortedByLength = testLines
@@ -48,11 +53,14 @@ export const createTests = (testLines: PixelData[][]) => {
       console.warn("More than 2 lines found in a group");
     }
 
-    const intensities = calcIntensity(lines);
+    const intensities = calcIntensity(index, lines);
 
     const resultMessage = getResultMessage(intensities.merged);
 
     console.log(lines);
+
+    setControlLinePixels(index, lines[0]);
+    setTestLinePixels(index, lines[1]);
 
     return {
       controlLine: {

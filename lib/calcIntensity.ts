@@ -1,7 +1,12 @@
 import { PixelData } from "@/types";
 import { getPercentile } from "./getPercentile";
+import {
+  setControlLineIntensity,
+  setMergedIntensity,
+  setTestLineIntensity,
+} from "@/stores/testStore";
 
-export const calcIntensity = (lines: any) => {
+export const calcIntensity = (index: number, lines: any) => {
   const sortedControlLine = lines[0].sort(
     (a: PixelData, b: PixelData) => b.lab.a - a.lab.a,
   );
@@ -22,6 +27,18 @@ export const calcIntensity = (lines: any) => {
   const differenceHSL = (testIntensityHSL / controlIntensityHSL) * 100;
 
   const mergedIntensity = differenceLAB + differenceHSL / 2;
+
+  setControlLineIntensity(index, {
+    LAB: Math.floor(controlIntensityLAB),
+    HSL: Math.floor(controlIntensityHSL),
+  });
+
+  setTestLineIntensity(index, {
+    LAB: Math.floor(testIntensityLAB),
+    HSL: Math.floor(testIntensityHSL),
+  });
+
+  setMergedIntensity(index, mergedIntensity);
 
   return {
     LAB: {

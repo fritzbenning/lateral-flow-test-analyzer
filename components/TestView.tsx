@@ -1,31 +1,33 @@
 "use client";
 
-import { useImageAnalyzer } from "@/hooks/useImageAnalyzer";
 import ImagePreview from "@/components/ImagePreview";
 import { Card } from "@/components/ui/card";
 import ResultHeader from "@/components/ResultHeader";
 import { useEffect, useState } from "react";
 import { ImageUpload } from "@/components/ImageUpload";
 import ResultSummary from "@/components/ResultSummary";
-import { Image } from "lucide-react";
+import { ImageIcon } from "lucide-react";
 import { LoadingSpinner } from "./ui/loading-spinner";
-import { useTestStore } from "@/stores/testStore";
+import { resetStore, useTestStore } from "@/stores/testStore";
+import { useTests } from "@/hooks/useTests";
+import { useImageOptimizer } from "@/hooks/useImageOptimizer";
 
 export function TestView() {
   const [files, setFiles] = useState<File[]>([]);
 
-  const {
-    tests: oldTests,
-    reset,
-    optImgElement,
-    status,
-  } = useImageAnalyzer(files || []);
+  const { status, optimizedImages } = useImageOptimizer(files);
+
+  const { tests: oldTests } = useTests(optimizedImages);
+  const tests = useTestStore((state) => state.tests);
 
   const handleFiles = (files: File[]) => {
     setFiles(files);
   };
 
-  const tests = useTestStore((state) => state.tests);
+  const reset = () => {
+    resetStore();
+    setFiles([]);
+  };
 
   useEffect(() => {
     console.log(tests);
@@ -38,7 +40,7 @@ export function TestView() {
           <ResultHeader onReset={reset} />
           {files.map((file, index) => (
             <Card key={file.name}>
-              {!optImgElement ? (
+              {!optimizedImages ? (
                 <div className="flex min-h-[320px] w-full flex-col items-center justify-center gap-4">
                   <LoadingSpinner size={32} />
                   {status}
@@ -46,7 +48,7 @@ export function TestView() {
               ) : (
                 <>
                   <div className="border-slate-150 align-items flex gap-2 border-b px-6 py-4 text-md font-medium leading-tight">
-                    <Image width="20px" height="20px" alt="Image" />
+                    <ImageIcon className="h-5 w-5" />
                     {file.name}
                   </div>
                   <div className="flex flex-col md:flex-row">

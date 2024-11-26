@@ -25,10 +25,6 @@ interface ResultSummaryProps {
       units: PixelData[];
     };
   };
-  intensities: {
-    LAB: any;
-    HSL: any;
-  };
 }
 
 const ResultSummary = ({ index, test }: ResultSummaryProps) => {
