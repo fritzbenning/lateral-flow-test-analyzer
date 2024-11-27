@@ -24,6 +24,20 @@ interface ResultSummaryProps {
     testLine: {
       units: PixelData[];
     };
+    intensities?: {
+      controlIndex: number;
+      testIndex: number;
+      LAB: {
+        control: number;
+        test: number;
+        difference: number;
+      };
+      HSL: {
+        control: number;
+        test: number;
+        difference: number;
+      };
+    };
   };
 }
 
@@ -38,8 +52,10 @@ const ResultSummary = ({ index, test }: ResultSummaryProps) => {
   const controlIndex = test?.intensities?.controlIndex;
   const testIndex = test?.intensities?.testIndex;
 
-  const controlHSL = test?.controlLine.units[controlIndex].hsl;
-  const testHSL = test?.testLine.units[testIndex].hsl;
+  const controlHSL = controlIndex
+    ? test?.controlLine.units[controlIndex].hsl
+    : null;
+  const testHSL = testIndex ? test?.testLine.units[testIndex].hsl : null;
 
   return (
     <div className="flex flex-col gap-5">
@@ -60,13 +76,13 @@ const ResultSummary = ({ index, test }: ResultSummaryProps) => {
                 <div
                   className="h-6 w-6 rounded-full"
                   style={{
-                    backgroundColor: `hsl(${controlHSL.h}, ${controlHSL.s}%, ${controlHSL.l}%)`,
+                    backgroundColor: `hsl(${controlHSL?.h}, ${controlHSL?.s}%, ${controlHSL?.l}%)`,
                   }}
                 />
                 <div
                   className="h-6 w-6 rounded-full"
                   style={{
-                    backgroundColor: `hsl(${testHSL.h}, ${testHSL.s}%, ${testHSL.l}%)`,
+                    backgroundColor: `hsl(${testHSL?.h}, ${testHSL?.s}%, ${testHSL?.l}%)`,
                   }}
                 />
               </div>
