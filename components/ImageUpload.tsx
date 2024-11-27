@@ -1,5 +1,5 @@
 import { useImageUploader } from "@/hooks/useImageUploader";
-import { FileIcon, Image, Upload } from "lucide-react";
+import { ImageIcon, Upload } from "lucide-react";
 import { Button } from "./ui/Button";
 
 interface ImageUploadProps {
@@ -44,7 +44,7 @@ export function ImageUpload({ handleFiles }: ImageUploadProps) {
       <div className="flex flex-col items-center gap-4">
         <div className="text-sm font-semibold uppercase text-slate-400">or</div>
         <Button variant="outline" onClick={handleExampleImage}>
-          <Image className="mr-2 h-4 w-4" />
+          <ImageIcon className="mr-2 h-4 w-4" />
           Try out a test image
         </Button>
       </div>
