@@ -16,7 +16,7 @@ import { ResultCard } from "@/components/ResultCard";
 export function Lab() {
   const [files, setFiles] = useState<File[]>([]);
 
-  const { status, optimizedImages } = useImageOptimizer(files);
+  const { status, loading, optimizedImages } = useImageOptimizer(files);
 
   useTests(optimizedImages);
 
@@ -39,6 +39,7 @@ export function Lab() {
               key={file.name}
               file={file}
               status={status}
+              loading={loading}
               index={index}
             />
           ))}

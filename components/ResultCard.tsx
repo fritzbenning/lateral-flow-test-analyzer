@@ -9,17 +9,20 @@ interface ResultCardProps {
   file: File;
   status: string;
   index: number;
+  loading: boolean;
 }
 
-export function ResultCard({ file, status, index }: ResultCardProps) {
-  const image = useTestStore((state) => state.tests[index].image);
-  const optimizedImage = useTestStore(
-    (state) => state.tests[index].optimizedImage,
-  );
+export function ResultCard({
+  file,
+  status,
+  index,
+  loading = true,
+}: ResultCardProps) {
+  const test = useTestStore((state) => state.tests[index]);
 
   return (
     <Card key={file.name}>
-      {!optimizedImage ? (
+      {loading ? (
         <div className="flex min-h-[320px] w-full flex-col items-center justify-center gap-4">
           <LoadingSpinner size={32} />
           {status}
@@ -32,7 +35,7 @@ export function ResultCard({ file, status, index }: ResultCardProps) {
           </div>
           <div className="flex flex-col md:flex-row">
             <aside className="flex w-80 flex-col gap-3 p-7">
-              <ImagePreview image={image} optImage={optimizedImage} />
+              <ImagePreview image={test.image} optImage={test.optimizedImage} />
             </aside>
             <div className="flex flex-1 flex-col space-y-4 p-7">
               <ResultSummary key={index} index={index} />
