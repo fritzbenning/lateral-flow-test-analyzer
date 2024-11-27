@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { ImageUpload } from "@/components/ImageUpload";
 import ResultSummary from "@/components/ResultSummary";
 import { ImageIcon } from "lucide-react";
-import { LoadingSpinner } from "./ui/LoadingSpinner";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { resetStore, useTestStore } from "@/stores/testStore";
 import { useTests } from "@/hooks/useTests";
 import { useImageOptimizer } from "@/hooks/useImageOptimizer";

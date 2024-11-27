@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/Dialog";
 import { Button } from "@/components/ui/Button";
 import PixelCanvas from "@/components/PixelCanvas";
-import { Separator } from "./ui/Separator";
+import { Separator } from "@/components/ui/Separator";
 import { useTestStore } from "@/stores/testStore";
 import { useEffect } from "react";
 import {
