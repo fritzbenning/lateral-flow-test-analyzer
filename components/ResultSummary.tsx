@@ -45,7 +45,7 @@ const ResultSummary = ({ index, test }: ResultSummaryProps) => {
     <div className="flex flex-col gap-5">
       <h3 className="flex gap-2 text-lg">
         <div className="flex items-center gap-1.5 text-red-500">
-          <ShieldAlert width="20" height="20" /> {test?.result}
+          <ShieldAlert width="20" height="20" /> {tests[index].result}
         </div>
       </h3>
       <div className="flex flex-col gap-2">

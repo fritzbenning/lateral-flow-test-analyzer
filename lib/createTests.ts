@@ -35,32 +35,35 @@ export const createTests = (index: number, testLines: PixelData[][]) => {
     [],
   );
 
-  console.log(associatedLines);
-
   const tests = associatedLines.map((lines: any) => {
     console.log(lines);
 
     if (lines.length === 0) {
-      console.warn("Group has no lines");
+      console.warn("No control and test line were found");
       return null;
     }
+
     if (lines.length < 2) {
-      console.warn("Group has less than 2 lines");
+      console.warn("The test is negative.");
       return null;
     }
 
-    if (lines.length > 2) {
-      console.warn("More than 2 lines found in a group");
+    if (lines.length === 2) {
+      console.warn("The test is positive.");
     }
-
-    const intensities = calcIntensity(index, lines);
-
-    const resultMessage = getResultMessage(intensities.merged);
 
     console.log(lines);
 
+    if (lines.length > 2) {
+      console.warn("More than 2 lines found in a group");
+      console.log(lines.length);
+      return null;
+    }
+
     setControlLinePixels(index, lines[0]);
     setTestLinePixels(index, lines[1]);
+
+    const intensities = calcIntensity(index, lines);
 
     return {
       controlLine: {
@@ -70,7 +73,7 @@ export const createTests = (index: number, testLines: PixelData[][]) => {
         units: lines[1],
       },
       intensities,
-      result: resultMessage,
+      result: "resultMessage",
     };
   });
 

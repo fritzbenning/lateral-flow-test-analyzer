@@ -10,7 +10,7 @@ export function useImageUploader({ onFilesSelected }: UseImageUploaderProps) {
     (acceptedFiles: File[]) => {
       onFilesSelected(acceptedFiles);
     },
-    [onFilesSelected]
+    [onFilesSelected],
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -18,7 +18,7 @@ export function useImageUploader({ onFilesSelected }: UseImageUploaderProps) {
     accept: {
       "image/*": [".jpeg", ".jpg", ".png"],
     },
-    multiple: false,
+    multiple: true,
   });
 
   return {

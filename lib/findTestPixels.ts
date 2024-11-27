@@ -2,7 +2,7 @@ import { useTestStore } from "@/stores/testStore";
 import { PixelData } from "@/types";
 
 export function findTestPixels(pixelData: PixelData[][]) {
-  const hueLowerBound1 = 260;
+  const hueLowerBound1 = 245;
   const hueUpperBound1 = 360;
   const hueLowerBound2 = 0;
   const hueUpperBound2 = 20;

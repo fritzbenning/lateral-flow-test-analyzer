@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { analyzeImage } from "@/lib/analyzeImage";
-import { PixelData } from "@/types";
 import { useConfigStore } from "@/stores/configStore";
 
 export function useTests(optimizedImages: HTMLImageElement[] | null) {
@@ -30,30 +29,13 @@ export function useTests(optimizedImages: HTMLImageElement[] | null) {
       allTests.push(newTests);
     });
 
-    console.log("Analysis complete for all images", {
-      tests: allTests,
-    });
-
     setTests(allTests);
     setLoading(false);
-
-    // Optional cleanup function
-    return () => {
-      setLoading(true);
-      setProgress(0);
-    };
   }, [optimizedImages, batchCount, imageSize]);
-
-  const reset = () => {
-    setLoading(true);
-    setProgress(0);
-    setTests([]);
-  };
 
   return {
     tests,
     loading,
     progress,
-    reset,
   };
 }

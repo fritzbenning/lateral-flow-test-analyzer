@@ -3,8 +3,10 @@ import { getPercentile } from "./getPercentile";
 import {
   setControlLineIntensity,
   setMergedIntensity,
+  setResult,
   setTestLineIntensity,
 } from "@/stores/testStore";
+import { getResultMessage } from "./getResultMessage";
 
 export const calcIntensity = (index: number, lines: any) => {
   const sortedControlLine = lines[0].sort(
@@ -39,6 +41,7 @@ export const calcIntensity = (index: number, lines: any) => {
   });
 
   setMergedIntensity(index, mergedIntensity);
+  setResult(index, getResultMessage(mergedIntensity));
 
   return {
     LAB: {

@@ -141,6 +141,15 @@ export const setMergedIntensity = (index: number, intensity: number | null) => {
   }));
 };
 
+export const setResult = (index: number, result: string) => {
+  ensureTestExists(index);
+  useTestStore.setState((state) => ({
+    tests: state.tests.map((test, i) =>
+      i === index ? { ...test, result } : test,
+    ),
+  }));
+};
+
 export const resetStore = () => {
   useTestStore.setState({
     tests: [],
