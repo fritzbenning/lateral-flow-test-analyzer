@@ -24,11 +24,6 @@ export function Header() {
             <CircleHelp width="18" height="18" /> How it works
           </Button>
         </Link>
-        {/* <Link href="/">
-          <Button variant="ghost" className="flex gap-2">
-            <Settings width="18" height="18" /> Settings
-          </Button>
-        </Link> */}
       </nav>
     </header>
   );
