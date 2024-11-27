@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Logo from "@/assets/images/lateral-flow-test-analyzer-logo.svg";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 import { CircleHelp, Scan, Settings } from "lucide-react";
 
 export function Header() {

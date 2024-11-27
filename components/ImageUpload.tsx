@@ -1,6 +1,6 @@
 import { useImageUploader } from "@/hooks/useImageUploader";
 import { FileIcon, Image, Upload } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button } from "./ui/Button";
 
 interface ImageUploadProps {
   handleFiles: (files: File[]) => void;

@@ -1,13 +1,13 @@
 "use client";
 
 import ImagePreview from "@/components/ImagePreview";
-import { Card } from "@/components/ui/card";
+import { Card } from "@/components/ui/Card";
 import ResultHeader from "@/components/ResultHeader";
 import { useEffect, useState } from "react";
 import { ImageUpload } from "@/components/ImageUpload";
 import ResultSummary from "@/components/ResultSummary";
 import { ImageIcon } from "lucide-react";
-import { LoadingSpinner } from "./ui/loading-spinner";
+import { LoadingSpinner } from "./ui/LoadingSpinner";
 import { resetStore, useTestStore } from "@/stores/testStore";
 import { useTests } from "@/hooks/useTests";
 import { useImageOptimizer } from "@/hooks/useImageOptimizer";

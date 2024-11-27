@@ -1,18 +1,23 @@
 import { CircleCheck, ShieldAlert, SwatchBook } from "lucide-react";
 import { PixelData } from "../types";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "./ui/dialog";
-import { Button } from "./ui/button";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/Alert";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/Dialog";
+import { Button } from "@/components/ui/Button";
+import PixelCanvas from "@/components/PixelCanvas";
+import { Separator } from "./ui/Separator";
+import { useTestStore } from "@/stores/testStore";
+import { useEffect } from "react";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import PixelCanvas from "./PixelCanvas";
-import { Separator } from "./ui/separator";
-import { useTestStore } from "@/stores/testStore";
-import { useEffect } from "react";
+} from "@/components/ui/Tooltip";
 
 interface ResultSummaryProps {
   index: number;

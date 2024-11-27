@@ -3,8 +3,6 @@ import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "@/components/theme-provider";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/AppSidebar";
 
 const inter = Inter({ subsets: ["latin"] });
 const spaceGrotesk = Space_Grotesk({
@@ -36,14 +34,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <div className="flex">
-            <SidebarProvider>
-              <div className="relative flex min-h-screen flex-1 flex-col px-4 pb-4">
-                <main className="mx-auto w-full max-w-7xl px-4">
-                  {children}
-                </main>
-              </div>
-              {/* <AppSidebar /> */}
-            </SidebarProvider>
+            <div className="relative flex min-h-screen flex-1 flex-col px-4 pb-4">
+              <main className="mx-auto w-full max-w-7xl px-4">{children}</main>
+            </div>
           </div>
           <Toaster position="top-center" richColors />
         </ThemeProvider>
