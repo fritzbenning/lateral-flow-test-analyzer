@@ -6,12 +6,13 @@ interface TestData {
   image: HTMLImageElement | null;
   optimizedImage: HTMLImageElement | null;
   allPixels: PixelData[][];
-  controlLinePixels: PixelData[];
-  testLinePixels: PixelData[];
-  controlLineIntensity: { LAB: number; HSL: number };
-  testLineIntensity: { LAB: number; HSL: number };
+  controlPixels: PixelData[];
+  controlIntensity: { LAB: number; HSL: number; deputy: number };
+  testPixels: PixelData[];
+  testIntensity: { LAB: number; HSL: number; deputy: number };
   mergedIntensity: null | number;
-  result: string;
+  result: boolean | null;
+  resultMessage: string;
 }
 
 interface TestState {
@@ -48,12 +49,13 @@ const ensureTestExists = (index: number) => {
         image: null,
         optimizedImage: null,
         allPixels: [],
-        controlLinePixels: [],
-        testLinePixels: [],
-        controlLineIntensity: { LAB: 0, HSL: 0 },
-        testLineIntensity: { LAB: 0, HSL: 0 },
+        controlPixels: [],
+        controlIntensity: { LAB: 0, HSL: 0, deputy: 0 },
+        testPixels: [],
+        testIntensity: { LAB: 0, HSL: 0, deputy: 0 },
         mergedIntensity: null,
-        result: "",
+        result: null,
+        resultMessage: "",
       });
     }
     return { tests };
@@ -90,44 +92,44 @@ export const setAllPixels = (index: number, pixels: PixelData[][]) => {
   }));
 };
 
-export const setControlLinePixels = (index: number, pixels: PixelData[]) => {
+export const setControlPixels = (index: number, pixels: PixelData[]) => {
   ensureTestExists(index);
   useTestStore.setState((state) => ({
     tests: state.tests.map((test, i) =>
-      i === index ? { ...test, controlLinePixels: pixels } : test,
+      i === index ? { ...test, controlPixels: pixels } : test,
     ),
   }));
 };
 
-export const setTestLinePixels = (index: number, pixels: PixelData[]) => {
+export const setTestPixels = (index: number, pixels: PixelData[]) => {
   ensureTestExists(index);
   useTestStore.setState((state) => ({
     tests: state.tests.map((test, i) =>
-      i === index ? { ...test, testLinePixels: pixels } : test,
+      i === index ? { ...test, testPixels: pixels } : test,
     ),
   }));
 };
 
-export const setControlLineIntensity = (
+export const setControlIntensity = (
   index: number,
-  intensity: { LAB: number; HSL: number },
+  intensity: { LAB: number; HSL: number; deputy: number },
 ) => {
   ensureTestExists(index);
   useTestStore.setState((state) => ({
     tests: state.tests.map((test, i) =>
-      i === index ? { ...test, controlLineIntensity: intensity } : test,
+      i === index ? { ...test, controlIntensity: intensity } : test,
     ),
   }));
 };
 
-export const setTestLineIntensity = (
+export const setTestIntensity = (
   index: number,
-  intensity: { LAB: number; HSL: number },
+  intensity: { LAB: number; HSL: number; deputy: number },
 ) => {
   ensureTestExists(index);
   useTestStore.setState((state) => ({
     tests: state.tests.map((test, i) =>
-      i === index ? { ...test, testLineIntensity: intensity } : test,
+      i === index ? { ...test, testIntensity: intensity } : test,
     ),
   }));
 };
@@ -141,11 +143,15 @@ export const setMergedIntensity = (index: number, intensity: number | null) => {
   }));
 };
 
-export const setResult = (index: number, result: string) => {
+export const setResult = (
+  index: number,
+  result: boolean | null,
+  resultMessage: string,
+) => {
   ensureTestExists(index);
   useTestStore.setState((state) => ({
     tests: state.tests.map((test, i) =>
-      i === index ? { ...test, result } : test,
+      i === index ? { ...test, result, resultMessage } : test,
     ),
   }));
 };

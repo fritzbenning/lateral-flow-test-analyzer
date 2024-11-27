@@ -62,7 +62,7 @@ export function TestView() {
                       {oldTests.map((test, index) => (
                         <ResultSummary
                           key={index}
-                          test={test[index]}
+                          test={test?.[index]}
                           index={index}
                         />
                       ))}

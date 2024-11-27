@@ -1,20 +1,39 @@
 import { PixelData } from "@/types";
 import { calcIntensity } from "@/lib/calcIntensity";
-import { getResultMessage } from "./getResultMessage";
-import {
-  setControlLineIntensity,
-  setControlLinePixels,
-  setTestLinePixels,
-} from "@/stores/testStore";
+import { setResult, setControlPixels, setTestPixels } from "@/stores/testStore";
 
 export const createTests = (index: number, testLines: PixelData[][]) => {
   const threshold = 80;
+  let tests = [];
 
   const linesSortedByLength = testLines
     .sort((a, b) => b.length - a.length)
     .slice(0, 2);
 
   console.log(linesSortedByLength);
+
+  if (linesSortedByLength.length === 0) {
+    setResult(index, null, "No control and test line was found.");
+    return {
+      controlLine: {
+        units: linesSortedByLength[0],
+      },
+      result: "No control and test line was found.",
+    };
+  }
+
+  if (linesSortedByLength.length === 1) {
+    setControlPixels(index, linesSortedByLength[0]);
+    setResult(index, false, "The test is negative.");
+    return { result: "The test is negative." };
+  }
+
+  if (linesSortedByLength.length > 2) {
+    console.warn("More than 2 lines found in a group");
+    console.log(linesSortedByLength.length);
+    setResult(index, null, "Too many test lines were found");
+    return null;
+  }
 
   const linesSortedByY = linesSortedByLength.sort((a, b) => a[0].y - b[0].y);
 
@@ -35,33 +54,13 @@ export const createTests = (index: number, testLines: PixelData[][]) => {
     [],
   );
 
-  const tests = associatedLines.map((lines: any) => {
+  tests = associatedLines.map((lines: any) => {
     console.log(lines);
 
-    if (lines.length === 0) {
-      console.warn("No control and test line were found");
-      return null;
-    }
+    console.warn("The test is positive.");
 
-    if (lines.length < 2) {
-      console.warn("The test is negative.");
-      return null;
-    }
-
-    if (lines.length === 2) {
-      console.warn("The test is positive.");
-    }
-
-    console.log(lines);
-
-    if (lines.length > 2) {
-      console.warn("More than 2 lines found in a group");
-      console.log(lines.length);
-      return null;
-    }
-
-    setControlLinePixels(index, lines[0]);
-    setTestLinePixels(index, lines[1]);
+    setControlPixels(index, lines[0]);
+    setTestPixels(index, lines[1]);
 
     const intensities = calcIntensity(index, lines);
 
@@ -76,8 +75,6 @@ export const createTests = (index: number, testLines: PixelData[][]) => {
       result: "resultMessage",
     };
   });
-
-  console.log(tests);
 
   return tests;
 };
