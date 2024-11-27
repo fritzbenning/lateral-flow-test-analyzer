@@ -12,12 +12,14 @@ interface ResultCardProps {
 }
 
 export function ResultCard({ file, status, index }: ResultCardProps) {
-  const test = useTestStore((state) => state.tests[index]);
-  const isOptimized = !!test?.optimizedImage;
+  const image = useTestStore((state) => state.tests[index].image);
+  const optimizedImage = useTestStore(
+    (state) => state.tests[index].optimizedImage,
+  );
 
   return (
     <Card key={file.name}>
-      {!isOptimized ? (
+      {!optimizedImage ? (
         <div className="flex min-h-[320px] w-full flex-col items-center justify-center gap-4">
           <LoadingSpinner size={32} />
           {status}
@@ -30,7 +32,7 @@ export function ResultCard({ file, status, index }: ResultCardProps) {
           </div>
           <div className="flex flex-col md:flex-row">
             <aside className="flex w-80 flex-col gap-3 p-7">
-              <ImagePreview image={test.image} optImage={test.optimizedImage} />
+              <ImagePreview image={image} optImage={optimizedImage} />
             </aside>
             <div className="flex flex-1 flex-col space-y-4 p-7">
               <ResultSummary key={index} index={index} />

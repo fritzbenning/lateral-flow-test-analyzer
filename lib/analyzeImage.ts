@@ -29,5 +29,5 @@ export function analyzeImage(
 
   const identifiedTestPixels = findTestPixels(pixelData);
   const testLines = groupPixelDatasByProximity(identifiedTestPixels);
-  const tests = createTests(index, testLines);
+  createTests(index, testLines);
 }
