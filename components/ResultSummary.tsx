@@ -26,40 +26,15 @@ import {
 
 interface ResultSummaryProps {
   index: number;
-  test: {
-    differenceLAB: number;
-    controlLine: {
-      units: PixelData[];
-    };
-    testLine: {
-      units: PixelData[];
-    };
-    intensities?: {
-      controlIndex: number;
-      testIndex: number;
-      LAB: {
-        control: number;
-        test: number;
-        difference: number;
-      };
-      HSL: {
-        control: number;
-        test: number;
-        difference: number;
-      };
-    };
-  };
 }
 
-const ResultSummary = ({ index, test }: ResultSummaryProps) => {
+const ResultSummary = ({ index }: ResultSummaryProps) => {
   const tests = useTestStore((state) => state.tests);
-  const allPixels = tests[index].allPixels;
+  const test = tests[index];
 
-  const controlDeputy =
-    tests[index].controlPixels[tests[index].controlIntensity.deputy].hsl;
+  const controlDeputy = test?.controlPixels[test.controlIntensity.deputy]?.hsl;
 
-  const testDeputy =
-    tests[index].testPixels[tests[index].controlIntensity.deputy].hsl;
+  const testDeputy = test?.testPixels[test.testIntensity.deputy]?.hsl;
 
   const resultConfig = {
     null: {
@@ -79,7 +54,7 @@ const ResultSummary = ({ index, test }: ResultSummaryProps) => {
     },
   } as const;
 
-  const result = String(tests[index].result) as keyof typeof resultConfig;
+  const result = String(test.result) as keyof typeof resultConfig;
 
   return (
     <div className="flex flex-col gap-5">
@@ -89,7 +64,7 @@ const ResultSummary = ({ index, test }: ResultSummaryProps) => {
             className={`flex items-center gap-1.5 ${resultConfig[result].colorClass}`}
           >
             {resultConfig[result].icon}
-            {tests[index].resultMessage}
+            {test.resultMessage}
           </span>
         </div>
       </h3>
@@ -121,14 +96,14 @@ const ResultSummary = ({ index, test }: ResultSummaryProps) => {
             </div>
           </AlertTitle>
         </Alert>
-        {test?.intensities && (
+        {test.comparedIntensity.LAB && test.comparedIntensity.HSL && (
           <>
             <Alert>
               <AlertTitle>
                 <div className="flex w-full items-center justify-between">
                   <span>
-                    <strong>{test?.intensities?.LAB.difference} %</strong>{" "}
-                    intensity relative to control
+                    <strong> {test.comparedIntensity.LAB}%</strong> intensity
+                    relative to control
                   </span>
                   <span className="flex items-center gap-1.5 text-sm font-bold">
                     <SwatchBook width="16" height="16" /> LAB{" "}
@@ -140,16 +115,16 @@ const ResultSummary = ({ index, test }: ResultSummaryProps) => {
                 </div>
               </AlertTitle>
               <AlertDescription>
-                (C) {tests[index].controlIntensity?.LAB} a* axis ・ (T){" "}
-                {tests[index].testIntensity?.LAB} a* axis
+                (C) {test.controlIntensity?.LAB} a* axis ・ (T){" "}
+                {test.testIntensity?.LAB} a* axis
               </AlertDescription>
             </Alert>
             <Alert>
               <AlertTitle>
                 <div className="flex w-full items-center justify-between">
                   <span>
-                    <strong>{test?.intensities?.HSL.difference} %</strong>{" "}
-                    intensity relative to control
+                    <strong> {test.comparedIntensity.HSL}%</strong> intensity
+                    relative to control
                   </span>
                   <span className="flex items-center gap-1.5 text-sm font-bold">
                     <SwatchBook width="16" height="16" /> HSL{" "}
@@ -161,8 +136,8 @@ const ResultSummary = ({ index, test }: ResultSummaryProps) => {
                 </div>
               </AlertTitle>
               <AlertDescription>
-                (C) {tests[index].controlIntensity?.HSL}% saturation ・ (T){" "}
-                {tests[index].testIntensity?.HSL}% saturation
+                (C) {test.controlIntensity?.HSL}% saturation ・ (T){" "}
+                {test.testIntensity?.HSL}% saturation
               </AlertDescription>
             </Alert>
           </>
@@ -179,11 +154,11 @@ const ResultSummary = ({ index, test }: ResultSummaryProps) => {
               <div className="flex flex-col gap-3">
                 <h4 className="text-md">Control</h4>
                 <ul className="flex w-[760px] flex-wrap gap-2">
-                  {tests[index].controlPixels.map(
+                  {test.controlPixels.map(
                     (unit: PixelData, unitIndex: number) => (
                       <li
                         key={unitIndex}
-                        className={`h-6 w-6 rounded-md ${unitIndex === tests[index].controlIntensity.deputy ? "outline outline-2 outline-offset-2 outline-black" : ""}`}
+                        className={`h-6 w-6 rounded-md ${unitIndex === test.controlIntensity.deputy ? "outline outline-2 outline-offset-2 outline-black" : ""}`}
                         style={{
                           backgroundColor: `hsl(${unit.hsl.h}, ${unit.hsl.s}%, ${unit.hsl.l}%)`,
                         }}
@@ -215,37 +190,35 @@ const ResultSummary = ({ index, test }: ResultSummaryProps) => {
               <div className="flex flex-col gap-3">
                 <h4 className="text-md">Test</h4>
                 <ul className="flex w-[760px] flex-wrap gap-2">
-                  {tests[index].testPixels.map(
-                    (unit: PixelData, unitIndex: number) => (
-                      <li
-                        key={unitIndex}
-                        className={`h-6 w-6 rounded-md ${unitIndex === tests[index].controlIntensity.deputy ? "outline outline-2 outline-offset-2 outline-black" : ""}`}
-                        style={{
-                          backgroundColor: `hsl(${unit.hsl.h}, ${unit.hsl.s}%, ${unit.hsl.l}%)`,
-                        }}
-                      >
-                        <TooltipProvider delayDuration={100}>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <div className="h-6 w-6" />
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <strong>x:</strong> {unit.x}, <strong>y:</strong>{" "}
-                              {unit.y}
-                              <Separator className="my-1.5" />
-                              <strong>h:</strong> {unit.hsl.h},{" "}
-                              <strong>s:</strong> {unit.hsl.s},{" "}
-                              <strong>l:</strong> {unit.hsl.l}
-                              <Separator className="my-1.5" />
-                              <strong>L:</strong> {Math.floor(unit.lab.l)},{" "}
-                              <strong>a:</strong> {Math.floor(unit.lab.a)},{" "}
-                              <strong>b:</strong> {Math.floor(unit.lab.b)}
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
-                      </li>
-                    ),
-                  )}
+                  {test.testPixels.map((unit: PixelData, unitIndex: number) => (
+                    <li
+                      key={unitIndex}
+                      className={`h-6 w-6 rounded-md ${unitIndex === test.controlIntensity.deputy ? "outline outline-2 outline-offset-2 outline-black" : ""}`}
+                      style={{
+                        backgroundColor: `hsl(${unit.hsl.h}, ${unit.hsl.s}%, ${unit.hsl.l}%)`,
+                      }}
+                    >
+                      <TooltipProvider delayDuration={100}>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <div className="h-6 w-6" />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <strong>x:</strong> {unit.x}, <strong>y:</strong>{" "}
+                            {unit.y}
+                            <Separator className="my-1.5" />
+                            <strong>h:</strong> {unit.hsl.h},{" "}
+                            <strong>s:</strong> {unit.hsl.s},{" "}
+                            <strong>l:</strong> {unit.hsl.l}
+                            <Separator className="my-1.5" />
+                            <strong>L:</strong> {Math.floor(unit.lab.l)},{" "}
+                            <strong>a:</strong> {Math.floor(unit.lab.a)},{" "}
+                            <strong>b:</strong> {Math.floor(unit.lab.b)}
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
@@ -257,7 +230,7 @@ const ResultSummary = ({ index, test }: ResultSummaryProps) => {
           </DialogTrigger>
           <DialogContent>
             <DialogTitle>Canvas Preview</DialogTitle>
-            <PixelCanvas pixelData={allPixels} />
+            <PixelCanvas pixelData={test.allPixels} />
           </DialogContent>
         </Dialog>
       </div>

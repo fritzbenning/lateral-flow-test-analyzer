@@ -15,7 +15,7 @@ export function findTestPixels(pixelData: PixelData[][]) {
     for (let x = 0; x < pixelData[y].length; x++) {
       const pixel = pixelData[y][x];
       const { h, s, l } = pixel.hsl;
-      const { l: lLab, a: aLab, b: bLab } = pixel.lab;
+      const { a } = pixel.lab;
 
       if (
         ((h >= hueLowerBound1 && h <= hueUpperBound1) ||
@@ -23,7 +23,7 @@ export function findTestPixels(pixelData: PixelData[][]) {
         s >= saturationThreshold &&
         l >= lightnessLowerBound &&
         l <= lightnessUpperBound &&
-        Math.floor(aLab) >= 4
+        Math.floor(a) >= 4
       ) {
         results.push({
           x,

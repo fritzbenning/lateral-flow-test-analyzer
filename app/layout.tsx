@@ -2,13 +2,10 @@ import type { Metadata } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
-import { ThemeProvider } from "@/components/theme-provider";
 
-const inter = Inter({ subsets: ["latin"] });
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  // optional: specify weights if you don't want all of them
-  // weight: ['400', '500', '700'],
+  weight: ["400", "500", "700"],
 });
 
 export const metadata: Metadata = {
@@ -27,19 +24,12 @@ export default function RootLayout({
         className={`${spaceGrotesk.className} bg-slate-50 antialiased`}
         suppressHydrationWarning
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <div className="flex">
-            <div className="relative flex min-h-screen flex-1 flex-col px-4 pb-4">
-              <main className="mx-auto w-full max-w-7xl px-4">{children}</main>
-            </div>
+        <div className="flex">
+          <div className="relative flex min-h-screen flex-1 flex-col px-4 pb-4">
+            <main className="mx-auto w-full max-w-7xl px-4">{children}</main>
           </div>
-          <Toaster position="top-center" richColors />
-        </ThemeProvider>
+        </div>
+        <Toaster position="top-center" richColors />
       </body>
     </html>
   );

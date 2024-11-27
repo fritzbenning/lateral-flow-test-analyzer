@@ -12,12 +12,12 @@ import { resetStore, useTestStore } from "@/stores/testStore";
 import { useTests } from "@/hooks/useTests";
 import { useImageOptimizer } from "@/hooks/useImageOptimizer";
 
-export function TestView() {
+export function Lab() {
   const [files, setFiles] = useState<File[]>([]);
 
   const { status, optimizedImages } = useImageOptimizer(files);
 
-  const { tests: oldTests } = useTests(optimizedImages);
+  useTests(optimizedImages);
   const tests = useTestStore((state) => state.tests);
 
   const handleFiles = (files: File[]) => {
@@ -59,13 +59,7 @@ export function TestView() {
                       />
                     </aside>
                     <div className="flex flex-1 flex-col space-y-4 p-7">
-                      {oldTests.map((test, index) => (
-                        <ResultSummary
-                          key={index}
-                          test={test?.[index]}
-                          index={index}
-                        />
-                      ))}
+                      <ResultSummary key={index} index={index} />
                     </div>
                   </div>
                 </>

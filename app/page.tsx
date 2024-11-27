@@ -1,11 +1,11 @@
 import { Header } from "@/components/Header";
-import { TestView } from "@/components/TestView";
+import { Lab } from "@/components/Lab";
 
 export default function Home() {
   return (
-    <div className="container mx-auto px-4 py-8 gap-8 flex flex-col">
+    <div className="container mx-auto flex flex-col gap-8 px-4 py-8">
       <Header />
-      <TestView />
+      <Lab />
     </div>
   );
 }

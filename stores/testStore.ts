@@ -10,6 +10,7 @@ interface TestData {
   controlIntensity: { LAB: number; HSL: number; deputy: number };
   testPixels: PixelData[];
   testIntensity: { LAB: number; HSL: number; deputy: number };
+  comparedIntensity: { LAB: number; HSL: number };
   mergedIntensity: null | number;
   result: boolean | null;
   resultMessage: string;
@@ -53,6 +54,7 @@ const ensureTestExists = (index: number) => {
         controlIntensity: { LAB: 0, HSL: 0, deputy: 0 },
         testPixels: [],
         testIntensity: { LAB: 0, HSL: 0, deputy: 0 },
+        comparedIntensity: { LAB: 0, HSL: 0 },
         mergedIntensity: null,
         result: null,
         resultMessage: "",
@@ -130,6 +132,18 @@ export const setTestIntensity = (
   useTestStore.setState((state) => ({
     tests: state.tests.map((test, i) =>
       i === index ? { ...test, testIntensity: intensity } : test,
+    ),
+  }));
+};
+
+export const setComparedIntensity = (
+  index: number,
+  intensity: { LAB: number; HSL: number },
+) => {
+  ensureTestExists(index);
+  useTestStore.setState((state) => ({
+    tests: state.tests.map((test, i) =>
+      i === index ? { ...test, comparedIntensity: intensity } : test,
     ),
   }));
 };

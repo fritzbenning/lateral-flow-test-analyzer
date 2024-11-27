@@ -1,6 +1,7 @@
 import { PixelData } from "@/types";
 import { getPercentile } from "./getPercentile";
 import {
+  setComparedIntensity,
   setControlIntensity,
   setMergedIntensity,
   setResult,
@@ -28,7 +29,7 @@ export const calcIntensity = (index: number, lines: any) => {
   const testIntensityHSL = sortedTestLine[testPercentile].hsl.s;
   const differenceHSL = (testIntensityHSL / controlIntensityHSL) * 100;
 
-  const mergedIntensity = differenceLAB + differenceHSL / 2;
+  const mergedIntensity = (differenceLAB + differenceHSL) / 2;
 
   setControlIntensity(index, {
     LAB: Math.floor(controlIntensityLAB),
@@ -40,6 +41,11 @@ export const calcIntensity = (index: number, lines: any) => {
     LAB: Math.floor(testIntensityLAB),
     HSL: Math.floor(testIntensityHSL),
     deputy: testPercentile,
+  });
+
+  setComparedIntensity(index, {
+    LAB: Math.floor(differenceLAB),
+    HSL: Math.floor(differenceHSL),
   });
 
   setMergedIntensity(index, mergedIntensity);
