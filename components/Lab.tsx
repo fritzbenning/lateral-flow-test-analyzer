@@ -11,6 +11,7 @@ import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { resetStore, useTestStore } from "@/stores/testStore";
 import { useTests } from "@/hooks/useTests";
 import { useImageOptimizer } from "@/hooks/useImageOptimizer";
+import { ResultCard } from "@/components/ResultCard";
 
 export function Lab() {
   const [files, setFiles] = useState<File[]>([]);
@@ -18,7 +19,6 @@ export function Lab() {
   const { status, optimizedImages } = useImageOptimizer(files);
 
   useTests(optimizedImages);
-  const tests = useTestStore((state) => state.tests);
 
   const handleFiles = (files: File[]) => {
     setFiles(files);
@@ -29,42 +29,18 @@ export function Lab() {
     setFiles([]);
   };
 
-  useEffect(() => {
-    console.log(tests);
-  }, [tests]);
-
   return (
     <>
       {files.length > 0 ? (
         <div className="flex flex-col gap-5">
           <ResultHeader onReset={reset} />
           {files.map((file, index) => (
-            <Card key={file.name}>
-              {!optimizedImages ? (
-                <div className="flex min-h-[320px] w-full flex-col items-center justify-center gap-4">
-                  <LoadingSpinner size={32} />
-                  {status}
-                </div>
-              ) : (
-                <>
-                  <div className="border-slate-150 align-items flex gap-2 border-b px-6 py-4 text-md font-medium leading-tight">
-                    <ImageIcon className="h-5 w-5" />
-                    {file.name}
-                  </div>
-                  <div className="flex flex-col md:flex-row">
-                    <aside className="flex w-80 flex-col gap-3 p-7">
-                      <ImagePreview
-                        image={tests[index].image}
-                        optImage={tests[index].optimizedImage}
-                      />
-                    </aside>
-                    <div className="flex flex-1 flex-col space-y-4 p-7">
-                      <ResultSummary key={index} index={index} />
-                    </div>
-                  </div>
-                </>
-              )}
-            </Card>
+            <ResultCard
+              key={file.name}
+              file={file}
+              status={status}
+              index={index}
+            />
           ))}
         </div>
       ) : (

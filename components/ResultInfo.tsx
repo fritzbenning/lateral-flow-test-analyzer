@@ -1,7 +1,7 @@
 import { CircleCheck } from "lucide-react";
 import { Alert, AlertTitle } from "@/components/ui/Alert";
-import { resultConfig } from "./ResultStatus";
-import { Pixel } from "./Pixel";
+import { resultConfig } from "@/components/ResultStatus";
+import { Pixel } from "@/components/Pixel";
 
 interface ResultInfoProps {
   result: "null" | "false" | "true";
@@ -21,8 +21,8 @@ export const ResultInfo = ({
         {resultConfig[result].info}
       </span>
       <div className="flex gap-1">
-        {controlDeputy && <Pixel variant="circle" color={controlDeputy} />}
-        {testDeputy && <Pixel variant="circle" color={testDeputy} />}
+        {controlDeputy && <Pixel color={controlDeputy} />}
+        {testDeputy && <Pixel color={testDeputy} />}
       </div>
     </AlertTitle>
   </Alert>
