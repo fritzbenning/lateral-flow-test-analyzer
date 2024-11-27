@@ -19,16 +19,16 @@ export function Header() {
             <Scan width="18" height="18" /> Scan images
           </Button>
         </Link>
-        <Link href="/">
+        <Link href="/about">
           <Button variant="ghost" className="flex gap-2">
             <CircleHelp width="18" height="18" /> How it works
           </Button>
         </Link>
-        <Link href="/">
+        {/* <Link href="/">
           <Button variant="ghost" className="flex gap-2">
             <Settings width="18" height="18" /> Settings
           </Button>
-        </Link>
+        </Link> */}
       </nav>
     </header>
   );
