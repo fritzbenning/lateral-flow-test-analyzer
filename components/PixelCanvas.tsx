@@ -82,7 +82,7 @@ const PixelCanvas: React.FC<PixelCanvasProps> = ({ pixelData }) => {
           }}
         />
         <div className="flex-1">
-          <strong>Position:</strong> {rowPosition} / {columnPosition}
+          <strong>Position:</strong> x {columnPosition} / y {rowPosition}
         </div>
 
         <div className="flex-1">
