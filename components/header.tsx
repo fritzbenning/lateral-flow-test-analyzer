@@ -22,7 +22,7 @@ export function Header() {
           <Link href={href} key={href}>
             <Button
               variant={pathname === href ? "secondary" : "ghost"}
-              className="flex gap-2"
+              className={`flex gap-2 ${pathname === href ? "bg-red-50 text-red-500 hover:bg-red-50" : ""}`}
             >
               <Icon width="18" height="18" />
               {text}

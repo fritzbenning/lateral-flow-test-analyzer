@@ -34,12 +34,19 @@ export function ResultCard({
             {file.name}
           </div>
           <div className="flex flex-col md:flex-row">
-            <aside className="flex w-80 flex-col gap-3 p-7">
-              <ImagePreview image={test.image} optImage={test.optimizedImage} />
-            </aside>
-            <div className="flex flex-1 flex-col space-y-4 p-7">
-              <ResultSummary key={index} index={index} />
-            </div>
+            {test?.image && test?.optimizedImage && (
+              <aside className="flex w-80 flex-col gap-3 p-7">
+                <ImagePreview
+                  image={test.image}
+                  optImage={test.optimizedImage}
+                />
+              </aside>
+            )}
+            {test && (
+              <div className="flex flex-1 flex-col space-y-4 p-7">
+                <ResultSummary key={index} index={index} />
+              </div>
+            )}
           </div>
         </>
       )}
