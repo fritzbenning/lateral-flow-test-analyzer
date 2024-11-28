@@ -26,7 +26,7 @@ export const IntensityMetric = ({
           <span className="flex items-center gap-1.5 text-sm font-bold">
             <SwatchBook width="16" height="16" /> {variant}{" "}
             <span className="font-normal">
-              (90p<sup>th</sup>)
+              (95p<sup>th</sup>)
             </span>
           </span>
         </div>

@@ -6,14 +6,14 @@ import { useState, useEffect } from "react";
 
 interface UseImageOptimizerResult {
   loading: boolean;
-  status: string;
+  status: string[];
   optimizedImages: HTMLImageElement[] | null;
   error: Error | null;
 }
 
 export function useImageOptimizer(files: File[]): UseImageOptimizerResult {
   const [loading, setLoading] = useState<boolean>(false);
-  const [status, setStatus] = useState<string>("");
+  const [status, setStatus] = useState<string[]>([]); // Initialize as empty array
   const [optImages, setOptImages] = useState<HTMLImageElement[] | null>(null);
   const [error, setError] = useState<Error | null>(null);
 
@@ -31,7 +31,10 @@ export function useImageOptimizer(files: File[]): UseImageOptimizerResult {
 
     for (let i = 0; i < files.length; i++) {
       console.log("Starting image processing for:", files[i].name);
-      setStatus(`Starting image processing for file ${i + 1} ...`);
+      setStatus((prev) => [
+        ...prev,
+        `Starting image processing for file ${i + 1} ...`,
+      ]);
 
       const originalImage = createImgElement(files[i]);
       setImage(i, originalImage);
@@ -42,7 +45,10 @@ export function useImageOptimizer(files: File[]): UseImageOptimizerResult {
             "Background removed successfully for file:",
             files[i].name,
           );
-          setStatus(`Test successfully isolated for file ${i + 1}!`);
+          setStatus((prev) => [
+            ...prev,
+            `Test successfully isolated for file ${i + 1}!`,
+          ]);
           const trimmedImage = await trimTransparentEdges(
             imageWithoutBackground,
           );
@@ -50,7 +56,10 @@ export function useImageOptimizer(files: File[]): UseImageOptimizerResult {
         })
         .then((trimmedImage) => {
           console.log("Image trimmed successfully for file:", files[i].name);
-          setStatus(`Image data optimized for file ${i + 1}!`);
+          setStatus((prev) => [
+            ...prev,
+            `Image data optimized for file ${i + 1}!`,
+          ]);
 
           if (mounted) {
             const optimizedImageElement = new Image();

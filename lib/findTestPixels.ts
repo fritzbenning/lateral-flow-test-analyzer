@@ -1,4 +1,3 @@
-import { useTestStore } from "@/stores/testStore";
 import { PixelData } from "@/types";
 
 export function findTestPixels(pixelData: PixelData[][]) {
@@ -35,8 +34,6 @@ export function findTestPixels(pixelData: PixelData[][]) {
       }
     }
   }
-
-  console.log(results);
 
   return results;
 }
