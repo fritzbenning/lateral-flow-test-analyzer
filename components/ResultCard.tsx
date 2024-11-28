@@ -26,14 +26,14 @@ export function ResultCard({
     <Card key={file.name}>
       <AnimatePresence mode="wait">
         {loading ? (
-          <Fade key={`loading-${file.name}`}>
+          <Fade keyName={`loading-${file.name}`}>
             <div className="flex min-h-[320px] w-full flex-col items-center justify-center gap-4">
               <LoadingSpinner size={32} />
               {status[index]}
             </div>
           </Fade>
         ) : (
-          <Fade key={`result-${file.name}`}>
+          <Fade keyName={`result-${file.name}`}>
             <div className="border-slate-150 align-items flex gap-2 border-b px-6 py-4 text-md font-medium leading-tight">
               <ImageIcon className="h-5 w-5" />
               {file.name}

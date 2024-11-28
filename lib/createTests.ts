@@ -5,8 +5,6 @@ import { setResult, setControlPixels, setTestPixels } from "@/stores/testStore";
 export const createTests = (index: number, testLines: PixelData[][]) => {
   const threshold = 80;
 
-  console.log(testLines);
-
   if (testLines.length === 0) {
     setResult(index, null, "No control and test line was found.");
     return null;
@@ -21,8 +19,6 @@ export const createTests = (index: number, testLines: PixelData[][]) => {
   const candidateLines = testLines
     .sort((a, b) => b.length - a.length)
     .slice(0, 2);
-
-  console.log(candidateLines);
 
   const [controlLine, testLine] = candidateLines.sort(
     (a, b) => a[0].y - b[0].y,

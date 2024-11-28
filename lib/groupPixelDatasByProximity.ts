@@ -1,16 +1,17 @@
 import { PixelData } from "@/types";
+import { checkForPeaks } from "./checkForPeaks";
 
 export function groupPixelDatasByProximity(
   units: PixelData[],
   proximity: number = 3,
 ) {
-  const grouped: PixelData[][] = [];
+  const groups: PixelData[][] = [];
 
   units.sort((a, b) => a.y - b.y);
 
   units.forEach((unit) => {
     let added = false;
-    for (const group of grouped) {
+    for (const group of groups) {
       if (Math.abs(group[group.length - 1].y - unit.y) <= proximity) {
         group.push(unit);
         added = true;
@@ -18,13 +19,39 @@ export function groupPixelDatasByProximity(
       }
     }
     if (!added) {
-      grouped.push([unit]);
+      groups.push([unit]);
     }
   });
 
-  const groups = grouped.filter((group) => group.length > 3);
+  const relevantGroups = groups.filter((group) => group.length > 3);
 
-  console.log(groups);
+  let checkedGroups: PixelData[][] = [];
 
-  return groups;
+  relevantGroups.map((group) => {
+    const peaks = checkForPeaks(group);
+    if (peaks.length === 1) {
+      console.log("Testline is verified.");
+      checkedGroups.push(group);
+    } else if (peaks.length === 2) {
+      console.log("Two testlines in one group are possible.");
+      const [peak1, peak2] = peaks;
+      if (!peak1 || !peak2) return [group];
+      const group1 = group.filter((pixel) => pixel.y <= peak1.y);
+      const group2 = group.filter(
+        (pixel) => pixel.y > peak1.y && pixel.y <= peak2.y,
+      );
+      const reducedGroup1 = group1.slice(-15);
+      const reducedGroup2 = group2.slice(-15);
+
+      checkedGroups.push(reducedGroup1, reducedGroup2);
+    } else {
+      console.log("To many peaks detected. Testline is not verified.");
+      console.log(peaks);
+      checkedGroups.push(group);
+    }
+  });
+
+  console.log(checkedGroups);
+
+  return checkedGroups;
 }
