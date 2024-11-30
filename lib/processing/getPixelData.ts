@@ -14,12 +14,14 @@ export const getPixelData = (
   const batchSize = Math.floor(height / batchCount);
   const batches: PixelData[][][] = [];
 
+  // process image data in batches
   for (let i = 0; i < batchCount; i++) {
     const startY = i * batchSize;
     const endY = i === batchCount - 1 ? height : (i + 1) * batchSize;
     batches.push(processBatch(startY, endY, imageData.data, width, height));
   }
 
+  // save all image pixels to store
   setAllPixels(index, batches.flat());
 
   return batches.flat();

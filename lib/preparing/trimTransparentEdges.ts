@@ -21,7 +21,7 @@ export function trimTransparentEdges(blob: Blob): Promise<Blob> {
       result.set(data);
 
       const blockSize = 4; // Process 4x4 blocks at a time
-      const threshold = Math.floor(img.width / 100); // Distance threshold to transparency
+      const THRESHOLD = Math.floor(img.width / 100); // Distance THRESHOLD to transparency
 
       // Process in blocks
       for (let y = 0; y < canvas.height; y += blockSize) {
@@ -29,8 +29,8 @@ export function trimTransparentEdges(blob: Blob): Promise<Blob> {
           // Check if this block is near any transparent pixels
           let nearTransparent = false;
 
-          blockCheck: for (let dy = -threshold; dy <= threshold; dy++) {
-            for (let dx = -threshold; dx <= threshold; dx++) {
+          blockCheck: for (let dy = -THRESHOLD; dy <= THRESHOLD; dy++) {
+            for (let dx = -THRESHOLD; dx <= THRESHOLD; dx++) {
               const nx = x + dx;
               const ny = y + dy;
 

@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 interface UseImageOptimizerResult {
   loading: boolean;
   status: string[];
-  optimizedImages: HTMLImageElement[] | null;
+  optimisedImages: HTMLImageElement[] | null;
   error: Error | null;
 }
 
@@ -27,15 +27,16 @@ export function useImageOptimizer(files: File[]): UseImageOptimizerResult {
     }
 
     for (let i = 0; i < files.length; i++) {
-      console.log("Starting image processing for:", files[i].name);
       setStatus((prev) => [
         ...prev,
-        `Starting image processing for file ${i + 1} ...`,
+        i > 1 ? `Processing image ${i + 1}` : "Processing image",
       ]);
 
+      // save original image in store
       const originalImage = createImgElement(files[i]);
       setImage(i, originalImage);
 
+      // remove the background to avoid possible misinterpretation
       removeBackground(files[i])
         .then(async (imageWithoutBackground) => {
           console.log(
@@ -52,7 +53,6 @@ export function useImageOptimizer(files: File[]): UseImageOptimizerResult {
           return trimmedImage;
         })
         .then((trimmedImage) => {
-          console.log("Image trimmed successfully for file:", files[i].name);
           setStatus((prev) => [
             ...prev,
             `Image data optimized for file ${i + 1}!`,
@@ -61,7 +61,6 @@ export function useImageOptimizer(files: File[]): UseImageOptimizerResult {
           if (mounted) {
             const optimizedImageElement = new Image();
             optimizedImageElement.onload = () => {
-              console.log("Optimized image loaded for file:", files[i].name);
               imagesToCleanup.push(optimizedImageElement);
               setOptImages((prev) =>
                 prev
@@ -104,5 +103,5 @@ export function useImageOptimizer(files: File[]): UseImageOptimizerResult {
     };
   }, [files]);
 
-  return { loading, status, optimizedImages: optImages, error };
+  return { loading, status, optimisedImages: optImages, error };
 }

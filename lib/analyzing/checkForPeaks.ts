@@ -27,7 +27,7 @@ export function checkForPeaks(group: PixelData[]): (PixelData | null)[] {
     return peak;
   }
 
-  const yThreshold = Math.floor(uniqueSortedByY.length * 0.3);
+  const yTHRESHOLD = Math.floor(uniqueSortedByY.length * 0.3);
 
   const pixelsAtY = uniqueSortedByY.map((y) => {
     const closestX = sortedByY.reduce<PixelData | null>((closest, pixel) => {
@@ -47,8 +47,8 @@ export function checkForPeaks(group: PixelData[]): (PixelData | null)[] {
   const peaks = pixelsAtY.filter((pixel, index) => {
     if (!pixel) return false;
     const checkWindow = pixelsAtY.slice(
-      Math.max(0, index - yThreshold),
-      Math.min(uniqueSortedByY.length - 1, index + yThreshold),
+      Math.max(0, index - yTHRESHOLD),
+      Math.min(uniqueSortedByY.length - 1, index + yTHRESHOLD),
     );
 
     const peak = checkWindow.every((otherPixel) => {

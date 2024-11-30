@@ -1,13 +1,18 @@
 import { PixelData } from "@/types";
 
+// Define constants outside the function to avoid recreating them on each call
+const HUE_RANGES = [
+  { min: 245, max: 360 },
+  { min: 0, max: 20 },
+] as const;
+
+const THRESHOLDS = {
+  saturation: 6,
+  lightness: { min: 45, max: 100 },
+  labA: 4,
+} as const;
+
 export function findTestPixels(pixelData: PixelData[][]) {
-  const hueLowerBound1 = 245;
-  const hueUpperBound1 = 360;
-  const hueLowerBound2 = 0;
-  const hueUpperBound2 = 20;
-  const saturationThreshold = 6;
-  const lightnessLowerBound = 45;
-  const lightnessUpperBound = 100;
   const results: PixelData[] = [];
 
   for (let y = 0; y < pixelData.length; y++) {
@@ -17,20 +22,13 @@ export function findTestPixels(pixelData: PixelData[][]) {
       const { a } = pixel.lab;
 
       if (
-        ((h >= hueLowerBound1 && h <= hueUpperBound1) ||
-          (h >= hueLowerBound2 && h <= hueUpperBound2)) &&
-        s >= saturationThreshold &&
-        l >= lightnessLowerBound &&
-        l <= lightnessUpperBound &&
-        Math.floor(a) >= 4
+        HUE_RANGES.some((range) => h >= range.min && h <= range.max) &&
+        s >= THRESHOLDS.saturation &&
+        l >= THRESHOLDS.lightness.min &&
+        l <= THRESHOLDS.lightness.max &&
+        Math.floor(a) >= THRESHOLDS.labA
       ) {
-        results.push({
-          x,
-          y,
-          rgb: pixel.rgb,
-          hsl: pixel.hsl,
-          lab: pixel.lab,
-        });
+        results.push({ ...pixel, x, y });
       }
     }
   }

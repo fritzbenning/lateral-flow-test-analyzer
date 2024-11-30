@@ -6,16 +6,19 @@ import { useImageOptimizer } from "./useImageOptimizer";
 export function useImageProcessor(files: File[]) {
   const [loading, setLoading] = useState<boolean>(true);
 
-  const { status, optimizedImages } = useImageOptimizer(files);
+  // get optimised images
+  const { status, optimisedImages } = useImageOptimizer(files);
 
   useEffect(() => {
-    if (!optimizedImages) return;
+    if (!optimisedImages) return;
 
-    optimizedImages.forEach((image, index) => {
+    // Process optimised images in batches
+    optimisedImages.forEach((image, index) => {
       processImages(index, image);
     });
+
     setLoading(false);
-  }, [optimizedImages]);
+  }, [optimisedImages]);
 
   return {
     loading,

@@ -3,7 +3,7 @@ import { calcIntensity } from "@/lib/analyzing/calcIntensity";
 import { setResult, setControlPixels, setTestPixels } from "@/stores/testStore";
 
 export const createTests = (index: number, testLines: PixelData[][]) => {
-  const threshold = 80;
+  const THRESHOLD = 80;
 
   if (testLines.length === 0) {
     setResult(index, null, "No control and test line was found.");
@@ -26,7 +26,7 @@ export const createTests = (index: number, testLines: PixelData[][]) => {
 
   const xDiff = Math.abs(controlLine[0].x - testLine[0].x);
 
-  if (xDiff <= threshold) {
+  if (xDiff <= THRESHOLD) {
     setControlPixels(index, controlLine);
     setTestPixels(index, testLine);
     calcIntensity(index, [controlLine, testLine]);
