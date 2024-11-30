@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { CircleHelp, Menu, Scan } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { Logo } from "@/components/Logo";
-import { Drawer, DrawerContent, DrawerTrigger } from "./ui/DrawerTemp";
+import { Drawer, DrawerContent, DrawerTrigger } from "./ui/Drawer";
 
 export function Header() {
   const pathname = usePathname();
