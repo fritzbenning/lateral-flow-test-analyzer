@@ -1,15 +1,12 @@
 import { PixelData } from "@/types";
-import { checkForPeaks } from "./checkForPeaks";
+import { checkForPeaks } from "@/lib/analyzingResult/checkForPeaks";
 
-export function groupPixelDatasByProximity(
-  units: PixelData[],
-  proximity: number = 3,
-) {
+export function groupPixelData(testPixels: PixelData[], proximity: number = 3) {
   const groups: PixelData[][] = [];
 
-  units.sort((a, b) => a.y - b.y);
+  testPixels.sort((a, b) => a.y - b.y);
 
-  units.forEach((unit) => {
+  testPixels.forEach((unit) => {
     let added = false;
     for (const group of groups) {
       if (Math.abs(group[group.length - 1].y - unit.y) <= proximity) {

@@ -9,8 +9,8 @@ interface PixelCanvasProps {
 }
 
 const PixelCanvas: React.FC<PixelCanvasProps> = ({ pixelData }) => {
-  const width = 780;
-  const height = 640;
+  const width = 728;
+  const height = 616;
 
   const canvasRef = useRef<HTMLDivElement>(null);
 

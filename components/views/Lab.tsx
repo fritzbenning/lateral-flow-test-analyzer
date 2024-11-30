@@ -3,19 +3,16 @@
 import ResultHeader from "@/components/ResultHeader";
 import { ImageUpload } from "@/components/ImageUpload";
 import { resetStore } from "@/stores/testStore";
-import { useTests } from "@/hooks/useTests";
-import { useImageOptimizer } from "@/hooks/useImageOptimizer";
 import { ResultCard } from "@/components/ResultCard";
 import { Fade } from "@/components/Fade";
 import { AnimatePresence } from "framer-motion";
 import { useState } from "react";
+import { useImageProcessor } from "@/hooks/useImageProcessor";
 
 export function Lab() {
   const [files, setFiles] = useState<File[]>([]);
 
-  const { status, loading, optimizedImages } = useImageOptimizer(files);
-
-  useTests(optimizedImages);
+  const { loading, status } = useImageProcessor(files);
 
   const handleFiles = (files: File[]) => {
     setFiles(files);

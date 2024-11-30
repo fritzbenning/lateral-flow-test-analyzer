@@ -1,5 +1,6 @@
 import { PixelData } from "@/types";
-import { rgbToHsl, rgbToLab } from "../utils/helpers";
+import { rgbToHsl, rgbToLab } from "../../utils/helpers";
+import { useConfigStore } from "@/stores/configStore";
 
 export const processBatch = (
   startY: number,
@@ -7,11 +8,8 @@ export const processBatch = (
   data: Uint8ClampedArray,
   width: number,
   height: number,
-  onProgress: (progress: number) => void,
-  pixelBinding: number = 2,
 ) => {
-  const totalRows = Math.ceil(height / 2);
-  let processedRows = 0;
+  const { pixelBinding } = useConfigStore.getState();
 
   const batchPixelData: PixelData[][] = [];
 
@@ -52,11 +50,6 @@ export const processBatch = (
       });
     }
     batchPixelData.push(row);
-
-    // Update progress after processing each row
-    processedRows++;
-    const progress = Math.round((processedRows / totalRows) * 100);
-    onProgress(progress);
   }
   return batchPixelData;
 };

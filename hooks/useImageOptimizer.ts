@@ -1,5 +1,5 @@
-import { createImgElement } from "@/lib/createImgElement";
-import { trimTransparentEdges } from "@/lib/trimTransparentEdges";
+import { createImgElement } from "@/lib/preparingImage/createImgElement";
+import { trimTransparentEdges } from "@/lib/preparingImage/trimTransparentEdges";
 import { setImage, setOptimizedImage } from "@/stores/testStore";
 import { removeBackground } from "@imgly/background-removal";
 import { useState, useEffect } from "react";
@@ -12,7 +12,7 @@ interface UseImageOptimizerResult {
 }
 
 export function useImageOptimizer(files: File[]): UseImageOptimizerResult {
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [status, setStatus] = useState<string[]>([]); // Initialize as empty array
   const [optImages, setOptImages] = useState<HTMLImageElement[] | null>(null);
   const [error, setError] = useState<Error | null>(null);
@@ -20,9 +20,6 @@ export function useImageOptimizer(files: File[]): UseImageOptimizerResult {
   useEffect(() => {
     let mounted = true;
     const imagesToCleanup: HTMLImageElement[] = [];
-
-    setLoading(true);
-    setError(null);
 
     if (!files.length) {
       setLoading(false);
