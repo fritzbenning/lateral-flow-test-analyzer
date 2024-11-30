@@ -1,36 +1,48 @@
 import { PixelData } from "@/types";
 import { checkForPeaks } from "@/lib/analyzing/checkForPeaks";
+import { useConfigStore } from "@/stores/configStore";
 
-export function groupPixelData(testPixels: PixelData[], proximity: number = 3) {
+export function groupPixelData(testPixels: PixelData[]) {
   const groups: PixelData[][] = [];
 
+  // calc proximity threshold
+  const { imageSize } = useConfigStore.getState();
+  const { minPixelsPerGroup } = useConfigStore.getState();
+
+  const PROXIMITY_THRESHOLD = imageSize * 0.005;
+
+  // sort pixels by y-axis
   testPixels.sort((a, b) => a.y - b.y);
 
+  // group pixels by proximity
   testPixels.forEach((unit) => {
     let added = false;
     for (const group of groups) {
-      if (Math.abs(group[group.length - 1].y - unit.y) <= proximity) {
+      if (Math.abs(group[group.length - 1].y - unit.y) <= PROXIMITY_THRESHOLD) {
         group.push(unit);
         added = true;
         break;
       }
     }
-    if (!added) {
-      groups.push([unit]);
-    }
+
+    // create new group if pixel is not added to any group
+    !added && groups.push([unit]);
   });
 
-  const relevantGroups = groups.filter((group) => group.length > 3);
+  // remove non-significant groups
+  const relevantGroups = groups.filter(
+    (group) => group.length > minPixelsPerGroup,
+  );
 
+  // check if a group has multiple peaks
   let checkedGroups: PixelData[][] = [];
 
   relevantGroups.map((group) => {
     const peaks = checkForPeaks(group);
+
     if (peaks.length === 1) {
-      console.log("Testline is verified.");
       checkedGroups.push(group);
     } else if (peaks.length === 2) {
-      console.log("Two testlines in one group are possible.");
       const [peak1, peak2] = peaks;
       if (!peak1 || !peak2) return [group];
       const group1 = group.filter((pixel) => pixel.y <= peak1.y);
@@ -39,11 +51,8 @@ export function groupPixelData(testPixels: PixelData[], proximity: number = 3) {
       );
       const reducedGroup1 = group1.slice(-15);
       const reducedGroup2 = group2.slice(-15);
-
       checkedGroups.push(reducedGroup1, reducedGroup2);
     } else {
-      console.log("To many peaks detected. Testline is not verified.");
-      console.log(peaks);
       checkedGroups.push(group);
     }
   });
