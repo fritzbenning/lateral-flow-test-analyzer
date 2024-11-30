@@ -9,15 +9,19 @@ export const processBatch = (
   width: number,
   height: number,
 ) => {
+  // use pixel binding to lower misinterpretations
   const { pixelBinding } = useConfigStore.getState();
 
   const batchPixelData: PixelData[][] = [];
 
+  // Create pixel units using the average colour per pixel binding unit
   for (let y = startY; y < endY; y += pixelBinding) {
     const row: PixelData[] = [];
     for (let x = 0; x < width; x += pixelBinding) {
-      let maxRed = -1;
-      let selectedPixel = { red: 0, green: 0, blue: 0 };
+      let sumRed = 0;
+      let sumGreen = 0;
+      let sumBlue = 0;
+      let pixelCount = 0;
 
       for (let dy = 0; dy < pixelBinding; dy++) {
         for (let dx = 0; dx < pixelBinding; dx++) {
@@ -25,19 +29,18 @@ export const processBatch = (
           const ny = y + dy;
           if (nx < width && ny < height) {
             const index = (ny * width + nx) * 4;
-            const red = data[index];
-            const green = data[index + 1];
-            const blue = data[index + pixelBinding];
-
-            if (red > maxRed) {
-              maxRed = red;
-              selectedPixel = { red, green, blue };
-            }
+            sumRed += data[index];
+            sumGreen += data[index + 1];
+            sumBlue += data[index + 2];
+            pixelCount++;
           }
         }
       }
 
-      const { red, green, blue } = selectedPixel;
+      const red = Math.round(sumRed / pixelCount);
+      const green = Math.round(sumGreen / pixelCount);
+      const blue = Math.round(sumBlue / pixelCount);
+
       const lab = rgbToLab(red, green, blue);
       const hsl = rgbToHsl(red, green, blue);
 
