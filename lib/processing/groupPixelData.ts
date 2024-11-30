@@ -45,19 +45,15 @@ export function groupPixelData(testPixels: PixelData[]) {
     } else if (peaks.length === 2) {
       const [peak1, peak2] = peaks;
       if (!peak1 || !peak2) return [group];
-      const group1 = group.filter((pixel) => pixel.y <= peak1.y);
-      const group2 = group.filter(
+      const controlGroup = group.filter((pixel) => pixel.y <= peak1.y);
+      const testGroup = group.filter(
         (pixel) => pixel.y > peak1.y && pixel.y <= peak2.y,
       );
-      const reducedGroup1 = group1.slice(-15);
-      const reducedGroup2 = group2.slice(-15);
-      checkedGroups.push(reducedGroup1, reducedGroup2);
+      checkedGroups.push(controlGroup, testGroup);
     } else {
       checkedGroups.push(group);
     }
   });
-
-  console.log(checkedGroups);
 
   return checkedGroups;
 }
