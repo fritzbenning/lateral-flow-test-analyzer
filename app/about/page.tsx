@@ -1,4 +1,4 @@
-import { Header } from "@/components/header";
+import { Header } from "@/components/Header";
 import { Card, CardHeader, CardTitle } from "@/components/ui/Card";
 
 export default function Home() {
