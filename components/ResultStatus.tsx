@@ -24,7 +24,7 @@ const resultConfig = {
 } as const;
 
 export const ResultStatus = ({ result, resultMessage }: ResultStatusProps) => (
-  <h3 className="flex gap-2 text-lg">
+  <h3 className="flex gap-2 text-md leading-tight sm:text-lg">
     <div>
       <span
         className={`flex items-center gap-1.5 ${resultConfig[result].colorClass}`}

@@ -22,7 +22,7 @@ export const ResultDetails = ({
   controlIntensity,
   allPixels,
 }: ResultDetailsProps) => (
-  <div className="flex gap-2">
+  <div className="flex flex-col gap-1 sm:flex-row sm:gap-2">
     <Dialog>
       <DialogTrigger asChild>
         <Button className="btn">Show identified pixels</Button>
@@ -45,7 +45,7 @@ export const ResultDetails = ({
     </Dialog>
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Open pixel view</Button>
+        <Button className="hidden md:block">Open pixel view</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogTitle>Canvas Preview</DialogTitle>

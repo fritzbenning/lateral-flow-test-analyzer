@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Space_Grotesk } from "next/font/google";
+import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 
@@ -25,8 +25,8 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <div className="flex">
-          <div className="relative flex min-h-screen flex-1 flex-col px-4 pb-4">
-            <main className="mx-auto w-full max-w-7xl px-4">{children}</main>
+          <div className="relative flex min-h-screen flex-1 flex-col">
+            <main className="mx-auto w-full max-w-6xl">{children}</main>
           </div>
         </div>
         <Toaster position="top-center" richColors />

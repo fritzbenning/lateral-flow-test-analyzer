@@ -16,7 +16,7 @@ interface PixelListProps {
 export const PixelList = ({ title, pixels, deputyIndex }: PixelListProps) => (
   <div className="flex flex-col gap-2">
     <h4 className="font-medium">{title}</h4>
-    <ul className="flex w-[760px] flex-wrap gap-2">
+    <ul className="flex w-full flex-wrap gap-2">
       {pixels.map((pixel, index) => (
         <li
           key={index}

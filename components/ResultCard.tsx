@@ -34,13 +34,13 @@ export function ResultCard({
           </Fade>
         ) : (
           <Fade keyName={`result-${file.name}`}>
-            <div className="border-slate-150 align-items flex gap-2 border-b px-6 py-4 text-md font-medium leading-tight">
+            <div className="border-slate-150 align-items flex gap-2 border-b px-4 py-4 text-md font-medium leading-tight md:px-6">
               <ImageIcon className="h-5 w-5" />
               {file.name}
             </div>
             <div className="flex flex-col md:flex-row">
               {test?.image && test?.optimizedImage && (
-                <aside className="flex h-80 w-80 flex-col gap-3 p-7">
+                <aside className="flex h-60 w-full flex-col px-4 pb-6 pt-4 md:h-80 md:w-80 md:gap-3 md:p-7">
                   <ImagePreview
                     image={test.image}
                     optImage={test.optimizedImage}
@@ -48,7 +48,7 @@ export function ResultCard({
                 </aside>
               )}
               {test && (
-                <div className="flex flex-1 flex-col space-y-4 p-7">
+                <div className="flex flex-1 flex-col space-y-4 px-4 pb-4 md:p-7">
                   <ResultSummary key={index} index={index} />
                 </div>
               )}
