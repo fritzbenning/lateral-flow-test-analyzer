@@ -1,6 +1,6 @@
 import { PixelData } from "@/types";
 
-export function checkForPeaks(group: PixelData[]): (PixelData | null)[] {
+export function checkForPeaks(group: PixelData[]): PixelData[] {
   const minLineHeight = 8;
   const sortedByY = group.sort((a, b) => a.y - b.y);
 
@@ -18,45 +18,42 @@ export function checkForPeaks(group: PixelData[]): (PixelData | null)[] {
     const averagedY =
       uniqueSortedByY.reduce((acc, y) => acc + y, 0) / uniqueSortedByY.length;
 
-    const peak = [
-      sortedByY.find(
-        (pixel) => pixel.y === uniqueSortedByY[Math.floor(averagedY)],
-      ) || null,
-    ];
+    const pixel = sortedByY.find(
+      (pixel) => pixel.y === uniqueSortedByY[Math.floor(averagedY)],
+    );
 
-    return peak;
+    return pixel ? [pixel] : [];
   }
 
   const yTHRESHOLD = Math.floor(uniqueSortedByY.length * 0.3);
 
-  const pixelsAtY = uniqueSortedByY.map((y) => {
-    const closestX = sortedByY.reduce<PixelData | null>((closest, pixel) => {
-      if (
-        pixel.y === y &&
-        (closest === null ||
-          Math.abs(pixel.x - averagedXPosition) <
-            Math.abs(closest.x - averagedXPosition))
-      ) {
-        return pixel;
-      }
-      return closest;
-    }, null);
-    return closestX;
-  });
+  const pixelsAtY = uniqueSortedByY
+    .map((y) => {
+      const closestX = sortedByY.reduce<PixelData>(
+        (closest, pixel) => {
+          if (pixel.y !== y) return closest;
 
-  const peaks = pixelsAtY.filter((pixel, index) => {
-    if (!pixel) return false;
+          if (!closest) return pixel;
+
+          return Math.abs(pixel.x - averagedXPosition) <
+            Math.abs(closest.x - averagedXPosition)
+            ? pixel
+            : closest;
+        },
+        sortedByY.find((p) => p.y === y)!,
+      );
+
+      return closestX;
+    })
+    .filter((pixel): pixel is PixelData => pixel !== undefined);
+
+  const peaks = pixelsAtY.filter((pixel: PixelData, index) => {
     const checkWindow = pixelsAtY.slice(
       Math.max(0, index - yTHRESHOLD),
       Math.min(uniqueSortedByY.length - 1, index + yTHRESHOLD),
     );
 
-    const peak = checkWindow.every((otherPixel) => {
-      if (!otherPixel) return false;
-      return pixel.lab.a >= otherPixel.lab.a;
-    });
-
-    return peak;
+    return checkWindow.every((otherPixel) => pixel.lab.a >= otherPixel.lab.a);
   });
 
   return peaks;
