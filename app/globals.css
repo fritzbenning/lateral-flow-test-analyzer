@@ -57,4 +57,46 @@
     @apply bg-background text-foreground;
     font-family: var(--font-space-grotesk);
   }
+
+  /* Headings */
+  h1 {
+    @apply mb-6 text-3xl font-bold tracking-tight text-primary;
+  }
+
+  h2 {
+    @apply mb-4 mt-8 text-2xl font-semibold tracking-tight text-primary;
+  }
+
+  /* Paragraphs and spacing */
+  p {
+    @apply mb-4 leading-7 text-muted-foreground;
+  }
+
+  /* Lists */
+  ul {
+    @apply my-6 ml-6 list-disc space-y-2 text-muted-foreground;
+  }
+
+  li {
+    @apply leading-7;
+  }
+
+  /* Links */
+  a {
+    @apply text-primary underline-offset-4 transition-colors hover:underline;
+  }
+
+  /* Inline text styling */
+  strong {
+    @apply font-semibold text-primary;
+  }
+
+  .highlight {
+    @apply rounded bg-accent px-1 py-0.5 font-medium text-accent-foreground;
+  }
+
+  /* Custom classes */
+  .step {
+    @apply mt-8 space-y-4;
+  }
 }

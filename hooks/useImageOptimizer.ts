@@ -1,4 +1,5 @@
 import { createImgElement } from "@/lib/preparing/createImgElement";
+import { rotateImage } from "@/lib/preparing/rotateImage";
 import { trimTransparentEdges } from "@/lib/preparing/trimTransparentEdges";
 import { setImage, setOptimizedImage } from "@/stores/testStore";
 import { removeBackground } from "@imgly/background-removal";
@@ -8,14 +9,21 @@ interface UseImageOptimizerResult {
   loading: boolean;
   status: string[];
   optimisedImages: HTMLImageElement[] | null;
+  rotatedImages: HTMLImageElement[] | null;
   error: Error | null;
 }
 
 export function useImageOptimizer(files: File[]): UseImageOptimizerResult {
   const [loading, setLoading] = useState<boolean>(true);
-  const [status, setStatus] = useState<string[]>([]); // Initialize as empty array
-  const [optImages, setOptImages] = useState<HTMLImageElement[] | null>(null);
+  const [status, setStatus] = useState<string[]>([]);
+  const [optimisedImages, setOptimisedImages] = useState<
+    HTMLImageElement[] | null
+  >(null);
+  const [rotatedImages, setRotatedImages] = useState<HTMLImageElement[] | null>(
+    null,
+  );
   const [error, setError] = useState<Error | null>(null);
+  const [isRotated, setIsRotated] = useState<boolean>(false);
 
   useEffect(() => {
     let mounted = true;
@@ -26,33 +34,29 @@ export function useImageOptimizer(files: File[]): UseImageOptimizerResult {
       return;
     }
 
-    for (let i = 0; i < files.length; i++) {
-      setStatus((prev) => [
-        ...prev,
-        i > 1 ? `Processing image ${i + 1}` : "Processing image",
-      ]);
+    const processFiles = async () => {
+      for (let i = 0; i < files.length; i++) {
+        if (!mounted) return;
 
-      // save original image in store
-      const originalImage = createImgElement(files[i]);
-      setImage(i, originalImage);
+        setStatus((prev) => [
+          ...prev,
+          i > 1 ? `Processing image ${i + 1}` : "Processing image",
+        ]);
 
-      // remove the background to avoid possible misinterpretation
-      removeBackground(files[i])
-        .then(async (imageWithoutBackground) => {
-          console.log(
-            "Background removed successfully for file:",
-            files[i].name,
-          );
+        // save original image in store
+        const originalImage = createImgElement(files[i]);
+        setImage(i, originalImage);
+
+        try {
+          const imageWithoutBackground = await removeBackground(files[i]);
           setStatus((prev) => [
             ...prev,
             `Test successfully isolated for file ${i + 1}!`,
           ]);
+
           const trimmedImage = await trimTransparentEdges(
             imageWithoutBackground,
           );
-          return trimmedImage;
-        })
-        .then((trimmedImage) => {
           setStatus((prev) => [
             ...prev,
             `Image data optimized for file ${i + 1}!`,
@@ -60,42 +64,43 @@ export function useImageOptimizer(files: File[]): UseImageOptimizerResult {
 
           if (mounted) {
             const optimizedImageElement = new Image();
-            optimizedImageElement.onload = () => {
-              imagesToCleanup.push(optimizedImageElement);
-              setOptImages((prev) =>
-                prev
-                  ? [...prev, optimizedImageElement]
-                  : [optimizedImageElement],
-              );
-              setOptimizedImage(i, optimizedImageElement);
-              setLoading(false);
-            };
-            optimizedImageElement.onerror = (e) => {
-              console.error(
-                "Error loading optimized image for file:",
-                files[i].name,
-                e,
-              );
-              setError(
-                new Error(`Failed to load optimized image for file ${i + 1}`),
-              );
-              setLoading(false);
-            };
-            optimizedImageElement.src = URL.createObjectURL(trimmedImage);
+            await new Promise<void>((resolve, reject) => {
+              optimizedImageElement.onload = () => {
+                imagesToCleanup.push(optimizedImageElement);
+                setOptimisedImages((prev) =>
+                  prev
+                    ? [...prev, optimizedImageElement]
+                    : [optimizedImageElement],
+                );
+                setOptimizedImage(i, optimizedImageElement);
+                resolve();
+              };
+              optimizedImageElement.onerror = (e) => {
+                reject(
+                  new Error(`Failed to load optimized image for file ${i + 1}`),
+                );
+              };
+              optimizedImageElement.src = URL.createObjectURL(trimmedImage);
+            });
           }
-        })
-        .catch((error) => {
-          console.error(
+        } catch (error) {
+          console.warn(
             "Error processing image for file:",
             files[i].name,
             error,
           );
           if (mounted) {
-            setError(error);
-            setLoading(false);
+            setError(error as Error);
           }
-        });
-    }
+        }
+      }
+
+      if (mounted) {
+        setLoading(false);
+      }
+    };
+
+    processFiles();
 
     return () => {
       mounted = false;
@@ -103,5 +108,27 @@ export function useImageOptimizer(files: File[]): UseImageOptimizerResult {
     };
   }, [files]);
 
-  return { loading, status, optimisedImages: optImages, error };
+  // Only run rotation once when images are initially optimized
+  useEffect(() => {
+    if (!optimisedImages || isRotated) return;
+
+    const rotateImages = async () => {
+      try {
+        setStatus((prev) => [...prev, "Rotating images..."]);
+        const rotatedImages = await Promise.all(
+          optimisedImages.map((image) => rotateImage(image)),
+        );
+        setRotatedImages(rotatedImages);
+        setIsRotated(true);
+        setStatus((prev) => [...prev, "Images rotated successfully"]);
+      } catch (error) {
+        console.warn("Error rotating images:", error);
+        setError(error as Error);
+      }
+    };
+
+    rotateImages();
+  }, [optimisedImages, isRotated]);
+
+  return { loading, status, optimisedImages, rotatedImages, error };
 }
