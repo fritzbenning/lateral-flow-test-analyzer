@@ -1,5 +1,5 @@
-import { createImgElement } from "@/lib/preparingImage/createImgElement";
-import { trimTransparentEdges } from "@/lib/preparingImage/trimTransparentEdges";
+import { createImgElement } from "@/lib/preparing/createImgElement";
+import { trimTransparentEdges } from "@/lib/preparing/trimTransparentEdges";
 import { setImage, setOptimizedImage } from "@/stores/testStore";
 import { removeBackground } from "@imgly/background-removal";
 import { useState, useEffect } from "react";

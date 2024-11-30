@@ -1,5 +1,5 @@
 import { PixelData } from "@/types";
-import { processBatch } from "@/lib/processingPixels/processBatch";
+import { processBatch } from "@/lib/processing/processBatch";
 import { setAllPixels } from "@/stores/testStore";
 import { useConfigStore } from "@/stores/configStore";
 

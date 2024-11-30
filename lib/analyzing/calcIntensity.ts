@@ -1,5 +1,5 @@
 import { PixelData } from "@/types";
-import { getPercentile } from "@/lib/analyzingResult/getPercentile";
+import { getPercentile } from "@/lib/analyzing/getPercentile";
 import {
   setComparedIntensity,
   setControlIntensity,
@@ -7,7 +7,7 @@ import {
   setResult,
   setTestIntensity,
 } from "@/stores/testStore";
-import { getResultMessage } from "@/lib/analyzingResult/getResultMessage";
+import { getResultMessage } from "@/lib/analyzing/getResultMessage";
 
 export const calcIntensity = (index: number, lines: any) => {
   const sortedControlLine = lines[0].sort(

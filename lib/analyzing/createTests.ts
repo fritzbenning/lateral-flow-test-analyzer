@@ -1,5 +1,5 @@
 import { PixelData } from "@/types";
-import { calcIntensity } from "@/lib/analyzingResult/calcIntensity";
+import { calcIntensity } from "@/lib/analyzing/calcIntensity";
 import { setResult, setControlPixels, setTestPixels } from "@/stores/testStore";
 
 export const createTests = (index: number, testLines: PixelData[][]) => {

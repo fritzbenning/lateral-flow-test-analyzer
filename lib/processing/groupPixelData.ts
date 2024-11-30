@@ -1,5 +1,5 @@
 import { PixelData } from "@/types";
-import { checkForPeaks } from "@/lib/analyzingResult/checkForPeaks";
+import { checkForPeaks } from "@/lib/analyzing/checkForPeaks";
 
 export function groupPixelData(testPixels: PixelData[], proximity: number = 3) {
   const groups: PixelData[][] = [];
