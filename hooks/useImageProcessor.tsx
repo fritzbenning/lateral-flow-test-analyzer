@@ -7,20 +7,20 @@ export function useImageProcessor(files: File[]) {
   const [loading, setLoading] = useState<boolean>(true);
 
   // get optimised images
-  const { status, optimisedImages, rotatedImages } = useImageOptimizer(files);
+  const { status, rotatedImages } = useImageOptimizer(files);
 
   useEffect(() => {
-    if (!optimisedImages) return;
+    if (!rotatedImages) return;
 
     console.log("start processing");
 
     // Process optimised images in batches
-    optimisedImages.forEach((image, index) => {
+    rotatedImages.forEach((image, index) => {
       processImages(index, image);
     });
 
     setLoading(false);
-  }, [optimisedImages]);
+  }, [rotatedImages]);
 
   return {
     loading,
