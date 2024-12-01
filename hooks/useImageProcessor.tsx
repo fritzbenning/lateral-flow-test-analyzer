@@ -10,15 +10,17 @@ export function useImageProcessor(files: File[]) {
   const { status, optimisedImages, rotatedImages } = useImageOptimizer(files);
 
   useEffect(() => {
-    if (!rotatedImages) return;
+    if (!optimisedImages) return;
+
+    console.log("start processing");
 
     // Process optimised images in batches
-    rotatedImages.forEach((image, index) => {
+    optimisedImages.forEach((image, index) => {
       processImages(index, image);
     });
 
     setLoading(false);
-  }, [rotatedImages]);
+  }, [optimisedImages]);
 
   return {
     loading,

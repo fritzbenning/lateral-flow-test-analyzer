@@ -1,7 +1,11 @@
 import { createImgElement } from "@/lib/preparing/createImgElement";
 import { rotateImage } from "@/lib/preparing/rotateImage";
 import { trimTransparentEdges } from "@/lib/preparing/trimTransparentEdges";
-import { setImage, setOptimizedImage } from "@/stores/testStore";
+import {
+  setImage,
+  setOptimizedImage,
+  setRotatedImage,
+} from "@/stores/testStore";
 import { removeBackground } from "@imgly/background-removal";
 import { useState, useEffect } from "react";
 
@@ -119,6 +123,7 @@ export function useImageOptimizer(files: File[]): UseImageOptimizerResult {
           optimisedImages.map((image) => rotateImage(image)),
         );
         setRotatedImages(rotatedImages);
+        rotatedImages.forEach((image, index) => setRotatedImage(index, image));
         setIsRotated(true);
         setStatus((prev) => [...prev, "Images rotated successfully"]);
       } catch (error) {

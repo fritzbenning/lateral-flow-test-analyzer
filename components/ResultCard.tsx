@@ -6,6 +6,7 @@ import ResultSummary from "@/components/ResultSummary";
 import { useTestStore } from "@/stores/testStore";
 import { Fade } from "@/components/Fade";
 import { AnimatePresence } from "framer-motion";
+import { useEffect } from "react";
 
 interface ResultCardProps {
   file: File;
@@ -21,6 +22,10 @@ export function ResultCard({
   loading = true,
 }: ResultCardProps) {
   const test = useTestStore((state) => state.tests[index]);
+
+  useEffect(() => {
+    console.log(test);
+  }, [test]);
 
   return (
     <Card key={file.name}>
@@ -43,7 +48,7 @@ export function ResultCard({
                 <aside className="flex h-60 w-full flex-col px-4 pb-6 pt-4 md:h-80 md:w-80 md:gap-3 md:p-7">
                   <ImagePreview
                     image={test.image}
-                    optImage={test.optimizedImage}
+                    optImage={test.rotatedImage}
                   />
                 </aside>
               )}

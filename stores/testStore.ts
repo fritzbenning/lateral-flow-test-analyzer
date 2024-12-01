@@ -5,6 +5,7 @@ import { persist, createJSONStorage } from "zustand/middleware";
 interface TestData {
   image: HTMLImageElement | null;
   optimizedImage: HTMLImageElement | null;
+  rotatedImage: HTMLImageElement | null;
   allPixels: PixelData[][];
   controlPixels: PixelData[];
   controlIntensity: { LAB: number; HSL: number; deputy: number };
@@ -25,7 +26,12 @@ const storage = {
   storage: createJSONStorage(() => sessionStorage),
   partialize: (state: TestState) => ({
     tests: state.tests.map((test) => {
-      const excludeFields = ["allPixels", "image", "optimizedImage"];
+      const excludeFields = [
+        "allPixels",
+        "image",
+        "optimizedImage",
+        "rotatedImage",
+      ];
       return Object.fromEntries(
         Object.entries(test).filter(([key]) => !excludeFields.includes(key)),
       );
@@ -49,6 +55,7 @@ const ensureTestExists = (index: number) => {
       tests.push({
         image: null,
         optimizedImage: null,
+        rotatedImage: null,
         allPixels: [],
         controlPixels: [],
         controlIntensity: { LAB: 0, HSL: 0, deputy: 0 },
@@ -81,6 +88,15 @@ export const setOptimizedImage = (
   useTestStore.setState((state) => ({
     tests: state.tests.map((test, i) =>
       i === index ? { ...test, optimizedImage: newImage } : test,
+    ),
+  }));
+};
+
+export const setRotatedImage = (index: number, newImage: HTMLImageElement) => {
+  ensureTestExists(index);
+  useTestStore.setState((state) => ({
+    tests: state.tests.map((test, i) =>
+      i === index ? { ...test, rotatedImage: newImage } : test,
     ),
   }));
 };
