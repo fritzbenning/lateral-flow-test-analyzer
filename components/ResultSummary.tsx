@@ -33,18 +33,22 @@ const ResultSummary = ({ index }: ResultSummaryProps) => {
           controlDeputy={controlPixels[controlIntensity.deputy]?.hsl}
           testDeputy={testPixels[testIntensity.deputy]?.hsl}
         />
-        <IntensityMetric
-          comparedValue={comparedIntensity.LAB!}
-          controlValue={controlIntensity.LAB!}
-          testValue={testIntensity.LAB!}
-          variant="LAB"
-        />
-        <IntensityMetric
-          comparedValue={comparedIntensity.HSL!}
-          controlValue={controlIntensity.HSL!}
-          testValue={testIntensity.HSL!}
-          variant="HSL"
-        />
+        {testResult === "true" && (
+          <>
+            <IntensityMetric
+              comparedValue={comparedIntensity.LAB!}
+              controlValue={controlIntensity.LAB!}
+              testValue={testIntensity.LAB!}
+              variant="LAB"
+            />
+            <IntensityMetric
+              comparedValue={comparedIntensity.HSL!}
+              controlValue={controlIntensity.HSL!}
+              testValue={testIntensity.HSL!}
+              variant="HSL"
+            />
+          </>
+        )}
       </div>
       <ResultDetails
         controlPixels={controlPixels}

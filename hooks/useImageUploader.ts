@@ -16,7 +16,7 @@ export function useImageUploader({ onFilesSelected }: UseImageUploaderProps) {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
-      "image/*": [".jpeg", ".jpg", ".png"],
+      "image/*": [".jpeg", ".jpg", ".png", ".webp"],
     },
     multiple: true,
   });
