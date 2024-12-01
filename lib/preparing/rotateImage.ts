@@ -21,6 +21,27 @@ export const rotateImage = (
       // Calculate rotation angle from dominant lines
       const rotationAngle = calculateRotationAngle(lines);
 
+      // Check if the two strongest lines are vertical
+      const areStrongestLinesVertical = lines
+        .slice(0, 2)
+        .every((line) => Math.abs(Math.abs(line.angle) - 90) < 10); // Within ±10° of vertical (90° or -90°)
+
+      // Add console log for vertical lines detection
+      if (areStrongestLinesVertical) {
+        console.log(
+          "Detected vertical alignment: Two strongest lines are vertical",
+        );
+        console.log(
+          "Strongest lines angles:",
+          lines.slice(0, 2).map((line) => line.angle),
+        );
+      }
+
+      // Adjust rotation angle if strongest lines are vertical
+      const finalRotationAngle = areStrongestLinesVertical
+        ? rotationAngle + 90
+        : rotationAngle;
+
       // Create a new canvas for the rotated image
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
@@ -34,7 +55,7 @@ export const rotateImage = (
       ctx.globalCompositeOperation = "source-over";
 
       // Set dimensions to fit rotated image
-      const radians = Math.abs((rotationAngle * Math.PI) / 180);
+      const radians = Math.abs((finalRotationAngle * Math.PI) / 180);
       const newWidth =
         Math.abs(width * Math.cos(radians)) +
         Math.abs(height * Math.sin(radians));
@@ -47,7 +68,7 @@ export const rotateImage = (
 
       // Rotate and draw the image
       ctx.translate(newWidth / 2, newHeight / 2);
-      ctx.rotate((rotationAngle * Math.PI) / 180);
+      ctx.rotate((finalRotationAngle * Math.PI) / 180);
 
       // Add scale factor
       const scaleFactor = 1.3;
