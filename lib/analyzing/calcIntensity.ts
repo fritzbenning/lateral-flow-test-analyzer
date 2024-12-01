@@ -18,8 +18,8 @@ export const calcIntensity = (index: number, lines: any) => {
     (a: PixelData, b: PixelData) => b.lab.a - a.lab.a,
   );
 
-  const controlPercentile = getPercentile(sortedControlLine);
-  const testPercentile = getPercentile(sortedTestLine);
+  const controlPercentile = getPercentile(sortedControlLine, 5);
+  const testPercentile = getPercentile(sortedTestLine, 5);
 
   const controlIntensityLAB = sortedControlLine[controlPercentile].lab.a;
   const testIntensityLAB = sortedTestLine[testPercentile].lab.a;

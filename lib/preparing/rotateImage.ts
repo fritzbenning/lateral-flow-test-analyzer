@@ -24,18 +24,7 @@ export const rotateImage = (
       // Check if the two strongest lines are vertical
       const areStrongestLinesVertical = lines
         .slice(0, 2)
-        .every((line) => Math.abs(Math.abs(line.angle) - 90) < 10); // Within ±10° of vertical (90° or -90°)
-
-      // Add console log for vertical lines detection
-      if (areStrongestLinesVertical) {
-        console.log(
-          "Detected vertical alignment: Two strongest lines are vertical",
-        );
-        console.log(
-          "Strongest lines angles:",
-          lines.slice(0, 2).map((line) => line.angle),
-        );
-      }
+        .every((line) => Math.abs(Math.abs(line.angle) - 90) < 10);
 
       // Adjust rotation angle if strongest lines are vertical
       const finalRotationAngle = areStrongestLinesVertical
@@ -71,7 +60,7 @@ export const rotateImage = (
       ctx.rotate((finalRotationAngle * Math.PI) / 180);
 
       // Add scale factor
-      const scaleFactor = 1.3;
+      const scaleFactor = 1.2;
       ctx.scale(scaleFactor, scaleFactor);
 
       ctx.drawImage(imgElement, -width / 2, -height / 2, width, height);

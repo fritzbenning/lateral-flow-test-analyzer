@@ -7,6 +7,7 @@ import {
   setRotatedImage,
 } from "@/stores/testStore";
 import { removeBackground } from "@imgly/background-removal";
+import { correctWhiteBalance } from "@/lib/preparing/correctWhiteBalance";
 import { useState, useEffect } from "react";
 
 interface UseImageOptimizerResult {
@@ -69,15 +70,25 @@ export function useImageOptimizer(files: File[]): UseImageOptimizerResult {
           if (mounted) {
             const optimizedImageElement = new Image();
             await new Promise<void>((resolve, reject) => {
-              optimizedImageElement.onload = () => {
-                imagesToCleanup.push(optimizedImageElement);
-                setOptimisedImages((prev) =>
-                  prev
-                    ? [...prev, optimizedImageElement]
-                    : [optimizedImageElement],
-                );
-                setOptimizedImage(i, optimizedImageElement);
-                resolve();
+              optimizedImageElement.onload = async () => {
+                try {
+                  const whiteBalancedImage = await correctWhiteBalance(
+                    optimizedImageElement,
+                  );
+                  setStatus((prev) => [
+                    ...prev,
+                    `White balance corrected for file ${i + 1}!`,
+                  ]);
+
+                  imagesToCleanup.push(whiteBalancedImage);
+                  setOptimisedImages((prev) =>
+                    prev ? [...prev, whiteBalancedImage] : [whiteBalancedImage],
+                  );
+                  setOptimizedImage(i, whiteBalancedImage);
+                  resolve();
+                } catch (error) {
+                  reject(error);
+                }
               };
               optimizedImageElement.onerror = (e) => {
                 reject(
