@@ -60,7 +60,7 @@ export const rotateImage = (
       ctx.rotate((finalRotationAngle * Math.PI) / 180);
 
       // Add scale factor
-      const scaleFactor = 1.2;
+      const scaleFactor = 1.3;
       ctx.scale(scaleFactor, scaleFactor);
 
       ctx.drawImage(imgElement, -width / 2, -height / 2, width, height);

@@ -25,7 +25,7 @@ export function checkForPeaks(group: PixelData[]): PixelData[] {
     return pixel ? [pixel] : [];
   }
 
-  const yTHRESHOLD = Math.floor(uniqueSortedByY.length * 0.3);
+  const yTHRESHOLD = 4;
 
   const pixelsAtY = uniqueSortedByY
     .map((y) => {

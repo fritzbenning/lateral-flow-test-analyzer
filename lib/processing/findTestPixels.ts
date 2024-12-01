@@ -2,7 +2,7 @@ import { PixelData } from "@/types";
 
 // Boundaries for selecting test pixels
 const HUE_RANGES = [
-  { min: 245, max: 360 },
+  { min: 238, max: 360 },
   { min: 0, max: 20 },
 ] as const;
 
@@ -33,6 +33,8 @@ export function findTestPixels(pixelData: PixelData[][]) {
       }
     }
   }
+
+  console.log(results);
 
   return results;
 }

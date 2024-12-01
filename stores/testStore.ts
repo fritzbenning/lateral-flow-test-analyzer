@@ -1,6 +1,5 @@
 import { PixelData } from "@/types";
 import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
 
 interface TestData {
   image: HTMLImageElement | null;
@@ -21,32 +20,9 @@ interface TestState {
   tests: TestData[];
 }
 
-const storage = {
-  name: "lateral-flow-tests",
-  storage: createJSONStorage(() => sessionStorage),
-  partialize: (state: TestState) => ({
-    tests: state.tests.map((test) => {
-      const excludeFields = [
-        "allPixels",
-        "image",
-        "optimizedImage",
-        "rotatedImage",
-      ];
-      return Object.fromEntries(
-        Object.entries(test).filter(([key]) => !excludeFields.includes(key)),
-      );
-    }),
-  }),
-};
-
-export const useTestStore = create<TestState>()(
-  persist(
-    () => ({
-      tests: [] as TestData[],
-    }),
-    storage,
-  ),
-);
+export const useTestStore = create<TestState>()(() => ({
+  tests: [] as TestData[],
+}));
 
 const ensureTestExists = (index: number) => {
   useTestStore.setState((state) => {
