@@ -1,10 +1,7 @@
 import { createImageCanvas } from "./createImageCanvas";
-
-interface Line {
-  angle: number;
-  rho: number;
-  strength: number;
-}
+import { detectEdges } from "./detectEdges";
+import { houghTransform } from "./houghTransform";
+import { calculateRotationAngle } from "./calculateRotationAngle";
 
 export const rotateImage = (
   imgElement: HTMLImageElement,
@@ -31,6 +28,11 @@ export const rotateImage = (
         throw new Error("Could not get canvas context");
       }
 
+      // Add these lines to preserve image quality
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+      ctx.globalCompositeOperation = "source-over";
+
       // Set dimensions to fit rotated image
       const radians = Math.abs((rotationAngle * Math.PI) / 180);
       const newWidth =
@@ -46,6 +48,11 @@ export const rotateImage = (
       // Rotate and draw the image
       ctx.translate(newWidth / 2, newHeight / 2);
       ctx.rotate((rotationAngle * Math.PI) / 180);
+
+      // Add scale factor
+      const scaleFactor = 1.3;
+      ctx.scale(scaleFactor, scaleFactor);
+
       ctx.drawImage(imgElement, -width / 2, -height / 2, width, height);
 
       // Create new image from canvas
@@ -58,116 +65,3 @@ export const rotateImage = (
     }
   });
 };
-
-function detectEdges(
-  data: Uint8ClampedArray,
-  width: number,
-  height: number,
-): Uint8ClampedArray {
-  const edges = new Uint8ClampedArray(width * height);
-  const sobelX = [-1, 0, 1, -2, 0, 2, -1, 0, 1];
-  const sobelY = [-1, -2, -1, 0, 0, 0, 1, 2, 1];
-
-  for (let y = 1; y < height - 1; y++) {
-    for (let x = 1; x < width - 1; x++) {
-      let sumX = 0;
-      let sumY = 0;
-
-      // Apply Sobel operator
-      for (let i = -1; i <= 1; i++) {
-        for (let j = -1; j <= 1; j++) {
-          const idx = ((y + i) * width + (x + j)) * 4;
-          const gray = (data[idx] + data[idx + 1] + data[idx + 2]) / 3;
-          sumX += gray * sobelX[(i + 1) * 3 + (j + 1)];
-          sumY += gray * sobelY[(i + 1) * 3 + (j + 1)];
-        }
-      }
-
-      const magnitude = Math.sqrt(sumX * sumX + sumY * sumY);
-      edges[y * width + x] = magnitude > 128 ? 255 : 0;
-    }
-  }
-
-  return edges;
-}
-
-function houghTransform(
-  edges: Uint8ClampedArray,
-  width: number,
-  height: number,
-): Line[] {
-  const diag = Math.sqrt(width * width + height * height);
-  const rhoMax = Math.ceil(diag);
-  const thetaMax = 180;
-  const accumulator: number[][] = Array(rhoMax * 2)
-    .fill(0)
-    .map(() => Array(thetaMax).fill(0));
-
-  // Accumulate votes in Hough space
-  for (let y = 0; y < height; y++) {
-    for (let x = 0; x < width; x++) {
-      if (edges[y * width + x] > 0) {
-        for (let theta = 0; theta < thetaMax; theta++) {
-          const rad = (theta * Math.PI) / 180;
-          const rho = x * Math.cos(rad) + y * Math.sin(rad);
-          const rhoIndex = Math.round(rho + rhoMax);
-          if (rhoIndex >= 0 && rhoIndex < rhoMax * 2) {
-            accumulator[rhoIndex][theta]++;
-          }
-        }
-      }
-    }
-  }
-
-  // Find peaks in Hough space
-  const lines: Line[] = [];
-  const threshold =
-    Math.max(...accumulator.map((row) => Math.max(...row))) * 0.5;
-
-  for (let rho = 0; rho < rhoMax * 2; rho++) {
-    for (let theta = 0; theta < thetaMax; theta++) {
-      if (accumulator[rho][theta] > threshold) {
-        lines.push({
-          rho: rho - rhoMax,
-          angle: theta,
-          strength: accumulator[rho][theta],
-        });
-      }
-    }
-  }
-
-  return lines;
-}
-
-function calculateRotationAngle(lines: Line[]): number {
-  // Sort lines by strength
-  const sortedLines = lines.sort((a, b) => b.strength - a.strength);
-
-  // Get dominant angles (near horizontal or vertical)
-  const angles = sortedLines.slice(0, 5).map((line) => {
-    let angle = line.angle % 180;
-    // Keep track of whether angle was in upper or lower quadrant
-    const isUpperQuadrant = angle > 90 && angle <= 180;
-
-    // Normalize angles to be relative to horizontal or vertical
-    if (angle > 45 && angle <= 135) {
-      angle = angle - 90; // This gives us negative angles for < 90 and positive for > 90
-    } else {
-      angle = angle <= 45 ? -angle : -(180 - angle);
-    }
-    return { angle, isUpperQuadrant };
-  });
-
-  // Calculate weighted average of angles
-  const avgAngle =
-    angles.reduce((sum, { angle }) => sum + angle, 0) / angles.length;
-
-  // Count which quadrant has more lines to determine rotation direction
-  const upperQuadrantCount = angles.filter(
-    ({ isUpperQuadrant }) => isUpperQuadrant,
-  ).length;
-  const lowerQuadrantCount = angles.length - upperQuadrantCount;
-
-  // If more lines are in the upper quadrant, invert the rotation
-  return upperQuadrantCount > lowerQuadrantCount ? -avgAngle : avgAngle;
-}
