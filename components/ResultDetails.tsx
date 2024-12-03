@@ -35,13 +35,11 @@ export const ResultDetails = ({
             pixels={controlPixels}
             deputyIndex={controlIntensity.deputy}
           />
-          {controlIntensity.deputy > 0 && (
-            <PixelList
-              title="Test"
-              pixels={testPixels}
-              deputyIndex={controlIntensity.deputy}
-            />
-          )}
+          <PixelList
+            title="Test"
+            pixels={testPixels}
+            deputyIndex={controlIntensity.deputy}
+          />
         </div>
       </DialogContent>
     </Dialog>
