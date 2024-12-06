@@ -40,14 +40,12 @@ export function useNeuralNetwork(files: File[]): UseNeuralNetworkResult {
           const file = files[i];
           const image = await fileToImageElement(file);
 
-          //   // Resize the original file and image
-          //   const resizedFile = await resizeImage(file, 800); // Using default 800px width
-          //   const resizedImage = await resizeImage(image, 800);
-
           // remove background from image
           let imageWithoutBackground = await removeBackground(i, file);
           // rotate image to correct orientation
           const rotationAngle = await getRotationAngle(imageWithoutBackground);
+
+          console.log(rotationAngle);
 
           const rotatedImage = await rotateImage(image, rotationAngle);
 

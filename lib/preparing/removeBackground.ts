@@ -22,8 +22,6 @@ export const removeBackground = async (index: number, imageFile: File) => {
 
     const data = await response.json();
 
-    console.log(data);
-
     if (!data.testDetected) {
       setError(index, true, "There is no lateral flow test in the image.");
       throw new Error("No test detected");

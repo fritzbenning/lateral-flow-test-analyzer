@@ -30,11 +30,15 @@ export const getRotationAngle = async (imageElement: HTMLImageElement) => {
         ? rotationAngle + 90
         : rotationAngle;
 
+      // Add check for NaN
+      if (isNaN(finalRotationAngle)) {
+        console.warn("Rotation angle is NaN. Falling back to 0.");
+        return 0;
+      }
+
       return finalRotationAngle;
     } catch (error) {
-      throw new Error("Can't measure rotation angle. Falling back to 0.", {
-        cause: error,
-      });
+      console.warn("Can't measure rotation angle. Falling back to 0.", error);
       return 0; // Fallback to 0 on error
     }
   };
