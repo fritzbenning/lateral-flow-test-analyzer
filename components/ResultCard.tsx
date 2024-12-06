@@ -1,5 +1,5 @@
 import { Card } from "@/components/ui/Card";
-import { ImageIcon } from "lucide-react";
+import { ArrowUpFromLine, ImageIcon, ShieldAlert, Upload } from "lucide-react";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import ImagePreview from "@/components/ImagePreview";
 import ResultSummary from "@/components/ResultSummary";
@@ -7,14 +7,21 @@ import { useTestStore } from "@/stores/testStore";
 import { Fade } from "@/components/Fade";
 import { AnimatePresence } from "framer-motion";
 import { useEffect } from "react";
+import { Button } from "./ui/Button";
 
 interface ResultCardProps {
   file: File;
   index: number;
   loading: boolean;
+  onReset: () => void;
 }
 
-export function ResultCard({ file, index, loading = true }: ResultCardProps) {
+export function ResultCard({
+  file,
+  index,
+  loading = true,
+  onReset,
+}: ResultCardProps) {
   const test = useTestStore((state) => state.tests[index]);
 
   useEffect(() => {
@@ -25,14 +32,31 @@ export function ResultCard({ file, index, loading = true }: ResultCardProps) {
     <Card key={file.name}>
       <AnimatePresence mode="wait">
         {loading ? (
-          <Fade keyName={`loading-${file.name}`}>
-            <div className="flex min-h-[320px] w-full flex-col items-center justify-center gap-4">
-              <LoadingSpinner size={32} />
-              <AnimatePresence mode="wait">
-                <Fade keyName={test?.status}>{test?.status}</Fade>
-              </AnimatePresence>
-            </div>
-          </Fade>
+          <>
+            {test?.error ? (
+              <Fade keyName={`loading-${file.name}`}>
+                <div className="flex min-h-[320px] w-full flex-col items-center justify-center gap-6">
+                  <ShieldAlert className="h-10 w-10 text-red-500" />
+                  <div className="max-w-md text-center">
+                    {test?.errorMessage}
+                  </div>
+                  <Button onClick={onReset}>
+                    <ArrowUpFromLine className="mr-2 h-4 w-4" />
+                    Upload new image
+                  </Button>
+                </div>
+              </Fade>
+            ) : (
+              <Fade keyName={`loading-${file.name}`}>
+                <div className="flex min-h-[320px] w-full flex-col items-center justify-center gap-4">
+                  <LoadingSpinner size={32} />
+                  <AnimatePresence mode="wait">
+                    <Fade keyName={test?.status}>{test?.status}</Fade>
+                  </AnimatePresence>
+                </div>
+              </Fade>
+            )}
+          </>
         ) : (
           <Fade keyName={`result-${file.name}`}>
             <div className="border-slate-150 align-items flex gap-2 border-b px-4 py-4 text-md font-medium leading-tight md:px-6">

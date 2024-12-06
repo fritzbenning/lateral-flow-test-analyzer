@@ -10,7 +10,7 @@ export default function ResultHeader({ onReset }: ResultHeaderProps) {
     <div className="flex items-center justify-between">
       <h2 className="text-xl font-bold">Your result</h2>
       <Button onClick={onReset}>
-        <ListRestart className="mr-2 h-5 w-5" />
+        <ListRestart className="mr-2 h-4 w-4" />
         Reset
       </Button>
     </div>

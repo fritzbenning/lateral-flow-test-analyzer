@@ -10,6 +10,7 @@ import { detectLateralFlowTest } from "@/lib/analyzing/detectLateralFlowTest";
 import { removeBackground } from "@/lib/preparing/removeBackground";
 import { fileToImageElement } from "@/utils/imageConversion";
 import { getRotationAngle } from "@/lib/preparing/getRotationAngle";
+import { correctWhiteBalance } from "@/lib/preparing/correctWhiteBalance";
 
 interface UseNeuralNetworkResult {
   loading: boolean;
@@ -50,17 +51,29 @@ export function useNeuralNetwork(files: File[]): UseNeuralNetworkResult {
           const { testAreaImage, previewImage } =
             await detectLateralFlowTest(rotatedImage);
 
-          // set images in store
-          if (mounted) {
-            setTestAreaImage(i, testAreaImage);
-            setPreviewImage(i, previewImage);
-            setTestAreaImages((prev) => [...prev, testAreaImage]);
-          }
-        } catch (error) {
-          if (mounted) {
-            setError(i, true, "Failed to execute neural network.");
+          const aspectRatio = testAreaImage.width / testAreaImage.height;
+
+          console.log(aspectRatio);
+
+          if (aspectRatio > 0.5) {
+            setError(
+              i,
+              true,
+              "The perspective of the test is not suitable for an analysis. Please follow the guidelines.",
+            );
+            throw new Error("Perspective of the test is not suitable.");
           }
 
+          const correctedTestAreaImage =
+            await correctWhiteBalance(testAreaImage);
+
+          // set images in store
+          if (mounted) {
+            setTestAreaImage(i, correctedTestAreaImage);
+            setPreviewImage(i, previewImage);
+            setTestAreaImages((prev) => [...prev, correctedTestAreaImage]);
+          }
+        } catch (error) {
           throw new Error("Failed to execute neural network.", {
             cause: error,
           });

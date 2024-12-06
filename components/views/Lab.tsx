@@ -34,6 +34,7 @@ export function Lab() {
               file={file}
               loading={loading}
               index={index}
+              onReset={reset}
             />
           ))}
         </Fade>
