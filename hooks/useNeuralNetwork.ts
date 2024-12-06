@@ -53,8 +53,6 @@ export function useNeuralNetwork(files: File[]): UseNeuralNetworkResult {
 
           const aspectRatio = testAreaImage.width / testAreaImage.height;
 
-          console.log(aspectRatio);
-
           if (aspectRatio > 0.5) {
             setError(
               i,

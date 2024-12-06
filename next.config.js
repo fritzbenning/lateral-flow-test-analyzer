@@ -21,9 +21,11 @@ const nextConfig = {
       },
     ];
   },
-  api: {
-    bodyParser: {
-      sizeLimit: "10mb",
+  serverRuntimeConfig: {
+    api: {
+      bodyParser: {
+        sizeLimit: "10mb",
+      },
     },
   },
 };

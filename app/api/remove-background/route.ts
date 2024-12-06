@@ -24,7 +24,7 @@ export async function POST(request: Request) {
         "Content-Type": "application/json",
       },
       data: {
-        api_key: process.env.NEXT_PUBLIC_ROBOFLOW_API_KEY,
+        api_key: process.env.ROBOFLOW_API_KEY,
         inputs: {
           image: { type: "base64", value: base64Image },
         },

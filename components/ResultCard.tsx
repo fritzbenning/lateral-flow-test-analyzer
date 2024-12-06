@@ -24,10 +24,6 @@ export function ResultCard({
 }: ResultCardProps) {
   const test = useTestStore((state) => state.tests[index]);
 
-  useEffect(() => {
-    console.log(test);
-  }, [test]);
-
   return (
     <Card key={file.name}>
       <AnimatePresence mode="wait">
