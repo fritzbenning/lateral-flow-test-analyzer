@@ -14,8 +14,6 @@ export function groupPixelData(testPixels: PixelData[]) {
   const GROUP_SIZE_THRESHOLD = 4;
   const MIN_X_COORDINATES = 5;
 
-  console.log(PROXIMITY_THRESHOLD);
-
   // sort pixels by y-axis
   testPixels.sort((a, b) => a.y - b.y);
 
@@ -48,13 +46,9 @@ export function groupPixelData(testPixels: PixelData[]) {
   horizontalGroups.map((group) => {
     const peaks = checkForPeaks(group);
 
-    console.log(peaks);
-
     if (peaks.length === 1) {
-      console.log("One peak is detected.");
       checkedGroups.push(group);
     } else if (peaks.length === 2) {
-      console.warn("Two peaks are detected.");
       const [peak1, peak2] = peaks;
       if (!peak1 || !peak2) return;
       const controlGroup = group.filter((pixel) => pixel.y <= peak1.y);
@@ -63,15 +57,12 @@ export function groupPixelData(testPixels: PixelData[]) {
       );
       checkedGroups.push(controlGroup, testGroup);
     } else if (peaks.length > 2) {
-      console.warn("Multiple peaks are deteced.");
-      console.log(peaks);
       const peakLabAValues = peaks.map((peak) => peak.lab.a);
       const sortedLabAValues = [...peakLabAValues].sort((a, b) => b - a);
       const topTwoAverage = (sortedLabAValues[0] + sortedLabAValues[1]) / 2;
       const significantPeaks = peaks.filter(
         (peak) => peak.lab.a >= topTwoAverage * 0.3,
       );
-      console.log(significantPeaks);
       if (significantPeaks.length === 2) {
         const [peak1, peak2] = significantPeaks;
         const controlGroup = group.filter(
@@ -87,7 +78,6 @@ export function groupPixelData(testPixels: PixelData[]) {
         checkedGroups.push(controlGroup, testGroup);
       }
     } else {
-      console.log("No peak is detected.");
       checkedGroups.push(group);
     }
   });
@@ -128,14 +118,10 @@ export function groupPixelData(testPixels: PixelData[]) {
     [],
   );
 
-  console.log(filteredGroups);
-
   // remove non-significant groups
   const relevantGroups = filteredGroups
     .filter((group) => group.length > minPixelsPerGroup)
     .slice(0, 2);
-
-  console.log(relevantGroups);
 
   // Filter out pixels with lab.a values less than 5th percentile of group
   const reducedGroups = relevantGroups.map((group) => {

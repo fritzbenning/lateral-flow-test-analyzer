@@ -12,7 +12,7 @@ import { useImageProcessor } from "@/hooks/useImageProcessor";
 export function Lab() {
   const [files, setFiles] = useState<File[]>([]);
 
-  const { loading, status } = useImageProcessor(files);
+  const { loading } = useImageProcessor(files);
 
   const handleFiles = (files: File[]) => {
     setFiles(files);
@@ -32,7 +32,6 @@ export function Lab() {
             <ResultCard
               key={file.name}
               file={file}
-              status={status}
               loading={loading}
               index={index}
             />

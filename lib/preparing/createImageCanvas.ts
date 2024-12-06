@@ -7,7 +7,7 @@ export const createImageCanvas = (imgElement: HTMLImageElement) => {
   const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
 
   if (!ctx) {
-    throw new Error("Could not get canvas context");
+    throw new Error("Could not get canvas context.");
   }
 
   // calculate image dimensions

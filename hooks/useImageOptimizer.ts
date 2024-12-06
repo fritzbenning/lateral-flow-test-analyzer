@@ -1,4 +1,3 @@
-import { createImgElement } from "@/lib/preparing/createImgElement";
 import { rotateImage } from "@/lib/preparing/rotateImage";
 import { trimTransparentEdges } from "@/lib/preparing/trimTransparentEdges";
 import {
@@ -9,6 +8,8 @@ import {
 import { removeBackground } from "@imgly/background-removal";
 import { correctWhiteBalance } from "@/lib/preparing/correctWhiteBalance";
 import { useState, useEffect } from "react";
+import { getRotationAngle } from "@/lib/preparing/getRotationAngle";
+import { fileToImageElement } from "@/utils/imageConversion";
 
 interface UseImageOptimizerResult {
   loading: boolean;
@@ -49,7 +50,7 @@ export function useImageOptimizer(files: File[]): UseImageOptimizerResult {
         ]);
 
         // save original image in store
-        const originalImage = createImgElement(files[i]);
+        const originalImage = await fileToImageElement(files[i]);
         setImage(i, originalImage);
 
         try {
@@ -131,7 +132,9 @@ export function useImageOptimizer(files: File[]): UseImageOptimizerResult {
       try {
         setStatus((prev) => [...prev, "Rotating images..."]);
         const rotatedImages = await Promise.all(
-          optimisedImages.map((image) => rotateImage(image)),
+          optimisedImages.map(async (image) =>
+            rotateImage(image, await getRotationAngle(image)),
+          ),
         );
         setRotatedImages(rotatedImages);
         rotatedImages.forEach((image, index) => setRotatedImage(index, image));

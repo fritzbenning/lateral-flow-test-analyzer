@@ -20,6 +20,7 @@ const ResultSummary = ({ index }: ResultSummaryProps) => {
     testIntensity,
     comparedIntensity,
     allPixels,
+    testAreaImage,
   } = test;
 
   const testResult = String(result) as "null" | "false" | "true";

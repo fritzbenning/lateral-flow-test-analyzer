@@ -14,7 +14,6 @@ export function checkForPeaks(group: PixelData[]): PixelData[] {
   );
 
   if (uniqueSortedByY.length < minLineHeight) {
-    console.log("Only a few pixels present, suggesting a test line.");
     const averagedY =
       uniqueSortedByY.reduce((acc, y) => acc + y, 0) / uniqueSortedByY.length;
 

@@ -29,7 +29,7 @@ export default function RootLayout({
             <main className="mx-auto w-full max-w-6xl">{children}</main>
           </div>
         </div>
-        <Toaster position="top-center" richColors />
+        <Toaster />
       </body>
     </html>
   );

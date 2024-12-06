@@ -34,7 +34,5 @@ export function findTestPixels(pixelData: PixelData[][]) {
     }
   }
 
-  console.log(results);
-
   return results;
 }

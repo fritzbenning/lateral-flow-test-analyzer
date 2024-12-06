@@ -8,7 +8,7 @@ interface ConfigState {
 }
 
 export const useConfigStore = create<ConfigState>(() => ({
-  imageSize: 800,
+  imageSize: 800, // 800 by using large not a test area image
   batchCount: 4,
   pixelBinding: 2,
   minPixelsPerGroup: 5,

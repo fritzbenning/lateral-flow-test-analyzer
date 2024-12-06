@@ -14,6 +14,11 @@ interface TestData {
   mergedIntensity: null | number;
   result: boolean | null;
   resultMessage: string;
+  testAreaImage: HTMLImageElement | null;
+  previewImage: HTMLImageElement | null;
+  error: boolean;
+  errorMessage: string;
+  status: string;
 }
 
 interface TestState {
@@ -41,6 +46,11 @@ const ensureTestExists = (index: number) => {
         mergedIntensity: null,
         result: null,
         resultMessage: "",
+        testAreaImage: null,
+        previewImage: null,
+        error: false,
+        errorMessage: "",
+        status: "Warming up ...",
       });
     }
     return { tests };
@@ -73,6 +83,24 @@ export const setRotatedImage = (index: number, newImage: HTMLImageElement) => {
   useTestStore.setState((state) => ({
     tests: state.tests.map((test, i) =>
       i === index ? { ...test, rotatedImage: newImage } : test,
+    ),
+  }));
+};
+
+export const setTestAreaImage = (index: number, newImage: HTMLImageElement) => {
+  ensureTestExists(index);
+  useTestStore.setState((state) => ({
+    tests: state.tests.map((test, i) =>
+      i === index ? { ...test, testAreaImage: newImage } : test,
+    ),
+  }));
+};
+
+export const setPreviewImage = (index: number, newImage: HTMLImageElement) => {
+  ensureTestExists(index);
+  useTestStore.setState((state) => ({
+    tests: state.tests.map((test, i) =>
+      i === index ? { ...test, previewImage: newImage } : test,
     ),
   }));
 };
@@ -158,6 +186,28 @@ export const setResult = (
   useTestStore.setState((state) => ({
     tests: state.tests.map((test, i) =>
       i === index ? { ...test, result, resultMessage } : test,
+    ),
+  }));
+};
+
+export const setError = (
+  index: number,
+  error: boolean,
+  errorMessage: string,
+) => {
+  ensureTestExists(index);
+  useTestStore.setState((state) => ({
+    tests: state.tests.map((test, i) =>
+      i === index ? { ...test, error, errorMessage } : test,
+    ),
+  }));
+};
+
+export const setStatus = (index: number, status: string) => {
+  ensureTestExists(index);
+  useTestStore.setState((state) => ({
+    tests: state.tests.map((test, i) =>
+      i === index ? { ...test, status } : test,
     ),
   }));
 };

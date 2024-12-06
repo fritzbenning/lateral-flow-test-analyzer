@@ -10,17 +10,11 @@ import { useEffect } from "react";
 
 interface ResultCardProps {
   file: File;
-  status: string[];
   index: number;
   loading: boolean;
 }
 
-export function ResultCard({
-  file,
-  status,
-  index,
-  loading = true,
-}: ResultCardProps) {
+export function ResultCard({ file, index, loading = true }: ResultCardProps) {
   const test = useTestStore((state) => state.tests[index]);
 
   useEffect(() => {
@@ -34,7 +28,9 @@ export function ResultCard({
           <Fade keyName={`loading-${file.name}`}>
             <div className="flex min-h-[320px] w-full flex-col items-center justify-center gap-4">
               <LoadingSpinner size={32} />
-              {status[index]}
+              <AnimatePresence mode="wait">
+                <Fade keyName={test?.status}>{test?.status}</Fade>
+              </AnimatePresence>
             </div>
           </Fade>
         ) : (
@@ -45,10 +41,11 @@ export function ResultCard({
             </div>
             <div className="flex flex-col md:flex-row">
               {test?.image && test?.optimizedImage && (
-                <aside className="flex h-60 w-full flex-col px-4 pb-6 pt-4 md:h-80 md:w-80 md:gap-3 md:p-7">
+                <aside className="flex h-60 w-full flex-col px-4 pb-6 pt-4 md:h-80 md:w-96 md:gap-3 md:p-7">
                   <ImagePreview
                     image={test.image}
-                    optImage={test.rotatedImage}
+                    optImage={test.previewImage}
+                    testAreaImage={test?.testAreaImage}
                   />
                 </aside>
               )}
