@@ -32,18 +32,28 @@ export async function POST(request: Request) {
     });
 
     const output = response.data.outputs[0];
-    const base64result = output.image[0].value;
+
     const detectedTestLength = output.testDetection.predictions.length;
-    const detectedObjectLength = output.objectDetection[0].predictions.length;
+    const detectedObjectLength = output.objectDetection.length;
+
+    let base64result = "";
+
+    if (detectedTestLength > 0 && detectedObjectLength > 0) {
+      base64result = output.image[0].value;
+    } else {
+      base64result = base64Image;
+    }
 
     return NextResponse.json({
+      data: response.data,
       image: base64result,
-      noTestDetected: detectedTestLength === 0,
-      noObjectDetected: detectedTestLength >= 1 && detectedObjectLength === 0,
+      testDetected: detectedTestLength > 0,
+      objectDetected: detectedObjectLength > 0,
+      detectedObjectLength: detectedObjectLength,
     });
   } catch (error) {
     return NextResponse.json(
-      { error: "Failed to process image" },
+      { error: "Failed to process image", cause: error },
       { status: 500 },
     );
   }

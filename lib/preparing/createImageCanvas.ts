@@ -17,9 +17,13 @@ export const createImageCanvas = (imgElement: HTMLImageElement) => {
   canvas.width = width;
   canvas.height = height;
 
+  // Resize the original image element to match canvas dimensions
+  imgElement.width = width;
+  imgElement.height = height;
+
   // draw image on canvas to get image data
   ctx.drawImage(imgElement, 0, 0, width, height);
   const imageData = ctx.getImageData(0, 0, width, height);
 
-  return { imageData, width, height };
+  return { imageData, width, height, ctx, imgElement };
 };

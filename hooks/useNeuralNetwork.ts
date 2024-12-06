@@ -11,6 +11,7 @@ import { removeBackground } from "@/lib/preparing/removeBackground";
 import { fileToImageElement } from "@/utils/imageConversion";
 import { getRotationAngle } from "@/lib/preparing/getRotationAngle";
 import { correctWhiteBalance } from "@/lib/preparing/correctWhiteBalance";
+import { resizeImage } from "@/lib/preparing/resizeImage";
 
 interface UseNeuralNetworkResult {
   loading: boolean;
@@ -38,6 +39,10 @@ export function useNeuralNetwork(files: File[]): UseNeuralNetworkResult {
         try {
           const file = files[i];
           const image = await fileToImageElement(file);
+
+          //   // Resize the original file and image
+          //   const resizedFile = await resizeImage(file, 800); // Using default 800px width
+          //   const resizedImage = await resizeImage(image, 800);
 
           // remove background from image
           let imageWithoutBackground = await removeBackground(i, file);

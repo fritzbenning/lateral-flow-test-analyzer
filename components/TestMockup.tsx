@@ -20,6 +20,7 @@ const TestMockup: React.FC<TestMockupProps> = ({ testAreaImage }) => {
                 width={16}
                 height={64}
                 className="rounded-sm"
+                style={{ width: "auto", height: "auto" }}
               />
               <span className="absolute top-[-1.75rem] text-xs font-bold text-slate-400">
                 C

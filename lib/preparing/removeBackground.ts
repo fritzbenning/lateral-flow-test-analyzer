@@ -1,10 +1,11 @@
-import { setStatus } from "@/stores/testStore";
+import { setError, setStatus } from "@/stores/testStore";
 import { removeBackground as localRemoveBackground } from "@imgly/background-removal";
 
 export const removeBackground = async (index: number, imageFile: File) => {
   setStatus(index, "Removing background with AI ✨");
 
   try {
+    console.log("Try");
     const formData = new FormData();
     formData.append("image", imageFile);
 
@@ -14,13 +15,22 @@ export const removeBackground = async (index: number, imageFile: File) => {
     });
 
     if (!response.ok) {
+      const data = await response.json();
+      console.log(data);
       throw new Error("Failed to remove background");
     }
 
     const data = await response.json();
 
+    console.log(data);
+
+    if (!data.testDetected) {
+      setError(index, true, "There is no lateral flow test in the image.");
+      throw new Error("No test detected");
+    }
+
     // If the API detected potential issues, use local fallback
-    if (data.noObjectDetected) {
+    if (!data.objectDetected) {
       setStatus(index, "Retrying to remove background locally 🪄");
       const blob = await localRemoveBackground(imageFile);
       const arrayBuffer = await blob.arrayBuffer();
@@ -38,6 +48,7 @@ export const removeBackground = async (index: number, imageFile: File) => {
 
     return image;
   } catch (error) {
+    console.log(error);
     // Use local fallback if API fails
     try {
       setStatus(index, "Retrying to remove background locally 🪄");
