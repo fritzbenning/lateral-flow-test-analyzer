@@ -1,52 +1,35 @@
-import {
-  blobToImageElement,
-  fileToImageElement,
-  imageToBase64,
-} from "@/utils/imageConversion";
-import axios from "axios";
-import { removeBackground as localRemoveBackground } from "@imgly/background-removal";
 import { setStatus } from "@/stores/testStore";
+import { removeBackground as localRemoveBackground } from "@imgly/background-removal";
 
 export const removeBackground = async (index: number, imageFile: File) => {
+  setStatus(index, "Removing background with AI ✨");
+
   try {
-    setStatus(index, "Removing background with AI ✨");
+    const formData = new FormData();
+    formData.append("image", imageFile);
 
-    const imageElement = await fileToImageElement(imageFile);
-    const imageBase64 = await imageToBase64(imageElement);
-
-    const response = await axios({
+    const response = await fetch("/api/remove-background", {
       method: "POST",
-      url: "https://detect.roboflow.com/infer/workflows/friddle/background-removal",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      data: {
-        api_key: process.env.NEXT_PUBLIC_ROBOFLOW_API_KEY,
-        inputs: {
-          image: { type: "base64", value: imageBase64 },
-        },
-      },
+      body: formData,
     });
 
-    console.log(response.data);
+    if (!response.ok) {
+      throw new Error("Failed to remove background");
+    }
 
-    // only one image is supported so far
-    const output = response.data.outputs[0];
+    const data = await response.json();
 
-    const base64image = output.image[0].value;
-
-    const detectedTestLength = output.testDetection.predictions.length;
-    const detectedObjectLength = output.objectDetection[0].predictions.length;
-
-    if (detectedTestLength >= 1 && detectedObjectLength === 0) {
-      console.log(detectedTestLength);
-      console.log(detectedObjectLength);
+    // If the API detected potential issues, use local fallback
+    if (data.noObjectDetected) {
       setStatus(index, "Retrying to remove background locally 🪄");
-      return await removeBackgroundLocally(imageFile);
+      const blob = await localRemoveBackground(imageFile);
+      const arrayBuffer = await blob.arrayBuffer();
+      const base64 = Buffer.from(arrayBuffer).toString("base64");
+      data.image = base64;
     }
 
     const image = new Image();
-    image.src = `data:image/jpeg;base64,${base64image}`;
+    image.src = `data:image/jpeg;base64,${data.image}`;
 
     await new Promise((resolve, reject) => {
       image.onload = resolve;
@@ -55,19 +38,24 @@ export const removeBackground = async (index: number, imageFile: File) => {
 
     return image;
   } catch (error) {
-    // try local fallback
-    console.log("fallback");
-    console.log(error);
-    setStatus(index, "Retrying to remove background locally 🪄");
-    return await removeBackgroundLocally(imageFile);
+    // Use local fallback if API fails
+    try {
+      setStatus(index, "Retrying to remove background locally 🪄");
+      const blob = await localRemoveBackground(imageFile);
+      const arrayBuffer = await blob.arrayBuffer();
+      const base64 = Buffer.from(arrayBuffer).toString("base64");
+
+      const image = new Image();
+      image.src = `data:image/jpeg;base64,${base64}`;
+
+      await new Promise((resolve, reject) => {
+        image.onload = resolve;
+        image.onerror = reject;
+      });
+
+      return image;
+    } catch (err) {
+      throw new Error("Failed to remove background");
+    }
   }
 };
-
-async function removeBackgroundLocally(imageFile: File) {
-  try {
-    const blob = await localRemoveBackground(imageFile);
-    return await blobToImageElement(blob);
-  } catch (err) {
-    throw new Error("Failed to remove background.", { cause: err });
-  }
-}
