@@ -28,7 +28,7 @@ const Preview: React.FC<ImagePreviewProps> = ({
           <AnimatePresence mode="wait">
             <Fade key={showOptimized ? "optimized" : "preview"} variant="fade">
               <Image
-                src={showOptimized ? optImage.src : image.src}
+                src={showOptimized ? image.src : optImage.src}
                 alt={showOptimized ? "Optimized image" : "Preview image"}
                 width={320}
                 height={320}
