@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import {
   setError,
+  setImage,
+  setOptimizedImage,
   setPreviewImage,
   setStatus,
   setTestAreaImage,
@@ -13,6 +15,7 @@ import { getRotationAngle } from "@/lib/preparing/getRotationAngle";
 import { correctWhiteBalance } from "@/lib/preparing/correctWhiteBalance";
 import { resizeImage } from "@/lib/preparing/resizeImage";
 import { log } from "@/utils/log";
+import { useConfigStore } from "@/stores/configStore";
 
 interface UseNeuralNetworkResult {
   loading: boolean;
@@ -40,8 +43,10 @@ export function useNeuralNetwork(files: File[]): UseNeuralNetworkResult {
         try {
           const file = files[i];
           const image = await fileToImageElement(file);
+          setImage(i, image);
 
-          const resizedImage = await resizeImage(image);
+          const { imageSize } = useConfigStore.getState();
+          const resizedImage = await resizeImage(image, imageSize);
 
           // remove background from image
           let imageWithoutBackground = await removeBackground(i, resizedImage);
@@ -49,11 +54,14 @@ export function useNeuralNetwork(files: File[]): UseNeuralNetworkResult {
           const rotationAngle = await getRotationAngle(imageWithoutBackground);
 
           const rotatedImage = await rotateImage(resizedImage, rotationAngle);
+          const correctedImage = await correctWhiteBalance(rotatedImage);
+
+          setOptimizedImage(i, correctedImage);
 
           // detect lateral flow test
           setStatus(i, "Detecting lateral flow test 🔎");
           const { testAreaImage, previewImage } =
-            await detectLateralFlowTest(rotatedImage);
+            await detectLateralFlowTest(correctedImage);
 
           const aspectRatio = testAreaImage.width / testAreaImage.height;
 
@@ -66,14 +74,11 @@ export function useNeuralNetwork(files: File[]): UseNeuralNetworkResult {
             throw new Error("Perspective of the test is not suitable.");
           }
 
-          const correctedTestAreaImage =
-            await correctWhiteBalance(testAreaImage);
-
           // set images in store
           if (mounted) {
-            setTestAreaImage(i, correctedTestAreaImage);
+            setTestAreaImage(i, testAreaImage);
             setPreviewImage(i, previewImage);
-            setTestAreaImages((prev) => [...prev, correctedTestAreaImage]);
+            setTestAreaImages((prev) => [...prev, testAreaImage]);
           }
         } catch (error) {
           throw new Error("Failed to execute neural network.", {
@@ -84,7 +89,7 @@ export function useNeuralNetwork(files: File[]): UseNeuralNetworkResult {
 
       if (mounted) {
         setLoading(false);
-        log(`🎉 Images are processed successfully`, "success");
+        log(`🎉 Images are prepared successfully`, "success");
       }
     };
 

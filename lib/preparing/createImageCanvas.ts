@@ -1,7 +1,6 @@
-import { useConfigStore } from "@/stores/configStore";
-import { calcTestImageDimensions } from "./calcTestImageDimensions";
+import { log } from "@/utils/log";
 
-export const createImageCanvas = (imgElement: HTMLImageElement) => {
+export const createImageCanvas = (image: HTMLImageElement) => {
   // create canvas
   const canvas: HTMLCanvasElement = document.createElement("canvas");
   const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
@@ -10,20 +9,16 @@ export const createImageCanvas = (imgElement: HTMLImageElement) => {
     throw new Error("Could not get canvas context.");
   }
 
-  // calculate image dimensions
-  const { imageSize } = useConfigStore.getState();
-  const { width, height } = calcTestImageDimensions(imgElement, imageSize);
+  const width = image.width;
+  const height = image.height;
 
   canvas.width = width;
   canvas.height = height;
 
-  // Resize the original image element to match canvas dimensions
-  imgElement.width = width;
-  imgElement.height = height;
-
-  // draw image on canvas to get image data
-  ctx.drawImage(imgElement, 0, 0, width, height);
+  ctx.drawImage(image, 0, 0, width, height);
   const imageData = ctx.getImageData(0, 0, width, height);
+
+  log("👓 Image data has been read out", "info");
 
   return { imageData, width, height };
 };

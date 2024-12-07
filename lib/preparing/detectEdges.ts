@@ -1,3 +1,5 @@
+import { log } from "@/utils/log";
+
 export function detectEdges(
   data: Uint8ClampedArray,
   width: number,
@@ -26,6 +28,8 @@ export function detectEdges(
       edges[y * width + x] = magnitude > 128 ? 255 : 0;
     }
   }
+
+  log("📏 Image edges have been detected", "info");
 
   return edges;
 }

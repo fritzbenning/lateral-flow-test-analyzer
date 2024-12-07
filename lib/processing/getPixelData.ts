@@ -2,6 +2,7 @@ import { PixelData } from "@/types";
 import { processBatch } from "@/lib/processing/processBatch";
 import { setAllPixels } from "@/stores/testStore";
 import { useConfigStore } from "@/stores/configStore";
+import { log } from "@/utils/log";
 
 export const getPixelData = (
   index: number,
@@ -23,6 +24,8 @@ export const getPixelData = (
 
   // save all image pixels to store
   setAllPixels(index, batches.flat());
+
+  log("👾 Pixel data has been captured", "info");
 
   return batches.flat();
 };

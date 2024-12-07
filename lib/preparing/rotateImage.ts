@@ -1,13 +1,8 @@
 import { log } from "@/utils/log";
-import { createImageCanvas } from "./createImageCanvas";
-
 export const rotateImage = async (
-  imageElement: HTMLImageElement,
+  image: HTMLImageElement,
   rotationAngle: number,
 ): Promise<HTMLImageElement> => {
-  // Get image data from canvas
-  const { width, height } = createImageCanvas(imageElement);
-
   // Create a new canvas for the rotated image
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
@@ -26,6 +21,9 @@ export const rotateImage = async (
   const cos = Math.abs(Math.cos(radians));
   const sin = Math.abs(Math.sin(radians));
 
+  const width = image.width;
+  const height = image.height;
+
   const newWidth = Math.round(width * cos + height * sin);
   const newHeight = Math.round(width * sin + height * cos);
 
@@ -37,7 +35,7 @@ export const rotateImage = async (
   ctx.rotate(radians);
 
   // Ensure the image is drawn with the correct aspect ratio
-  ctx.drawImage(imageElement, -width / 2, -height / 2, width, height);
+  ctx.drawImage(image, -width / 2, -height / 2, width, height);
 
   // Return as Promise to handle the final image loading
   return new Promise((resolve, reject) => {

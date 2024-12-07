@@ -1,15 +1,13 @@
-import { useConfigStore } from "@/stores/configStore";
 import { log } from "@/utils/log";
 
 export async function resizeImage(
   image: HTMLImageElement,
+  newWidth: number,
 ): Promise<HTMLImageElement> {
-  const { imageSize } = useConfigStore.getState();
-
   // Calculate new dimensions maintaining aspect ratio
   const aspectRatio = image.width / image.height;
-  const targetWidth = imageSize;
-  const targetHeight = Math.round(imageSize / aspectRatio);
+  const targetWidth = newWidth;
+  const targetHeight = Math.round(newWidth / aspectRatio);
 
   // Create canvas with new dimensions
   const canvas = document.createElement("canvas");

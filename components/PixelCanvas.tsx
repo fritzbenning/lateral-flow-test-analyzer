@@ -9,7 +9,7 @@ interface PixelCanvasProps {
 }
 
 const PixelCanvas: React.FC<PixelCanvasProps> = ({ pixelData }) => {
-  const width = 728;
+  const width = 340;
   const height = 616;
 
   const canvasRef = useRef<HTMLDivElement>(null);
@@ -61,7 +61,7 @@ const PixelCanvas: React.FC<PixelCanvasProps> = ({ pixelData }) => {
   const rowCount = pixelData.length;
 
   return (
-    <div ref={canvasRef} className="flex w-full flex-col gap-4">
+    <div ref={canvasRef} className="flex w-full gap-4">
       <Grid
         cellRenderer={cellRenderer}
         columnCount={columnCount}
@@ -72,32 +72,32 @@ const PixelCanvas: React.FC<PixelCanvasProps> = ({ pixelData }) => {
         height={height}
         scrollToColumn={Math.floor(columnCount / 2)}
         scrollToRow={Math.floor(rowCount / 2)}
-        className="overflow-hidden rounded-lg"
+        className="flex-shrink-0 overflow-hidden rounded-lg"
       />
-      <figcaption className="flex w-full items-center justify-between gap-4 text-left text-sm leading-4">
+      <figcaption className="flex w-full flex-col gap-4 rounded-lg bg-slate-50 p-8 text-left text-sm leading-4">
         <div
           className="h-6 w-6 rounded-md"
           style={{
             backgroundColor: `hsl(${selectedHSL?.h}, ${selectedHSL?.s}%, ${selectedHSL?.l}%)`,
           }}
         />
-        <div className="flex-1">
+        <div>
           <strong>Position:</strong> x {columnPosition} / y {rowPosition}
         </div>
 
-        <div className="flex-1">
+        <div>
           <strong>RGB:</strong>{" "}
           {selectedRGB
             ? `${selectedRGB.r}, ${selectedRGB.g}, ${selectedRGB.b}`
             : "N/A"}
         </div>
-        <div className="flex-1">
+        <div>
           <strong>HSL:</strong>{" "}
           {selectedHSL
             ? `${selectedHSL.h}°, ${selectedHSL.s}%, ${selectedHSL.l}%`
             : "N/A"}
         </div>
-        <div className="flex-1">
+        <div>
           <strong>LAB:</strong>{" "}
           {selectedLAB
             ? `${Math.floor(selectedLAB.l)}, ${Math.floor(

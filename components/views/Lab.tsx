@@ -26,7 +26,7 @@ export function Lab() {
   return (
     <AnimatePresence mode="wait" initial={false}>
       {files.length > 0 ? (
-        <Fade keyName="results" className="flex flex-col gap-4 md:gap-5">
+        <Fade key="results" className="flex flex-col gap-4 md:gap-5">
           <ResultHeader onReset={reset} />
           {files.map((file, index) => (
             <ResultCard
@@ -39,7 +39,7 @@ export function Lab() {
           ))}
         </Fade>
       ) : (
-        <Fade keyName="upload">
+        <Fade key="upload">
           <ImageUpload handleFiles={handleFiles} />
         </Fade>
       )}

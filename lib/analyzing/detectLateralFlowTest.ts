@@ -1,5 +1,7 @@
 import { base64ToImage, imageToBase64 } from "@/utils/imageConversion";
 import { log } from "@/utils/log";
+import { resizeImage } from "@/lib/preparing/resizeImage";
+import { useConfigStore } from "@/stores/configStore";
 
 export async function detectLateralFlowTest(image: HTMLImageElement) {
   try {
@@ -30,9 +32,17 @@ export async function detectLateralFlowTest(image: HTMLImageElement) {
     const previewImage = await base64ToImage(previewImageBase64);
     const testAreaImage = await base64ToImage(testAreaImageBase64);
 
-    log(`✅ Lateral flow test is detected successfully`, "info");
+    const { imageSize } = useConfigStore.getState();
+    const resizedTestAreaImage = await resizeImage(
+      testAreaImage,
+      imageSize * 0.04,
+    );
 
-    return { testAreaImage, previewImage };
+    console.log(imageSize * 0.04);
+
+    log(`✅ Lateral flow test is detected`, "info");
+
+    return { testAreaImage: resizedTestAreaImage, previewImage };
   } catch (error) {
     throw new Error("Failed to detect lateral flow test.", { cause: error });
   }

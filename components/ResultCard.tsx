@@ -30,7 +30,7 @@ export function ResultCard({
         {loading ? (
           <>
             {test?.error ? (
-              <Fade keyName={`loading-${file.name}`}>
+              <Fade key={`loading-${file.name}`}>
                 <div className="flex min-h-[320px] w-full flex-col items-center justify-center gap-6">
                   <ShieldAlert className="h-10 w-10 text-red-500" />
                   <div className="max-w-md text-center">
@@ -43,18 +43,20 @@ export function ResultCard({
                 </div>
               </Fade>
             ) : (
-              <Fade keyName={`loading-${file.name}`}>
+              <Fade key={`loading-${file.name}`}>
                 <div className="flex min-h-[320px] w-full flex-col items-center justify-center gap-4">
                   <LoadingSpinner size={32} />
-                  <AnimatePresence mode="wait">
-                    <Fade keyName={test?.status}>{test?.status}</Fade>
-                  </AnimatePresence>
+                  <div className="h-6">
+                    <AnimatePresence mode="wait">
+                      <Fade key={test?.status}>{test?.status}</Fade>
+                    </AnimatePresence>
+                  </div>
                 </div>
               </Fade>
             )}
           </>
         ) : (
-          <Fade keyName={`result-${file.name}`}>
+          <Fade key={`result-${file.name}`}>
             <div className="border-slate-150 align-items flex gap-2 border-b px-4 py-4 text-md font-medium leading-tight md:px-6">
               <ImageIcon className="h-5 w-5" />
               {file.name}

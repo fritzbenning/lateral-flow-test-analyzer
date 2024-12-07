@@ -1,6 +1,8 @@
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
+  DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/Dialog";
@@ -28,7 +30,12 @@ export const ResultDetails = ({
         <Button className="btn">Show identified pixels</Button>
       </DialogTrigger>
       <DialogContent>
-        <DialogTitle>Identified pixels</DialogTitle>
+        <DialogHeader>
+          <DialogTitle>Identified pixels</DialogTitle>
+          <DialogDescription>
+            The following pixels have been identified in the image.
+          </DialogDescription>
+        </DialogHeader>
         <div className="flex flex-col gap-6">
           <PixelList
             title="Control"
@@ -48,7 +55,12 @@ export const ResultDetails = ({
         <Button className="hidden md:block">Open pixel view</Button>
       </DialogTrigger>
       <DialogContent>
-        <DialogTitle>Canvas Preview</DialogTitle>
+        <DialogHeader>
+          <DialogTitle>Canvas Preview</DialogTitle>
+          <DialogDescription>
+            This is a preview of the pixel data.
+          </DialogDescription>
+        </DialogHeader>
         <PixelCanvas pixelData={allPixels} />
       </DialogContent>
     </Dialog>

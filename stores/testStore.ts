@@ -4,7 +4,6 @@ import { create } from "zustand";
 interface TestData {
   image: HTMLImageElement | null;
   optimizedImage: HTMLImageElement | null;
-  rotatedImage: HTMLImageElement | null;
   allPixels: PixelData[][];
   controlPixels: PixelData[];
   controlIntensity: { LAB: number; HSL: number; deputy: number };
@@ -36,7 +35,6 @@ const ensureTestExists = (index: number) => {
       tests.push({
         image: null,
         optimizedImage: null,
-        rotatedImage: null,
         allPixels: [],
         controlPixels: [],
         controlIntensity: { LAB: 0, HSL: 0, deputy: 0 },
@@ -74,15 +72,6 @@ export const setOptimizedImage = (
   useTestStore.setState((state) => ({
     tests: state.tests.map((test, i) =>
       i === index ? { ...test, optimizedImage: newImage } : test,
-    ),
-  }));
-};
-
-export const setRotatedImage = (index: number, newImage: HTMLImageElement) => {
-  ensureTestExists(index);
-  useTestStore.setState((state) => ({
-    tests: state.tests.map((test, i) =>
-      i === index ? { ...test, rotatedImage: newImage } : test,
     ),
   }));
 };
