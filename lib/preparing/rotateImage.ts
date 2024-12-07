@@ -1,3 +1,4 @@
+import { log } from "@/utils/log";
 import { createImageCanvas } from "./createImageCanvas";
 
 export const rotateImage = async (
@@ -44,5 +45,7 @@ export const rotateImage = async (
     rotatedImage.onload = () => resolve(rotatedImage);
     rotatedImage.onerror = reject;
     rotatedImage.src = canvas.toDataURL();
+
+    log(`🔄 Image is rotated successfully`, "info");
   });
 };

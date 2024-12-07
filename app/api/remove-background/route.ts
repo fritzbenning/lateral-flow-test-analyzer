@@ -4,18 +4,14 @@ import axios from "axios";
 export async function POST(request: Request) {
   try {
     const formData = await request.formData();
-    const file = formData.get("image") as File;
+    const base64Image = formData.get("image") as string;
 
-    if (!file) {
+    if (!base64Image) {
       return NextResponse.json(
         { error: "No image file provided" },
         { status: 400 },
       );
     }
-
-    // Convert File to base64
-    const buffer = await file.arrayBuffer();
-    const base64Image = Buffer.from(buffer).toString("base64");
 
     const response = await axios({
       method: "POST",

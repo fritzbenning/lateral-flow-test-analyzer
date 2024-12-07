@@ -1,6 +1,7 @@
 import { useImageUploader } from "@/hooks/useImageUploader";
 import { ImageIcon, Upload } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { log } from "@/utils/log";
 
 interface ImageUploadProps {
   handleFiles: (files: File[]) => void;
@@ -17,6 +18,7 @@ export function ImageUpload({ handleFiles }: ImageUploadProps) {
       const blob = await response.blob();
       const file = new File([blob], "example-test.jpg", { type: "image/jpeg" });
       handleFiles([file]);
+      log(`🚀 Files are ready for processing`, "info");
     } catch (error) {
       console.error("Error loading example image:", error);
     }

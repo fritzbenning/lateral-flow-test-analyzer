@@ -3,6 +3,7 @@ import { createImageCanvas } from "./createImageCanvas";
 import { detectEdges } from "./detectEdges";
 import { houghTransform } from "./houghTransform";
 import { calculateRotationAngle } from "./calculateRotationAngle";
+import { log } from "@/utils/log";
 
 export const getRotationAngle = async (imageElement: HTMLImageElement) => {
   const getAngle = () => {
@@ -35,6 +36,8 @@ export const getRotationAngle = async (imageElement: HTMLImageElement) => {
         console.warn("Rotation angle is NaN. Falling back to 0.");
         return 0;
       }
+
+      log(`📐 Rotation angle is ${finalRotationAngle}°`, "info");
 
       return finalRotationAngle;
     } catch (error) {

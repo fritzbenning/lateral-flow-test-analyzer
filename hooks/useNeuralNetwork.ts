@@ -12,6 +12,7 @@ import { fileToImageElement } from "@/utils/imageConversion";
 import { getRotationAngle } from "@/lib/preparing/getRotationAngle";
 import { correctWhiteBalance } from "@/lib/preparing/correctWhiteBalance";
 import { resizeImage } from "@/lib/preparing/resizeImage";
+import { log } from "@/utils/log";
 
 interface UseNeuralNetworkResult {
   loading: boolean;
@@ -40,14 +41,14 @@ export function useNeuralNetwork(files: File[]): UseNeuralNetworkResult {
           const file = files[i];
           const image = await fileToImageElement(file);
 
+          const resizedImage = await resizeImage(image);
+
           // remove background from image
-          let imageWithoutBackground = await removeBackground(i, file);
+          let imageWithoutBackground = await removeBackground(i, resizedImage);
           // rotate image to correct orientation
           const rotationAngle = await getRotationAngle(imageWithoutBackground);
 
-          console.log(rotationAngle);
-
-          const rotatedImage = await rotateImage(image, rotationAngle);
+          const rotatedImage = await rotateImage(resizedImage, rotationAngle);
 
           // detect lateral flow test
           setStatus(i, "Detecting lateral flow test 🔎");
@@ -83,6 +84,7 @@ export function useNeuralNetwork(files: File[]): UseNeuralNetworkResult {
 
       if (mounted) {
         setLoading(false);
+        log(`🎉 Images are processed successfully`, "success");
       }
     };
 

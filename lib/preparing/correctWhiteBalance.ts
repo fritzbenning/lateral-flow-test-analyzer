@@ -1,3 +1,4 @@
+import { log } from "@/utils/log";
 import { getPercentile } from "../analyzing/getPercentile";
 
 interface RGBColor {
@@ -86,6 +87,8 @@ export async function correctWhiteBalance(
       }
 
       ctx.putImageData(imageData, 0, 0);
+
+      log(`🔆 White balance is corrected`, "info");
 
       // Create new image from corrected canvas
       const correctedImage = new Image();

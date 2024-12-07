@@ -25,5 +25,5 @@ export const createImageCanvas = (imgElement: HTMLImageElement) => {
   ctx.drawImage(imgElement, 0, 0, width, height);
   const imageData = ctx.getImageData(0, 0, width, height);
 
-  return { imageData, width, height, ctx, imgElement };
+  return { imageData, width, height };
 };

@@ -1,4 +1,5 @@
 import { base64ToImage, imageToBase64 } from "@/utils/imageConversion";
+import { log } from "@/utils/log";
 
 export async function detectLateralFlowTest(image: HTMLImageElement) {
   try {
@@ -28,6 +29,8 @@ export async function detectLateralFlowTest(image: HTMLImageElement) {
 
     const previewImage = await base64ToImage(previewImageBase64);
     const testAreaImage = await base64ToImage(testAreaImageBase64);
+
+    log(`✅ Lateral flow test is detected successfully`, "info");
 
     return { testAreaImage, previewImage };
   } catch (error) {
