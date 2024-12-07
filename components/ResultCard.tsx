@@ -1,12 +1,11 @@
 import { Card } from "@/components/ui/Card";
 import { ArrowUpFromLine, ImageIcon, ShieldAlert, Upload } from "lucide-react";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import ImagePreview from "@/components/ImagePreview";
+import Preview from "@/components/Preview";
 import ResultSummary from "@/components/ResultSummary";
 import { useTestStore } from "@/stores/testStore";
 import { Fade } from "@/components/Fade";
 import { AnimatePresence } from "framer-motion";
-import { useEffect } from "react";
 import { Button } from "./ui/Button";
 
 interface ResultCardProps {
@@ -64,7 +63,7 @@ export function ResultCard({
             <div className="flex flex-col md:flex-row">
               {test?.image && test?.optimizedImage && (
                 <aside className="flex h-60 w-full flex-col px-4 pb-6 pt-4 md:h-80 md:w-96 md:gap-3 md:p-7">
-                  <ImagePreview
+                  <Preview
                     image={test.image}
                     optImage={test.previewImage}
                     testAreaImage={test?.testAreaImage}

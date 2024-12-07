@@ -5,14 +5,15 @@ interface FadeProps {
   children: ReactNode;
   key: string;
   className?: string;
+  variant?: "fade" | "slideIn";
 }
 
-export function Fade({ children, className }: FadeProps) {
+export function Fade({ children, className, variant = "slideIn" }: FadeProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: variant === "slideIn" ? 20 : 0 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 0 }}
+      exit={{ opacity: 0, y: variant === "slideIn" ? 20 : 0 }}
       className={className}
     >
       {children}

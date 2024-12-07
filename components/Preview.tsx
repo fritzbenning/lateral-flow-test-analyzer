@@ -10,7 +10,7 @@ interface ImagePreviewProps {
   testAreaImage: HTMLImageElement | null;
 }
 
-const ImagePreview: React.FC<ImagePreviewProps> = ({
+const Preview: React.FC<ImagePreviewProps> = ({
   image,
   optImage,
   testAreaImage,
@@ -21,17 +21,18 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
     <div className="flex gap-3">
       <TestMockup testAreaImage={testAreaImage} />
       <div
-        className="relative aspect-square w-full cursor-help overflow-hidden rounded-md bg-slate-100"
+        className="relative flex aspect-square w-full cursor-help items-center justify-center overflow-hidden rounded-md bg-slate-100"
         onClick={() => setShowOptimized(!showOptimized)}
       >
         {image && optImage && (
           <AnimatePresence mode="wait">
-            <Fade key={showOptimized ? "optimized" : "preview"}>
+            <Fade key={showOptimized ? "optimized" : "preview"} variant="fade">
               <Image
                 src={showOptimized ? optImage.src : image.src}
                 alt={showOptimized ? "Optimized image" : "Preview image"}
                 width={320}
                 height={320}
+                objectFit="cover"
                 className="h-full w-full object-cover"
               />
             </Fade>
@@ -42,4 +43,4 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
   );
 };
 
-export default ImagePreview;
+export default Preview;
