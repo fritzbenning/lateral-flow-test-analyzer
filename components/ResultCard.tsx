@@ -65,14 +65,14 @@ export function ResultCard({ file, index, loading = true, onReset }: ResultCardP
               <ImageIcon className="h-5 w-5" />
               {file.name}
             </div>
-            <div className="flex flex-col md:flex-row">
+            <div className="flex flex-col items-stretch md:flex-row">
               {image && optimizedImage && (
                 <aside className="flex h-60 w-full flex-col px-4 pb-6 pt-4 md:h-80 md:w-96 md:gap-3 md:p-7">
                   <Preview image={image} optImage={previewImage} testAreaImage={testAreaImage} />
                 </aside>
               )}
               {test && (
-                <div className="flex flex-1 flex-col space-y-4 px-4 pb-4 md:p-7">
+                <div className="flex flex-1 flex-col px-4 pb-4 md:p-7">
                   <ResultSummary key={index} index={index} />
                 </div>
               )}

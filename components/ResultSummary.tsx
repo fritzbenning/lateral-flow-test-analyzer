@@ -26,20 +26,22 @@ const ResultSummary = ({ index }: ResultSummaryProps) => {
   const testResult = String(result) as "null" | "false" | "true";
 
   return (
-    <div className="flex flex-col gap-5">
-      <ResultStatus result={testResult} resultMessage={resultMessage} />
-      <div className="flex flex-col gap-2">
-        <ResultInfo result={testResult} controlLane={controlLane} testLane={testLane} />
-        {intensity && controlLane && testLane && (
-          <>
-            <IntensityMetric
-              intensity={intensity}
-              controlValue={controlLane.greyscale}
-              testValue={testLane.greyscale}
-              variant="Greyscale"
-            />
-          </>
-        )}
+    <div className="flex h-full flex-col justify-between gap-5">
+      <div className="flex flex-col gap-5">
+        <ResultStatus result={testResult} resultMessage={resultMessage} />
+        <div className="flex flex-col gap-2">
+          <ResultInfo result={testResult} controlLane={controlLane} testLane={testLane} />
+          {intensity && controlLane && testLane && (
+            <>
+              <IntensityMetric
+                intensity={intensity}
+                controlValue={controlLane.greyscale}
+                testValue={testLane.greyscale}
+                variant="Greyscale"
+              />
+            </>
+          )}
+        </div>
       </div>
       <ResultDetails
         index={index}

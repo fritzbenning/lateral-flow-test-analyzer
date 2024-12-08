@@ -1,15 +1,7 @@
+import { getPercentile } from "@/utils/getPercentile";
 import { log } from "@/utils/log";
-import { getPercentile } from "../analyzing/getPercentile";
 
-interface RGBColor {
-  r: number;
-  g: number;
-  b: number;
-}
-
-export async function correctWhiteBalance(
-  image: HTMLImageElement,
-): Promise<HTMLImageElement> {
+export async function correctWhiteBalance(image: HTMLImageElement): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     try {
       // Create canvas and get context
@@ -73,15 +65,11 @@ export async function correctWhiteBalance(
           );
           data[i + 1] = Math.min(
             255,
-            Math.pow(data[i + 1] / 255, gamma) *
-              255 *
-              (targetGray / whitePoint.g),
+            Math.pow(data[i + 1] / 255, gamma) * 255 * (targetGray / whitePoint.g),
           );
           data[i + 2] = Math.min(
             255,
-            Math.pow(data[i + 2] / 255, gamma) *
-              255 *
-              (targetGray / whitePoint.b),
+            Math.pow(data[i + 2] / 255, gamma) * 255 * (targetGray / whitePoint.b),
           );
         }
       }
@@ -93,8 +81,7 @@ export async function correctWhiteBalance(
       // Create new image from corrected canvas
       const correctedImage = new Image();
       correctedImage.onload = () => resolve(correctedImage);
-      correctedImage.onerror = (e) =>
-        reject(new Error("Failed to create corrected image"));
+      correctedImage.onerror = (e) => reject(new Error("Failed to create corrected image"));
       correctedImage.src = canvas.toDataURL();
     } catch (error) {
       reject(error);

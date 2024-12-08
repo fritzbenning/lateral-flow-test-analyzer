@@ -14,7 +14,7 @@ const Preview: React.FC<ImagePreviewProps> = ({ image, optImage, testAreaImage }
   const [showOptimized, setShowOptimized] = useState(false);
 
   return (
-    <div className="flex gap-3">
+    <div className="flex h-full gap-3">
       <TestMockup testAreaImage={testAreaImage} />
       <div
         className="relative flex aspect-square w-full cursor-help items-center justify-center overflow-hidden rounded-md bg-slate-100"
