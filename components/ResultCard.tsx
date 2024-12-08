@@ -7,7 +7,6 @@ import { useTestStore } from "@/stores/testStore";
 import { Fade } from "@/components/Fade";
 import { AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/Button";
-import Testchart from "@/components/TestChart";
 
 interface ResultCardProps {
   file: File;
@@ -19,27 +18,16 @@ interface ResultCardProps {
 export function ResultCard({ file, index, loading = true, onReset }: ResultCardProps) {
   const test = useTestStore((state) => state.tests[index]);
 
-  const {
-    result,
-    status,
-    error,
-    errorMessage,
-    image,
-    optimizedImage,
-    previewImage,
-    testAreaImage,
-  } = test;
-
   return (
     <Card key={file.name}>
       <AnimatePresence mode="wait">
-        {loading && !result ? (
+        {loading && !test?.result ? (
           <>
-            {error ? (
+            {test?.error ? (
               <Fade key={`loading-${file.name}`}>
                 <div className="flex min-h-[320px] w-full flex-col items-center justify-center gap-6">
                   <ShieldAlert className="h-10 w-10 text-red-500" />
-                  <div className="max-w-md text-center">{errorMessage}</div>
+                  <div className="max-w-md text-center">{test.errorMessage}</div>
                   <Button onClick={onReset}>
                     <ArrowUpFromLine className="mr-2 h-4 w-4" />
                     Upload new image
@@ -52,7 +40,7 @@ export function ResultCard({ file, index, loading = true, onReset }: ResultCardP
                   <LoadingSpinner size={32} />
                   <div className="h-6">
                     <AnimatePresence mode="wait">
-                      <Fade key={status}>{status}</Fade>
+                      <Fade key={test?.status}>{test?.status}</Fade>
                     </AnimatePresence>
                   </div>
                 </div>
@@ -66,9 +54,13 @@ export function ResultCard({ file, index, loading = true, onReset }: ResultCardP
               {file.name}
             </div>
             <div className="flex flex-col items-stretch md:flex-row">
-              {image && optimizedImage && (
+              {test?.image && test?.optimizedImage && (
                 <aside className="flex h-60 w-full flex-col px-4 pb-6 pt-4 md:h-80 md:w-96 md:gap-3 md:p-7">
-                  <Preview image={image} optImage={previewImage} testAreaImage={testAreaImage} />
+                  <Preview
+                    image={test.image}
+                    optImage={test.previewImage}
+                    testAreaImage={test.testAreaImage}
+                  />
                 </aside>
               )}
               {test && (

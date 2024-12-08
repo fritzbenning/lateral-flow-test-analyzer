@@ -3,9 +3,13 @@ import { processImage } from "@/lib/processImage";
 import { useNeuralNetwork } from "@/hooks/useNeuralNetwork";
 
 export function useImageProcessor(files: File[]) {
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const { testAreaImages } = useNeuralNetwork(files);
+
+  useEffect(() => {
+    setLoading(true);
+  }, [files]);
 
   useEffect(() => {
     if (!testAreaImages.length) return;
