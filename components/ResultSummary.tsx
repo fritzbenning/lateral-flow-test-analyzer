@@ -52,6 +52,7 @@ const ResultSummary = ({ index }: ResultSummaryProps) => {
         )}
       </div>
       <ResultDetails
+        index={index}
         controlPixels={controlPixels}
         testPixels={testPixels}
         controlIntensity={controlIntensity}

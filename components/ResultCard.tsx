@@ -70,20 +70,6 @@ export function ResultCard({ file, index, loading = true, onReset }: ResultCardP
                 </div>
               )}
             </div>
-            <Testchart
-              index={index}
-              dataType="greyscaleValue"
-              label="Greyscale value"
-              color="hsl(var(--chart-1))"
-              xSteps={5}
-            />
-            <Testchart
-              index={index}
-              dataType="labA"
-              label="Lab a* value"
-              color="hsl(var(--chart-2))"
-              xSteps={5}
-            />
           </Fade>
         )}
       </AnimatePresence>

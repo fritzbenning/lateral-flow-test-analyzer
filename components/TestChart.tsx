@@ -1,6 +1,6 @@
 "use client";
 
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import { Area, AreaChart, CartesianGrid, ReferenceLine, XAxis, YAxis } from "recharts";
 
 import {
   ChartConfig,
@@ -17,6 +17,7 @@ interface TestChartProps {
   label: string;
   color?: string;
   xSteps?: number;
+  ReferenceLines?: number[];
 }
 
 const Testchart = ({
@@ -25,6 +26,7 @@ const Testchart = ({
   label,
   color = "hsl(var(--chart-1))",
   xSteps = 5,
+  ReferenceLines = [],
 }: TestChartProps) => {
   const chartConfig = {
     [dataType]: {
@@ -38,7 +40,7 @@ const Testchart = ({
 
   return (
     <div>
-      <ChartContainer config={chartConfig} className="aspect-auto h-[360px]">
+      <ChartContainer config={chartConfig} className="aspect-auto h-[30vh] max-h-[400px]">
         <AreaChart
           accessibilityLayer
           data={chartData}
@@ -67,6 +69,9 @@ const Testchart = ({
               <stop offset="95%" stopColor={`var(--color-${dataType})`} stopOpacity={0.8} />
             </linearGradient>
           </defs>
+          {ReferenceLines.map((x: number) => (
+            <ReferenceLine x={x} stroke={`var(--color-${dataType})`} strokeDasharray="3 3" />
+          ))}
           <Area
             name="Value"
             dataKey={dataType}
@@ -75,6 +80,7 @@ const Testchart = ({
             fillOpacity={0.2}
             stroke={`var(--color-${dataType})`}
             baseLine={0}
+            isAnimationActive={false}
           />
         </AreaChart>
       </ChartContainer>
