@@ -1,4 +1,3 @@
-import { setError } from "./../../stores/testStore";
 import { createImageCanvas } from "./createImageCanvas";
 import { detectEdges } from "./detectEdges";
 import { houghTransform } from "./houghTransform";

@@ -32,7 +32,7 @@ export const ResultDetails = ({
     <div className="flex flex-col gap-1 sm:flex-row sm:gap-2">
       <Dialog>
         <DialogTrigger asChild>
-          <Button className="btn">Show visualisation</Button>
+          <Button className="btn">Open visualisation</Button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>

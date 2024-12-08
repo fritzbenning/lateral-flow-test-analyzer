@@ -1,5 +1,3 @@
-import { PixelData } from "@/types";
-import { rgbToGrayscale } from "@/lib/preparing/rgbToGrayscale";
 import { setChartData } from "@/stores/testStore";
 import { ChartDataPoint } from "@/types/chart";
 

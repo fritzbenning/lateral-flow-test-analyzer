@@ -1,7 +1,5 @@
 import { useConfigStore } from "@/stores/configStore";
 import { PixelData } from "@/types";
-import { rgbToGrayscale } from "@/lib/preparing/rgbToGrayscale";
-import { setChartData } from "@/stores/testStore";
 
 export const defineROI = (pixelData: PixelData[][], width: number, height: number) => {
   const { pixelBinding } = useConfigStore.getState();
@@ -12,6 +10,7 @@ export const defineROI = (pixelData: PixelData[][], width: number, height: numbe
   const uniqueYPixels = pixelData.flat().filter((pixel: PixelData) => {
     const y = pixel.y;
     const x = pixel.x;
+
     return x === centerX && y >= boundaryY && y < height / pixelBinding - boundaryY;
   });
 

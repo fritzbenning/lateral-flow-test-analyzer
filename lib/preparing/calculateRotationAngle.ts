@@ -1,4 +1,4 @@
-import { Line } from "../../types/image";
+import { Line } from "@/types/image";
 
 export function calculateRotationAngle(lines: Line[]): number {
   // Sort lines by strength
@@ -22,13 +22,9 @@ export function calculateRotationAngle(lines: Line[]): number {
   });
 
   // Calculate weighted average based on line strength
-  const totalStrength = sortedLines
-    .slice(0, 5)
-    .reduce((sum, line) => sum + line.strength, 0);
+  const totalStrength = sortedLines.slice(0, 5).reduce((sum, line) => sum + line.strength, 0);
   const weightedAngle =
-    sortedLines
-      .slice(0, 5)
-      .reduce((sum, line, index) => sum + angles[index] * line.strength, 0) /
+    sortedLines.slice(0, 5).reduce((sum, line, index) => sum + angles[index] * line.strength, 0) /
     totalStrength;
 
   // Return the negative of the weighted angle to correct the rotation

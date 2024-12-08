@@ -1,9 +1,8 @@
 import { PixelData } from "@/types";
 import { processBatch } from "@/lib/processing/processBatch";
-import { setAllPixels, setChartData } from "@/stores/testStore";
+import { setAllPixels } from "@/stores/testStore";
 import { useConfigStore } from "@/stores/configStore";
 import { log } from "@/utils/log";
-import { rgbToGrayscale } from "@/lib/preparing/rgbToGrayscale";
 
 export const getPixelData = (
   index: number,
