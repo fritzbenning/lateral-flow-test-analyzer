@@ -8,7 +8,8 @@ export const convertPixelsToDataPoints = (roiPixels: PixelData[]): ChartDataPoin
     y: pixel.y,
     greyscale: rgbToGrayscale(pixel.rgb.r, pixel.rgb.g, pixel.rgb.b),
     greyscaleValue: 1 - rgbToGrayscale(pixel.rgb.r, pixel.rgb.g, pixel.rgb.b) / 255,
-    lightness: pixel.hsl.l,
+    hsl: pixel.hsl,
+    lab: pixel.lab,
     labA: pixel.lab.a,
   }));
 

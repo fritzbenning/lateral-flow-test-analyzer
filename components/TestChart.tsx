@@ -37,10 +37,6 @@ const Testchart = ({
   const chartData = useTestStore((state) => state.tests[index].chartData);
   const ticks = generateTicks(0, 100, xSteps);
 
-  useEffect(() => {
-    console.log(chartData);
-  }, [chartData]);
-
   return (
     <div>
       <ChartContainer config={chartConfig} className="aspect-auto h-[30vh] max-h-[400px]">

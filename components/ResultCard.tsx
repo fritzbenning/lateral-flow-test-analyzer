@@ -19,16 +19,27 @@ interface ResultCardProps {
 export function ResultCard({ file, index, loading = true, onReset }: ResultCardProps) {
   const test = useTestStore((state) => state.tests[index]);
 
+  const {
+    result,
+    status,
+    error,
+    errorMessage,
+    image,
+    optimizedImage,
+    previewImage,
+    testAreaImage,
+  } = test;
+
   return (
     <Card key={file.name}>
       <AnimatePresence mode="wait">
-        {loading ? (
+        {loading && !result ? (
           <>
-            {test?.error ? (
+            {error ? (
               <Fade key={`loading-${file.name}`}>
                 <div className="flex min-h-[320px] w-full flex-col items-center justify-center gap-6">
                   <ShieldAlert className="h-10 w-10 text-red-500" />
-                  <div className="max-w-md text-center">{test?.errorMessage}</div>
+                  <div className="max-w-md text-center">{errorMessage}</div>
                   <Button onClick={onReset}>
                     <ArrowUpFromLine className="mr-2 h-4 w-4" />
                     Upload new image
@@ -41,7 +52,7 @@ export function ResultCard({ file, index, loading = true, onReset }: ResultCardP
                   <LoadingSpinner size={32} />
                   <div className="h-6">
                     <AnimatePresence mode="wait">
-                      <Fade key={test?.status}>{test?.status}</Fade>
+                      <Fade key={status}>{status}</Fade>
                     </AnimatePresence>
                   </div>
                 </div>
@@ -55,13 +66,9 @@ export function ResultCard({ file, index, loading = true, onReset }: ResultCardP
               {file.name}
             </div>
             <div className="flex flex-col md:flex-row">
-              {test?.image && test?.optimizedImage && (
+              {image && optimizedImage && (
                 <aside className="flex h-60 w-full flex-col px-4 pb-6 pt-4 md:h-80 md:w-96 md:gap-3 md:p-7">
-                  <Preview
-                    image={test.image}
-                    optImage={test.previewImage}
-                    testAreaImage={test?.testAreaImage}
-                  />
+                  <Preview image={image} optImage={previewImage} testAreaImage={testAreaImage} />
                 </aside>
               )}
               {test && (

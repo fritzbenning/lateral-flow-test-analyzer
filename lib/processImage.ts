@@ -24,7 +24,7 @@ export function processImage(index: number, image: HTMLImageElement) {
   const { controlLane, testLane } = identifyLanes(index, peaks);
 
   // analyzing lanes
-  const intensity = calcTestIntensity(controlLane, testLane);
+  const intensity = calcTestIntensity(index, controlLane, testLane);
 
   interpreteResult(index, controlLane, testLane, intensity);
   createChartData(index, dataPoints, peaks);

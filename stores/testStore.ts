@@ -15,6 +15,7 @@ interface TestData {
   testLane: ChartDataPoint | null;
   comparedIntensity: { LAB: number; HSL: number };
   mergedIntensity: null | number;
+  intensity: number | null;
   result: boolean | null;
   resultMessage: string;
   testAreaImage: HTMLImageElement | null;
@@ -49,6 +50,7 @@ const ensureTestExists = (index: number) => {
         testLane: null,
         comparedIntensity: { LAB: 0, HSL: 0 },
         mergedIntensity: null,
+        intensity: null,
         result: null,
         resultMessage: "",
         testAreaImage: null,
@@ -196,6 +198,13 @@ export const setStatus = (index: number, status: string) => {
   ensureTestExists(index);
   useTestStore.setState((state) => ({
     tests: state.tests.map((test, i) => (i === index ? { ...test, status } : test)),
+  }));
+};
+
+export const setIntensity = (index: number, intensity: number | null) => {
+  ensureTestExists(index);
+  useTestStore.setState((state) => ({
+    tests: state.tests.map((test, i) => (i === index ? { ...test, intensity } : test)),
   }));
 };
 

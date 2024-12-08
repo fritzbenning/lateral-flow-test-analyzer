@@ -2,19 +2,15 @@ import { CircleCheck } from "lucide-react";
 import { Alert, AlertTitle } from "@/components/ui/Alert";
 import { resultConfig } from "@/components/ResultStatus";
 import { Pixel } from "@/components/Pixel";
+import { ChartDataPoint } from "@/types/chart";
 
 interface ResultInfoProps {
   result: "null" | "false" | "true";
-  controlDeputy?: { h: number; s: number; l: number };
-  testDeputy?: { h: number; s: number; l: number };
-  testAreaImage?: { src: string };
+  controlLane?: ChartDataPoint;
+  testLane?: ChartDataPoint;
 }
 
-export const ResultInfo = ({
-  result,
-  controlDeputy,
-  testDeputy,
-}: ResultInfoProps) => {
+export const ResultInfo = ({ result, controlLane, testLane }: ResultInfoProps) => {
   return (
     <div className="flex gap-2">
       <Alert>
@@ -25,8 +21,8 @@ export const ResultInfo = ({
           </span>
 
           <div className="flex gap-1">
-            {controlDeputy && <Pixel color={controlDeputy} />}
-            {testDeputy && <Pixel color={testDeputy} />}
+            {controlLane && <Pixel pixel={controlLane} />}
+            {testLane && <Pixel pixel={testLane} />}
           </div>
         </AlertTitle>
       </Alert>

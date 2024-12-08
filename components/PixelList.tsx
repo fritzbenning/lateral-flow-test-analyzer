@@ -1,10 +1,5 @@
 import { PixelData } from "../types";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/Tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/Tooltip";
 import { Separator } from "@/components/ui/Separator";
 
 interface PixelListProps {
@@ -33,12 +28,11 @@ export const PixelList = ({ title, pixels, deputyIndex }: PixelListProps) => (
               <TooltipContent>
                 <strong>x:</strong> {pixel.x}, <strong>y:</strong> {pixel.y}
                 <Separator className="my-1.5" />
-                <strong>h:</strong> {pixel.hsl.h}, <strong>s:</strong>{" "}
-                {pixel.hsl.s}, <strong>l:</strong> {pixel.hsl.l}
+                <strong>h:</strong> {pixel.hsl.h}, <strong>s:</strong> {pixel.hsl.s},{" "}
+                <strong>l:</strong> {pixel.hsl.l}
                 <Separator className="my-1.5" />
-                <strong>L:</strong> {Math.floor(pixel.lab.l)},{" "}
-                <strong>a:</strong> {Math.floor(pixel.lab.a)},{" "}
-                <strong>b:</strong> {Math.floor(pixel.lab.b)}
+                <strong>L:</strong> {Math.floor(pixel.lab.l)}, <strong>a:</strong>{" "}
+                {Math.floor(pixel.lab.a)}, <strong>b:</strong> {Math.floor(pixel.lab.b)}
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
