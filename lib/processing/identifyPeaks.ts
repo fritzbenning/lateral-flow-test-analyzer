@@ -5,7 +5,12 @@ import { log } from "@/utils/log";
 export function identifyPeaks(dataPoints: ChartDataPoint[], height: number): ChartDataPoint[] {
   const { pixelBinding } = useConfigStore.getState();
 
-  const sortedByY = dataPoints.sort((a, b) => a.y - b.y);
+  const sortedByY = [...dataPoints].sort((a, b) => a.y - b.y);
+  const sortedByGreyscale = [...dataPoints].sort((a, b) => a.greyscaleValue - b.greyscaleValue);
+  const medianIndex = Math.floor(sortedByGreyscale.length / 2);
+  const medianGreyscaleValue = sortedByGreyscale[medianIndex].greyscaleValue;
+
+  console.log(medianGreyscaleValue);
 
   const yLowerBoundary = (height * 0.2) / pixelBinding;
   const yUpperBoundary = (height * 0.8) / pixelBinding;
@@ -23,6 +28,25 @@ export function identifyPeaks(dataPoints: ChartDataPoint[], height: number): Cha
 
     if (pixel.y < yLowerBoundary || pixel.y > yUpperBoundary) {
       return false;
+    }
+
+    if (pixel.greyscaleValue <= medianGreyscaleValue * 1.05) {
+      return false;
+    }
+
+    if (peak) {
+      const plateauPoints = checkWindow.filter(
+        (otherPixel) => Math.abs(otherPixel.greyscaleValue - pixel.greyscaleValue) === 0,
+      );
+      const isPlateau = plateauPoints.length > 1;
+
+      if (plateauPoints.some((otherPixel) => otherPixel.y < pixel.y)) {
+        return false;
+      }
+
+      if (isPlateau) {
+        log(`Found plateau with ${plateauPoints.length} points at y=${pixel.y}`, "info");
+      }
     }
 
     return peak;
