@@ -10,6 +10,8 @@ export function identifyPeaks(dataPoints: ChartDataPoint[], height: number): Cha
   const medianIndex = Math.floor(sortedByGreyscale.length / 2);
   const medianGreyscaleValue = sortedByGreyscale[medianIndex].greyscaleValue;
 
+  const GREYSCALE_THRESHOLD = medianGreyscaleValue * 1.1;
+
   console.log(medianGreyscaleValue);
 
   const yLowerBoundary = (height * 0.2) / pixelBinding;
@@ -30,7 +32,7 @@ export function identifyPeaks(dataPoints: ChartDataPoint[], height: number): Cha
       return false;
     }
 
-    if (pixel.greyscaleValue <= medianGreyscaleValue * 1.1) {
+    if (pixel.greyscaleValue <= GREYSCALE_THRESHOLD) {
       return false;
     }
 
