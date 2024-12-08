@@ -30,7 +30,7 @@ export function identifyPeaks(dataPoints: ChartDataPoint[], height: number): Cha
       return false;
     }
 
-    if (pixel.greyscaleValue <= medianGreyscaleValue * 1.05) {
+    if (pixel.greyscaleValue <= medianGreyscaleValue * 1.1) {
       return false;
     }
 
