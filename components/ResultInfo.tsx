@@ -6,8 +6,8 @@ import { ChartDataPoint } from "@/types/chart";
 
 interface ResultInfoProps {
   result: "null" | "false" | "true";
-  controlLane?: ChartDataPoint;
-  testLane?: ChartDataPoint;
+  controlLane?: ChartDataPoint | null;
+  testLane?: ChartDataPoint | null;
 }
 
 export const ResultInfo = ({ result, controlLane, testLane }: ResultInfoProps) => {
