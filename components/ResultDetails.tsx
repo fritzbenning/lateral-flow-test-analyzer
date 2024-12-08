@@ -66,28 +66,6 @@ export const ResultDetails = ({
           </div>
         </DialogContent>
       </Dialog>
-
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button className="btn">Show identified pixels</Button>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Identified pixels</DialogTitle>
-            <DialogDescription>
-              The following pixels have been identified in the image.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="flex flex-col gap-6">
-            <PixelList
-              title="Control"
-              pixels={controlPixels}
-              deputyIndex={controlIntensity.deputy}
-            />
-            <PixelList title="Test" pixels={testPixels} deputyIndex={controlIntensity.deputy} />
-          </div>
-        </DialogContent>
-      </Dialog>
       <Dialog>
         <DialogTrigger asChild>
           <Button className="hidden md:block">Open pixel view</Button>

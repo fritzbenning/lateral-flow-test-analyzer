@@ -17,11 +17,10 @@ const ResultSummary = ({ index }: ResultSummaryProps) => {
     controlPixels,
     testPixels,
     controlIntensity,
-    testIntensity,
-    comparedIntensity,
     allPixels,
     controlLane,
     testLane,
+    intensity,
   } = test;
 
   const testResult = String(result) as "null" | "false" | "true";
@@ -31,19 +30,13 @@ const ResultSummary = ({ index }: ResultSummaryProps) => {
       <ResultStatus result={testResult} resultMessage={resultMessage} />
       <div className="flex flex-col gap-2">
         <ResultInfo result={testResult} controlLane={controlLane} testLane={testLane} />
-        {testResult === "true" && (
+        {intensity && controlLane && testLane && (
           <>
             <IntensityMetric
-              comparedValue={comparedIntensity.LAB!}
-              controlValue={controlIntensity.LAB!}
-              testValue={testIntensity.LAB!}
-              variant="LAB"
-            />
-            <IntensityMetric
-              comparedValue={comparedIntensity.HSL!}
-              controlValue={controlIntensity.HSL!}
-              testValue={testIntensity.HSL!}
-              variant="HSL"
+              intensity={intensity}
+              controlValue={controlLane.greyscale}
+              testValue={testLane.greyscale}
+              variant="Greyscale"
             />
           </>
         )}

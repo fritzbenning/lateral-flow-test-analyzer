@@ -2,37 +2,41 @@ import { SwatchBook } from "lucide-react";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/Alert";
 
 interface IntensityMetricProps {
-  comparedValue: number;
+  intensity: number;
   controlValue: number;
   testValue: number;
-  variant: "LAB" | "HSL";
+  variant: "Greyscale" | "LAB";
 }
 
 export const IntensityMetric = ({
-  comparedValue,
+  intensity,
   controlValue,
   testValue,
   variant,
 }: IntensityMetricProps) => {
-  const unit = variant === "LAB" ? "a* axis" : "% saturation";
-
   return (
     <Alert>
       <AlertTitle>
         <div className="flex w-full items-center justify-between">
           <span>
-            <strong>{comparedValue}%</strong> intensity relative to control
+            <strong>The test intensity is {Math.floor(intensity * 100)}%</strong>
           </span>
           <span className="flex items-center gap-1.5 text-sm font-bold">
-            <SwatchBook width="16" height="16" /> {variant}{" "}
-            <span className="font-normal">
-              (95p<sup>th</sup>)
-            </span>
+            <SwatchBook width="16" height="16" /> {variant}
           </span>
         </div>
       </AlertTitle>
       <AlertDescription>
-        (C) {controlValue} {unit} ・ (T) {testValue} {unit}
+        {variant === "Greyscale" && (
+          <>
+            (C) Greyscale {controlValue} ・ (T) Greyscale {testValue}
+          </>
+        )}
+        {variant === "LAB" && (
+          <>
+            (C) {Math.floor(controlValue)} a* axis ・ (T) {Math.floor(testValue)} a* axis
+          </>
+        )}
       </AlertDescription>
     </Alert>
   );
