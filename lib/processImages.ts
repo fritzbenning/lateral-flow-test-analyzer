@@ -6,6 +6,9 @@ import { groupPixelData } from "@/lib/processing/groupPixelData";
 import { createChartData } from "@/lib/processing/createChartData";
 import { defineROI } from "@/lib/processing/defineROI";
 import { identifyPeaks } from "@/lib/processing/identifyPeaks";
+import { convertPixelsToDataPoints } from "@/lib/processing/convertPixelsToDataPoints";
+import { calcTestIntensity } from "@/lib/processing/calcTestIntensity";
+import { identifyLanes } from "@/lib/processing/identifyLanes";
 
 export function processImages(index: number, image: HTMLImageElement) {
   // preparing image
@@ -14,11 +17,14 @@ export function processImages(index: number, image: HTMLImageElement) {
   // processing pixels
   const pixelData = getPixelData(index, imageData, width, height);
   const roiPixels = defineROI(pixelData, width, height);
-  const peaks = identifyPeaks(roiPixels);
+  const dataPoints = convertPixelsToDataPoints(roiPixels);
+  const peaks = identifyPeaks(dataPoints, height);
+  const { controlLane, testLane } = identifyLanes(index, peaks);
+  const intensity = calcTestIntensity(controlLane, testLane);
 
-  console.log(peaks);
+  console.log(intensity);
 
-  createChartData(index, roiPixels, peaks);
+  createChartData(index, dataPoints, peaks);
 
   const testPixels = findTestPixels(pixelData);
   const testLines = groupPixelData(testPixels);

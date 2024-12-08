@@ -16,13 +16,9 @@ export const createTests = (index: number, testLines: PixelData[][]) => {
     return null;
   }
 
-  const candidateLines = testLines
-    .sort((a, b) => b.length - a.length)
-    .slice(0, 2);
+  const candidateLines = testLines.sort((a, b) => b.length - a.length).slice(0, 2);
 
-  const [controlLine, testLine] = candidateLines.sort(
-    (a, b) => a[0].y - b[0].y,
-  );
+  const [controlLine, testLine] = candidateLines.sort((a, b) => a[0].y - b[0].y);
 
   const xDiff = Math.abs(controlLine[0].x - testLine[0].x);
 

@@ -1,5 +1,5 @@
 import { PixelData } from "@/types";
-import { ChartData } from "@/types/chart";
+import { ChartData, ChartDataPoint } from "@/types/chart";
 import { create } from "zustand";
 
 interface TestData {
@@ -9,8 +9,10 @@ interface TestData {
   chartData: ChartData;
   controlPixels: PixelData[];
   controlIntensity: { LAB: number; HSL: number; deputy: number };
+  controlLane: ChartDataPoint | null;
   testPixels: PixelData[];
   testIntensity: { LAB: number; HSL: number; deputy: number };
+  testLane: ChartDataPoint | null;
   comparedIntensity: { LAB: number; HSL: number };
   mergedIntensity: null | number;
   result: boolean | null;
@@ -41,8 +43,10 @@ const ensureTestExists = (index: number) => {
         chartData: { data: [], referenceLines: [] },
         controlPixels: [],
         controlIntensity: { LAB: 0, HSL: 0, deputy: 0 },
+        controlLane: null,
         testPixels: [],
         testIntensity: { LAB: 0, HSL: 0, deputy: 0 },
+        testLane: null,
         comparedIntensity: { LAB: 0, HSL: 0 },
         mergedIntensity: null,
         result: null,
@@ -94,6 +98,20 @@ export const setAllPixels = (index: number, pixels: PixelData[][]) => {
   ensureTestExists(index);
   useTestStore.setState((state) => ({
     tests: state.tests.map((test, i) => (i === index ? { ...test, allPixels: pixels } : test)),
+  }));
+};
+
+export const setControlLane = (index: number, lane: ChartDataPoint | null) => {
+  ensureTestExists(index);
+  useTestStore.setState((state) => ({
+    tests: state.tests.map((test, i) => (i === index ? { ...test, controlLane: lane } : test)),
+  }));
+};
+
+export const setTestLane = (index: number, lane: ChartDataPoint | null) => {
+  ensureTestExists(index);
+  useTestStore.setState((state) => ({
+    tests: state.tests.map((test, i) => (i === index ? { ...test, testLane: lane } : test)),
   }));
 };
 

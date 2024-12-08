@@ -1,18 +1,22 @@
 import { PixelData } from "@/types";
+import { ChartDataPoint } from "@/types/chart";
+import { log } from "@/utils/log";
 
-export function identifyPeaks(roiPixels: PixelData[]): PixelData[] {
-  const sortedByY = roiPixels.sort((a, b) => a.y - b.y);
+export function identifyPeaks(dataPoints: ChartDataPoint[], height: number): ChartDataPoint[] {
+  const sortedByY = dataPoints.sort((a, b) => a.y - b.y);
 
-  const yTHRESHOLD = 4;
+  const yTHRESHOLD = height / 10;
 
-  const peaks = sortedByY.filter((pixel: PixelData, index) => {
+  const peaks = sortedByY.filter((pixel: ChartDataPoint, index) => {
     const checkWindow = sortedByY.slice(
       Math.max(0, index - yTHRESHOLD),
       Math.min(sortedByY.length - 1, index + yTHRESHOLD),
     );
 
-    return checkWindow.every((otherPixel) => pixel.lab.a >= otherPixel.lab.a);
+    return checkWindow.every((otherPixel) => pixel.greyscaleValue >= otherPixel.greyscaleValue);
   });
+
+  log(`🏔️ ${peaks.length} greyscale peaks were found`, "info");
 
   return peaks;
 }
