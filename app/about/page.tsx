@@ -3,10 +3,10 @@ import { Card } from "@/components/ui/Card";
 
 export default function Home() {
   return (
-    <div className="mx-auto flex flex-col gap-4 px-4 py-4 sm:gap-6 md:py-8 lg:gap-8">
+    <article className="mx-auto flex flex-col gap-4 px-4 py-4 sm:gap-6 md:py-8 lg:gap-8">
       <Header />
-      <Card className="prose max-w-none p-8 sm:p-12 lg:p-16">
-        <h1>How It Works: Lateral Flow Test Analyzer</h1>
+      <Card className="prose lg:prose-lg max-w-none p-8 sm:p-12 lg:max-w-none lg:p-16">
+        <h2>How It Works: Lateral Flow Test Analyzer</h2>
 
         <p>
           The <strong>Lateral Flow Test Analyzer</strong> is a scientific tool designed to analyze
@@ -15,7 +15,7 @@ export default function Home() {
         </p>
 
         <div className="step">
-          <h2>1. Image Preprocessing</h2>
+          <h3>1. Image Preprocessing</h3>
           <p>
             The image is prepared to ensure accurate and efficient analysis. The preprocessing steps
             include:
@@ -37,7 +37,7 @@ export default function Home() {
         </div>
 
         <div className="step">
-          <h2>2. Pixel Identification</h2>
+          <h3>2. Pixel Identification</h3>
           <p>
             Each pixel unit is analyzed to determine whether it could belong to the{" "}
             <span className="highlight">Control Line</span> or{" "}
@@ -55,7 +55,7 @@ export default function Home() {
         </div>
 
         <div className="step">
-          <h2>3. Pixel Grouping</h2>
+          <h3>3. Pixel Grouping</h3>
           <p>
             Pixels identified as potential matches are grouped based on their coordinates.
             Typically, two distinct groups are formed, corresponding to the{" "}
@@ -83,7 +83,7 @@ export default function Home() {
         </div>
 
         <div className="step">
-          <h2>4. Line Comparison</h2>
+          <h3>4. Line Comparison</h3>
           <p>
             The Control and Test lines are compared to quantify their relative intensity. Two
             methods are used for this comparison:
@@ -107,7 +107,7 @@ export default function Home() {
         </div>
 
         <div className="step">
-          <h2>5. Result Interpretation</h2>
+          <h3>5. Result Interpretation</h3>
           <p>
             Based on the computed test intensity, the result is categorized into one of the
             following:
@@ -149,6 +149,6 @@ export default function Home() {
           </p>
         </footer>
       </Card>
-    </div>
+    </article>
   );
 }
