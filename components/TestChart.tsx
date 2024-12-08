@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/Chart";
 import { useTestStore } from "@/stores/testStore";
 import { generateTicks } from "@/utils/chart";
+import { useEffect } from "react";
 
 interface TestChartProps {
   index: number;
@@ -17,7 +18,6 @@ interface TestChartProps {
   label: string;
   color?: string;
   xSteps?: number;
-  ReferenceLines?: number[];
 }
 
 const Testchart = ({
@@ -26,7 +26,6 @@ const Testchart = ({
   label,
   color = "hsl(var(--chart-1))",
   xSteps = 5,
-  ReferenceLines = [],
 }: TestChartProps) => {
   const chartConfig = {
     [dataType]: {
@@ -38,12 +37,16 @@ const Testchart = ({
   const chartData = useTestStore((state) => state.tests[index].chartData);
   const ticks = generateTicks(0, 100, xSteps);
 
+  useEffect(() => {
+    console.log(chartData);
+  }, [chartData]);
+
   return (
     <div>
       <ChartContainer config={chartConfig} className="aspect-auto h-[30vh] max-h-[400px]">
         <AreaChart
           accessibilityLayer
-          data={chartData}
+          data={chartData.data}
           margin={{
             left: 12,
             right: 12,
@@ -69,13 +72,18 @@ const Testchart = ({
               <stop offset="95%" stopColor={`var(--color-${dataType})`} stopOpacity={0.8} />
             </linearGradient>
           </defs>
-          {ReferenceLines.map((x: number) => (
-            <ReferenceLine x={x} stroke={`var(--color-${dataType})`} strokeDasharray="3 3" />
+          {chartData.referenceLines.map((x: number) => (
+            <ReferenceLine
+              key={`reference-line-${x}`}
+              x={x}
+              stroke={`var(--color-${dataType})`}
+              strokeDasharray="3 3"
+            />
           ))}
           <Area
             name="Value"
             dataKey={dataType}
-            type="natural"
+            type="monotone"
             fill={`url(#fill${dataType})`}
             fillOpacity={0.2}
             stroke={`var(--color-${dataType})`}

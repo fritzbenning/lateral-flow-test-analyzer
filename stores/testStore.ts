@@ -1,12 +1,12 @@
 import { PixelData } from "@/types";
-import { ChartDataPoint } from "@/types/chart";
+import { ChartData } from "@/types/chart";
 import { create } from "zustand";
 
 interface TestData {
   image: HTMLImageElement | null;
   optimizedImage: HTMLImageElement | null;
   allPixels: PixelData[][];
-  chartData: ChartDataPoint[];
+  chartData: ChartData;
   controlPixels: PixelData[];
   controlIntensity: { LAB: number; HSL: number; deputy: number };
   testPixels: PixelData[];
@@ -38,7 +38,7 @@ const ensureTestExists = (index: number) => {
         image: null,
         optimizedImage: null,
         allPixels: [],
-        chartData: [],
+        chartData: { data: [], referenceLines: [] },
         controlPixels: [],
         controlIntensity: { LAB: 0, HSL: 0, deputy: 0 },
         testPixels: [],
@@ -61,16 +61,11 @@ const ensureTestExists = (index: number) => {
 export const setImage = (index: number, newImage: HTMLImageElement) => {
   ensureTestExists(index);
   useTestStore.setState((state) => ({
-    tests: state.tests.map((test, i) =>
-      i === index ? { ...test, image: newImage } : test,
-    ),
+    tests: state.tests.map((test, i) => (i === index ? { ...test, image: newImage } : test)),
   }));
 };
 
-export const setOptimizedImage = (
-  index: number,
-  newImage: HTMLImageElement,
-) => {
+export const setOptimizedImage = (index: number, newImage: HTMLImageElement) => {
   ensureTestExists(index);
   useTestStore.setState((state) => ({
     tests: state.tests.map((test, i) =>
@@ -91,45 +86,35 @@ export const setTestAreaImage = (index: number, newImage: HTMLImageElement) => {
 export const setPreviewImage = (index: number, newImage: HTMLImageElement) => {
   ensureTestExists(index);
   useTestStore.setState((state) => ({
-    tests: state.tests.map((test, i) =>
-      i === index ? { ...test, previewImage: newImage } : test,
-    ),
+    tests: state.tests.map((test, i) => (i === index ? { ...test, previewImage: newImage } : test)),
   }));
 };
 
 export const setAllPixels = (index: number, pixels: PixelData[][]) => {
   ensureTestExists(index);
   useTestStore.setState((state) => ({
-    tests: state.tests.map((test, i) =>
-      i === index ? { ...test, allPixels: pixels } : test,
-    ),
+    tests: state.tests.map((test, i) => (i === index ? { ...test, allPixels: pixels } : test)),
   }));
 };
 
-export const setChartData = (index: number, dataPoints: ChartDataPoint[]) => {
+export const setChartData = (index: number, chartData: ChartData) => {
   ensureTestExists(index);
   useTestStore.setState((state) => ({
-    tests: state.tests.map((test, i) =>
-      i === index ? { ...test, chartData: dataPoints } : test,
-    ),
+    tests: state.tests.map((test, i) => (i === index ? { ...test, chartData: chartData } : test)),
   }));
 };
 
 export const setControlPixels = (index: number, pixels: PixelData[]) => {
   ensureTestExists(index);
   useTestStore.setState((state) => ({
-    tests: state.tests.map((test, i) =>
-      i === index ? { ...test, controlPixels: pixels } : test,
-    ),
+    tests: state.tests.map((test, i) => (i === index ? { ...test, controlPixels: pixels } : test)),
   }));
 };
 
 export const setTestPixels = (index: number, pixels: PixelData[]) => {
   ensureTestExists(index);
   useTestStore.setState((state) => ({
-    tests: state.tests.map((test, i) =>
-      i === index ? { ...test, testPixels: pixels } : test,
-    ),
+    tests: state.tests.map((test, i) => (i === index ? { ...test, testPixels: pixels } : test)),
   }));
 };
 
@@ -157,10 +142,7 @@ export const setTestIntensity = (
   }));
 };
 
-export const setComparedIntensity = (
-  index: number,
-  intensity: { LAB: number; HSL: number },
-) => {
+export const setComparedIntensity = (index: number, intensity: { LAB: number; HSL: number }) => {
   ensureTestExists(index);
   useTestStore.setState((state) => ({
     tests: state.tests.map((test, i) =>
@@ -178,38 +160,24 @@ export const setMergedIntensity = (index: number, intensity: number | null) => {
   }));
 };
 
-export const setResult = (
-  index: number,
-  result: boolean | null,
-  resultMessage: string,
-) => {
+export const setResult = (index: number, result: boolean | null, resultMessage: string) => {
   ensureTestExists(index);
   useTestStore.setState((state) => ({
-    tests: state.tests.map((test, i) =>
-      i === index ? { ...test, result, resultMessage } : test,
-    ),
+    tests: state.tests.map((test, i) => (i === index ? { ...test, result, resultMessage } : test)),
   }));
 };
 
-export const setError = (
-  index: number,
-  error: boolean,
-  errorMessage: string,
-) => {
+export const setError = (index: number, error: boolean, errorMessage: string) => {
   ensureTestExists(index);
   useTestStore.setState((state) => ({
-    tests: state.tests.map((test, i) =>
-      i === index ? { ...test, error, errorMessage } : test,
-    ),
+    tests: state.tests.map((test, i) => (i === index ? { ...test, error, errorMessage } : test)),
   }));
 };
 
 export const setStatus = (index: number, status: string) => {
   ensureTestExists(index);
   useTestStore.setState((state) => ({
-    tests: state.tests.map((test, i) =>
-      i === index ? { ...test, status } : test,
-    ),
+    tests: state.tests.map((test, i) => (i === index ? { ...test, status } : test)),
   }));
 };
 
