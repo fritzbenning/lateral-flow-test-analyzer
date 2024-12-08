@@ -53,7 +53,7 @@ export function ResultCard({ file, index, loading = true, onReset }: ResultCardP
               <ImageIcon className="h-5 w-5" />
               {file.name}
             </div>
-            <div className="flex flex-col items-stretch md:flex-row">
+            <div className="flex flex-col items-stretch gap-2 sm:gap-0 md:flex-row">
               {test?.image && test?.optimizedImage && (
                 <aside className="flex h-60 w-full flex-col px-4 pb-6 pt-4 md:h-80 md:w-96 md:gap-3 md:p-7">
                   <Preview

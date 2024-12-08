@@ -21,6 +21,7 @@
     "@radix-ui/react-toast": "^1.1.5",
     "@radix-ui/react-tooltip": "^1.1.4",
     "@shadcn/ui": "^0.0.4",
+    "@tailwindcss/typography": "^0.5.15",
     "@techstark/opencv-js": "4.10.0-release.1",
     "axios": "^1.7.9",
     "class-variance-authority": "^0.7.0",
