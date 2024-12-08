@@ -8,11 +8,9 @@ import {
 } from "@/components/ui/Dialog";
 import { Button } from "@/components/ui/Button";
 import PixelCanvas from "@/components/PixelCanvas";
-import { PixelList } from "@/components/PixelList";
-import { PixelData } from "../types";
+import { PixelData } from "@/types";
 import Testchart from "./TestChart";
-import { useTestStore } from "@/stores/testStore";
-
+import { LineChart, ScanSearch } from "lucide-react";
 interface ResultDetailsProps {
   index: number;
   controlPixels: PixelData[];
@@ -32,7 +30,9 @@ export const ResultDetails = ({
     <div className="flex flex-col gap-1 sm:flex-row sm:gap-2">
       <Dialog>
         <DialogTrigger asChild>
-          <Button className="btn">Open visualisation</Button>
+          <Button className="flex items-center gap-2">
+            <LineChart width={16} height={16} /> Open visualisation
+          </Button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
@@ -68,7 +68,9 @@ export const ResultDetails = ({
       </Dialog>
       <Dialog>
         <DialogTrigger asChild>
-          <Button className="hidden md:block">Open pixel view</Button>
+          <Button className="hidden items-center gap-2 md:flex">
+            <ScanSearch width={16} height={16} /> Open pixel view
+          </Button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>

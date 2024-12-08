@@ -12,8 +12,6 @@ export function identifyPeaks(dataPoints: ChartDataPoint[], height: number): Cha
 
   const GREYSCALE_THRESHOLD = medianGreyscaleValue * 1.1;
 
-  console.log(medianGreyscaleValue);
-
   const yLowerBoundary = (height * 0.2) / pixelBinding;
   const yUpperBoundary = (height * 0.8) / pixelBinding;
   const yTHRESHOLD = height / 10;
