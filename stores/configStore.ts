@@ -5,6 +5,7 @@ interface ConfigState {
   batchCount: number;
   pixelBinding: number;
   minPixelsPerGroup: number;
+  grayscaleMethod: "average" | "weighted";
 }
 
 export const useConfigStore = create<ConfigState>(() => ({
@@ -12,4 +13,5 @@ export const useConfigStore = create<ConfigState>(() => ({
   batchCount: 4,
   pixelBinding: 2,
   minPixelsPerGroup: 5,
+  grayscaleMethod: "average",
 }));

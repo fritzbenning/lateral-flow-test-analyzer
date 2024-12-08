@@ -1,10 +1,12 @@
 import { PixelData } from "@/types";
+import { ChartDataPoint } from "@/types/chart";
 import { create } from "zustand";
 
 interface TestData {
   image: HTMLImageElement | null;
   optimizedImage: HTMLImageElement | null;
   allPixels: PixelData[][];
+  chartData: ChartDataPoint[];
   controlPixels: PixelData[];
   controlIntensity: { LAB: number; HSL: number; deputy: number };
   testPixels: PixelData[];
@@ -36,6 +38,7 @@ const ensureTestExists = (index: number) => {
         image: null,
         optimizedImage: null,
         allPixels: [],
+        chartData: [],
         controlPixels: [],
         controlIntensity: { LAB: 0, HSL: 0, deputy: 0 },
         testPixels: [],
@@ -99,6 +102,15 @@ export const setAllPixels = (index: number, pixels: PixelData[][]) => {
   useTestStore.setState((state) => ({
     tests: state.tests.map((test, i) =>
       i === index ? { ...test, allPixels: pixels } : test,
+    ),
+  }));
+};
+
+export const setChartData = (index: number, dataPoints: ChartDataPoint[]) => {
+  ensureTestExists(index);
+  useTestStore.setState((state) => ({
+    tests: state.tests.map((test, i) =>
+      i === index ? { ...test, chartData: dataPoints } : test,
     ),
   }));
 };

@@ -1,12 +1,13 @@
 import { Card } from "@/components/ui/Card";
-import { ArrowUpFromLine, ImageIcon, ShieldAlert, Upload } from "lucide-react";
+import { ArrowUpFromLine, ImageIcon, ShieldAlert } from "lucide-react";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import Preview from "@/components/Preview";
 import ResultSummary from "@/components/ResultSummary";
 import { useTestStore } from "@/stores/testStore";
 import { Fade } from "@/components/Fade";
 import { AnimatePresence } from "framer-motion";
-import { Button } from "./ui/Button";
+import { Button } from "@/components/ui/Button";
+import Testchart from "@/components/TestChart";
 
 interface ResultCardProps {
   file: File;
@@ -15,12 +16,7 @@ interface ResultCardProps {
   onReset: () => void;
 }
 
-export function ResultCard({
-  file,
-  index,
-  loading = true,
-  onReset,
-}: ResultCardProps) {
+export function ResultCard({ file, index, loading = true, onReset }: ResultCardProps) {
   const test = useTestStore((state) => state.tests[index]);
 
   return (
@@ -32,9 +28,7 @@ export function ResultCard({
               <Fade key={`loading-${file.name}`}>
                 <div className="flex min-h-[320px] w-full flex-col items-center justify-center gap-6">
                   <ShieldAlert className="h-10 w-10 text-red-500" />
-                  <div className="max-w-md text-center">
-                    {test?.errorMessage}
-                  </div>
+                  <div className="max-w-md text-center">{test?.errorMessage}</div>
                   <Button onClick={onReset}>
                     <ArrowUpFromLine className="mr-2 h-4 w-4" />
                     Upload new image
@@ -76,6 +70,20 @@ export function ResultCard({
                 </div>
               )}
             </div>
+            <Testchart
+              index={index}
+              dataType="greyscaleValue"
+              label="Greyscale value"
+              color="hsl(var(--chart-1))"
+              xSteps={5}
+            />
+            <Testchart
+              index={index}
+              dataType="labA"
+              label="Lab a* value"
+              color="hsl(var(--chart-2))"
+              xSteps={5}
+            />
           </Fade>
         )}
       </AnimatePresence>
