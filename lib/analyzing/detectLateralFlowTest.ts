@@ -33,12 +33,7 @@ export async function detectLateralFlowTest(image: HTMLImageElement) {
     const testAreaImage = await base64ToImage(testAreaImageBase64);
 
     const { imageSize } = useConfigStore.getState();
-    const resizedTestAreaImage = await resizeImage(
-      testAreaImage,
-      imageSize * 0.04,
-    );
-
-    console.log(imageSize * 0.04);
+    const resizedTestAreaImage = await resizeImage(testAreaImage, imageSize * 0.04);
 
     log(`✅ Lateral flow test is detected`, "info");
 

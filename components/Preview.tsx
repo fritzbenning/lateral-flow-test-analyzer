@@ -10,11 +10,7 @@ interface ImagePreviewProps {
   testAreaImage: HTMLImageElement | null;
 }
 
-const Preview: React.FC<ImagePreviewProps> = ({
-  image,
-  optImage,
-  testAreaImage,
-}) => {
+const Preview: React.FC<ImagePreviewProps> = ({ image, optImage, testAreaImage }) => {
   const [showOptimized, setShowOptimized] = useState(false);
 
   return (
@@ -32,7 +28,6 @@ const Preview: React.FC<ImagePreviewProps> = ({
                 alt={showOptimized ? "Optimized image" : "Preview image"}
                 width={320}
                 height={320}
-                objectFit="cover"
                 className="h-full w-full object-cover"
               />
             </Fade>

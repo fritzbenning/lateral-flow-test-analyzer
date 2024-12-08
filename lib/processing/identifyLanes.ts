@@ -7,10 +7,10 @@ export const identifyLanes = (index: number, peaks: ChartDataPoint[]) => {
   let testLane = null;
 
   if (peaks.length === 1) {
-    const controlLane = peaks[0];
+    controlLane = peaks[0];
     setControlLane(index, controlLane);
 
-    log(`(C) lane position: ${controlLane.y}`, "info");
+    log(`📍 (C) lane y position: ${controlLane.y}`, "info");
   }
 
   if (peaks.length === 2) {
@@ -20,8 +20,8 @@ export const identifyLanes = (index: number, peaks: ChartDataPoint[]) => {
     setControlLane(index, controlLane);
     setTestLane(index, testLane);
 
-    log(`(C) lane position: ${controlLane.y}`, "info");
-    log(`(T) lane position: ${testLane.y}`, "info");
+    log(`📍 (C) lane y position: ${controlLane.y}`, "info");
+    log(`📍 (T) lane yposition: ${testLane.y}`, "info");
   }
 
   if (peaks.length > 2) {

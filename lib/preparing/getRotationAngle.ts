@@ -21,27 +21,25 @@ export const getRotationAngle = async (imageElement: HTMLImageElement) => {
       // Calculate rotation angle from dominant lines
       const rotationAngle = calculateRotationAngle(lines);
 
+      // Add detailed NaN checking
+      if (isNaN(rotationAngle)) {
+        log("📐 Rotation angle is unknown. Using default of 0°.", "info");
+        return 0;
+      }
+
       // Check if the two strongest lines are vertical
       const areStrongestLinesVertical = lines
         .slice(0, 2)
         .every((line) => Math.abs(Math.abs(line.angle) - 90) < 10);
 
       // Adjust rotation angle if strongest lines are vertical
-      const finalRotationAngle = areStrongestLinesVertical
-        ? rotationAngle + 90
-        : rotationAngle;
-
-      // Add check for NaN
-      if (isNaN(finalRotationAngle)) {
-        console.warn("Rotation angle is NaN. Falling back to 0.");
-        return 0;
-      }
+      const finalRotationAngle = areStrongestLinesVertical ? rotationAngle + 90 : rotationAngle;
 
       log(`📐 Rotation angle is ${finalRotationAngle}°`, "info");
 
       return finalRotationAngle;
     } catch (error) {
-      console.warn("Can't measure rotation angle. Falling back to 0.", error);
+      log("📐 Rotation angle is unknown. Using default of 0°.", "warning");
       return 0; // Fallback to 0 on error
     }
   };
@@ -57,10 +55,9 @@ export const getRotationAngle = async (imageElement: HTMLImageElement) => {
     imageElement.onload = () => resolve(angle);
     imageElement.onerror = (error) => {
       resolve(0); // Fallback to 0 on image load error
-      throw new Error(
-        "Can't measure rotation angle. Image is not loading. Falling back to 0.",
-        { cause: error },
-      );
+      throw new Error("Can't measure rotation angle. Image is not loading. Falling back to 0.", {
+        cause: error,
+      });
     };
   });
 };

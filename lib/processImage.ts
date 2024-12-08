@@ -9,8 +9,10 @@ import { identifyPeaks } from "@/lib/processing/identifyPeaks";
 import { convertPixelsToDataPoints } from "@/lib/processing/convertPixelsToDataPoints";
 import { calcTestIntensity } from "@/lib/processing/calcTestIntensity";
 import { identifyLanes } from "@/lib/processing/identifyLanes";
+import { interpreteResult } from "@/lib/processing/interpreteResult";
+import { log } from "@/utils/log";
 
-export function processImages(index: number, image: HTMLImageElement) {
+export function processImage(index: number, image: HTMLImageElement) {
   // preparing image
   const { imageData, width, height } = createImageCanvas(image);
 
@@ -20,10 +22,11 @@ export function processImages(index: number, image: HTMLImageElement) {
   const dataPoints = convertPixelsToDataPoints(roiPixels);
   const peaks = identifyPeaks(dataPoints, height);
   const { controlLane, testLane } = identifyLanes(index, peaks);
+
+  // analyzing lanes
   const intensity = calcTestIntensity(controlLane, testLane);
 
-  console.log(intensity);
-
+  interpreteResult(index, controlLane, testLane, intensity);
   createChartData(index, dataPoints, peaks);
 
   const testPixels = findTestPixels(pixelData);

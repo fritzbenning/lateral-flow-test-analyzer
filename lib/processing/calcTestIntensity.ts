@@ -12,7 +12,5 @@ export const calcTestIntensity = (
 
   const intensity = testLane.greyscaleValue / controlLane.greyscaleValue;
 
-  log(`The intensity of the test is ${Math.floor(intensity * 100)}%`, "info");
-
   return intensity;
 };

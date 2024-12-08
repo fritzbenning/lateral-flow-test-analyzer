@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { processImages } from "@/lib/processImages";
+import { processImage } from "@/lib/processImage";
 import { useNeuralNetwork } from "@/hooks/useNeuralNetwork";
 
 export function useImageProcessor(files: File[]) {
@@ -11,7 +11,7 @@ export function useImageProcessor(files: File[]) {
     if (!testAreaImages.length) return;
 
     testAreaImages.forEach((image, index) => {
-      processImages(index, image);
+      processImage(index, image);
     });
 
     setLoading(false);
