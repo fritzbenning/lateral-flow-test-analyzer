@@ -11,16 +11,16 @@ const config: Config = {
   ],
   theme: {
     fontSize: {
-      xs: pxToRem(12),
-      sm: pxToRem(14),
-      md: pxToRem(15),
-      base: pxToRem(16),
-      lg: pxToRem(17),
-      xl: pxToRem(20),
-      "2xl": pxToRem(24),
-      "3xl": pxToRem(30),
-      "4xl": pxToRem(36),
-      "5xl": pxToRem(48),
+      xs: "pxToRem(12)",
+      sm: "pxToRem(14)",
+      md: "pxToRem(15)",
+      base: "pxToRem(16)",
+      lg: "pxToRem(17)",
+      xl: "pxToRem(20)",
+      "2xl": "pxToRem(24)",
+      "3xl": "pxToRem(30)",
+      "4xl": "pxToRem(36)",
+      "5xl": "pxToRem(48)",
     },
     extend: {
       backgroundImage: {
@@ -75,20 +75,20 @@ const config: Config = {
         },
       },
       keyframes: {
-        "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
-        },
         "accordion-up": {
           from: {
             height: "var(--radix-accordion-content-height)",
           },
           to: {
             height: "0",
+          },
+        },
+        "accordion-down": {
+          from: {
+            height: "0",
+          },
+          to: {
+            height: "var(--radix-accordion-content-height)",
           },
         },
         fadeIn: {
@@ -105,6 +105,34 @@ const config: Config = {
         "accordion-up": "accordion-up 0.2s ease-out",
         "fade-in": "fadeIn 0.5s ease-out forwards",
       },
+      typography: (theme: (rule: string) => string) => ({
+        DEFAULT: {
+          css: {
+            h1: {
+              fontSize: theme("fontSize.2xl"),
+              marginTop: theme("spacing.0"),
+              fontWeight: "bold",
+            },
+            h2: {
+              fontSize: theme("fontSize.xl"),
+              fontWeight: "bold",
+            },
+            h3: {
+              fontSize: theme("fontSize.lg"),
+              fontWeight: "bold",
+            },
+            p: {
+              fontSize: theme("fontSize.base"),
+              marginTop: theme("spacing.3"),
+              marginBottom: theme("spacing.3"),
+            },
+            a: {
+              textDecoration: "underline",
+              color: "hsl(var(--primary))",
+            },
+          },
+        },
+      }),
     },
   },
   plugins: [require("@tailwindcss/typography"), require("tailwindcss-animate")],
