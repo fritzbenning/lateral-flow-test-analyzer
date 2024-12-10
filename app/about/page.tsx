@@ -19,7 +19,7 @@ import {
 import Image from "next/image";
 
 export const metadata: Metadata = {
-  title: "Lateral Flow Test Analyzer - How it works",
+  title: "How it works - Lateral Flow Test Analyzer",
   description:
     "With our trained neural network, we can analyse your lateral flow test in just one click. Learn more!",
   openGraph: {

@@ -9,7 +9,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Lateral Flow Test Analyzer - Scan your test!",
+  title: "Scan your test - Lateral Flow Test Analyzer",
   description:
     "Analyse your lateral flow test in seconds. Manual analysis is a thing of the past. Easy and free of charge!",
   openGraph: {
