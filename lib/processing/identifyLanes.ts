@@ -21,7 +21,7 @@ export const identifyLanes = (index: number, peaks: ChartDataPoint[]) => {
     setTestLane(index, testLane);
 
     log(`📍 (C) lane y position: ${controlLane.y}`, "info");
-    log(`📍 (T) lane yposition: ${testLane.y}`, "info");
+    log(`📍 (T) lane y position: ${testLane.y}`, "info");
   }
 
   if (peaks.length > 2) {

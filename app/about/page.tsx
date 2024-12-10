@@ -118,19 +118,36 @@ export default function Home() {
           </p>
           <h2>FAQs</h2>
           <Accordion type="single" collapsible className="not-prose w-full">
-            <AccordionItem value="item-1">
-              <AccordionTrigger>
-                Will my image be processed by third-party providers?
-              </AccordionTrigger>
+            <AccordionItem value="lateral-flow-test">
+              <AccordionTrigger>What is a lateral flow test?</AccordionTrigger>
               <AccordionContent>
-                Yes, in the beta phase of the Lateral Flow Test Analyzer, we use{" "}
-                <a href="https://roboflow.com/" target="_blank">
-                  Roboflow&apos;s
-                </a>{" "}
-                infrastructure in the EU to analyze the test image with our AI model.
+                <p>
+                  A lateral flow test (LFT) is a simple, rapid diagnostic tool used to detect the
+                  presence or absence of a specific substance, typically biomarkers, pathogens, or
+                  other analytes, in a liquid sample. It uses a thin strip of material where a
+                  sample flows laterally (via capillary action) across a series of specialized zones
+                  containing reagents.
+                </p>
+                <p>
+                  Results are usually visualized as lines, often within minutes, and are widely used
+                  for medical diagnostics, environmental testing, and food safety due to their
+                  affordability, portability, and ease of use.
+                </p>
               </AccordionContent>
             </AccordionItem>
-            <AccordionItem value="item-2">
+            <AccordionItem value="third-party-provider">
+              <AccordionTrigger>Are my images processed by third-party providers?</AccordionTrigger>
+              <AccordionContent>
+                <p>
+                  Yes, in the beta phase of the Lateral Flow Test Analyzer, we use{" "}
+                  <a href="https://roboflow.com/" target="_blank" className="underline">
+                    Roboflow&apos;s
+                  </a>{" "}
+                  infrastructure in the EU to analyze the test image with our AI model.
+                </p>
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="network-training">
               <AccordionTrigger>
                 Will my images be used to further improve the neural network?
               </AccordionTrigger>
@@ -140,11 +157,92 @@ export default function Home() {
                 click so that we can add the model type from the lateral flow test to our model.
               </AccordionContent>
             </AccordionItem>
+            <AccordionItem value="pixel-analysis">
+              <AccordionTrigger>Which pixels are used for the analysis?</AccordionTrigger>
+              <AccordionContent>
+                <p>
+                  The test area is determined with the help of our AI model. Then 2x2 pixels are
+                  combined into one pixel unit in order to filter out outliers and reduce the
+                  calculation load (this process is called pixel binding). Then all pixel units that
+                  are positioned in the centre of the X-axis are evaluated. In this way, only one
+                  pixel unit is analysed for each Y coordinate.
+                </p>
+                <p>
+                  To filter out possible edge shading, the top and bottom 10% of the pixel units on
+                  the Y axis are also removed from the analysis.
+                </p>
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="greyscale-conversion">
+              <AccordionTrigger>How are the images converted to greyscale?</AccordionTrigger>
+              <AccordionContent>
+                We currently use an unimportant conversion of the RGB values to greyscale. This
+                means that the values for red, green and blue are added together and then divided by
+                3. The calculated value is then set for each colour value.
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="peak-detection">
+              <AccordionTrigger>How are the peaks identified?</AccordionTrigger>
+              <AccordionContent>
+                <p>
+                  To detect the peaks, the grey values of each Y-coordinate are systematically
+                  analysed. Each individual pixel unit is compared with the neighbouring units (10%
+                  in each direction) to determine whether they have a higher grey value. If this is
+                  the case, this unit is evaluated as a peak.
+                </p>
+                <p>
+                  If there are pixel units with the same grey value among the direct neighbours, it
+                  can be assumed that a plateau has been formed. In this case, these pixel units are
+                  evaluated as a peak and the first pixel unit in this group is further processed as
+                  a peak.
+                </p>
+                <p>
+                  In order to exclude non-significant peaks, a relative minimum grey value must also
+                  be achieved. This is 110% of the grey value mediaan.
+                </p>
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="result-interpretation">
+              <AccordionTrigger>Which result is assumed for which intensities?</AccordionTrigger>
+              <AccordionContent>
+                <p>The result for a given intensity is determined based on its value:</p>
+                <ul>
+                  <li>
+                    <strong>Intensity = 0:</strong> The result is considered{" "}
+                    <em>negative with a high probability</em>.
+                  </li>
+                  <li>
+                    <strong>Intensity between 1 and 19:</strong> The result is{" "}
+                    <em>positive with a small probability</em>.
+                  </li>
+                  <li>
+                    <strong>Intensity between 20 and 49:</strong> The result is{" "}
+                    <em>positive with a moderate probability</em>.
+                  </li>
+                  <li>
+                    <strong>Intensity between 50 and 99:</strong> The result is{" "}
+                    <em>positive with a high probability</em>.
+                  </li>
+                </ul>
+              </AccordionContent>
+            </AccordionItem>
           </Accordion>
           <h2>Support us</h2>
           <p>
             If you like our work, please consider supporting us with a small donation. This will
             help us to continue our work and improve the Lateral Flow Test Analyzer.
+          </p>
+          <p>
+            <strong>
+              For more information on how you can support us, please contact us personally.
+            </strong>
+          </p>
+          <p className="not-prose py-4">
+            <NextLink href="/">
+              <Button className="flex items-center gap-2">
+                <Mail width={16} height={16} /> Get in touch
+              </Button>
+            </NextLink>
           </p>
         </article>
       </Card>
