@@ -13,15 +13,25 @@ export const metadata: Metadata = {
   description:
     "Analyse your lateral flow test in seconds. Manual analysis is a thing of the past. Easy and free of charge!",
   openGraph: {
+    type: "website",
+    siteName: "Lateral Flow Test Analyzer",
     title: "Lateral Flow Test Analyzer - Scan your test!",
     description:
       "Analyse your lateral flow test in seconds. Manual analysis is a thing of the past. Easy and free of charge!",
     images: [
       {
-        url: `${process.env.NEXT_PUBLIC_BASE_URL}/thumbnail/lateral-flow-test-analyzer-thumbnail.jpg`,
-        width: 1200,
-        height: 630,
+        url: `${process.env.NEXT_PUBLIC_BASE_URL}/thumbnail/lateral-flow-test-analyzer-thumbnail.avif`,
+        width: 1920,
+        height: 1008,
         alt: "Lateral Flow Test Analyzer Preview",
+        type: "image/avif",
+      },
+      {
+        url: `${process.env.NEXT_PUBLIC_BASE_URL}/thumbnail/lateral-flow-test-analyzer-thumbnail.jpg`,
+        width: 1920,
+        height: 1008,
+        alt: "Lateral Flow Test Analyzer Preview",
+        type: "image/jpeg",
       },
     ],
   },
