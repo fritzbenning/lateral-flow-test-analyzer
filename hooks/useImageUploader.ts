@@ -15,16 +15,16 @@ export function useImageUploader({ onFilesSelected }: UseImageUploaderProps) {
     [onFilesSelected],
   );
 
-  const { getRootProps, getInputProps, isDragActive, fileRejections } =
-    useDropzone({
-      onDrop,
-      accept: {
-        "image/jpeg": [".jpeg", ".jpg"],
-        "image/png": [".png"],
-        "image/webp": [".webp"],
-      },
-      multiple: true,
-    });
+  const { getRootProps, getInputProps, isDragActive, fileRejections } = useDropzone({
+    onDrop,
+    accept: {
+      "image/jpeg": [".jpeg", ".jpg"],
+      "image/png": [".png"],
+      "image/webp": [".webp"],
+      "image/avif": [".avif"],
+    },
+    multiple: true,
+  });
 
   useEffect(() => {
     if (fileRejections.length > 0) {

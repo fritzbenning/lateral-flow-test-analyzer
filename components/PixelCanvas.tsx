@@ -17,7 +17,11 @@ const PixelCanvas: React.FC<PixelCanvasProps> = ({ pixelData }) => {
   const cellWidth = 10;
 
   const width = columnCount * cellWidth;
-  const height = rowCount * cellWidth;
+  let height = rowCount * cellWidth;
+
+  if (height > 616) {
+    height = 616;
+  }
 
   const canvasRef = useRef<HTMLDivElement>(null);
 

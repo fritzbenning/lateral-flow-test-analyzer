@@ -5,6 +5,7 @@ import { TableOfContents } from "@/components/ui/TableOfContents";
 import { TagLine } from "@/components/ui/TagLine";
 import { Mail, Scan } from "lucide-react";
 import { HideOnMobile } from "@/components/ui/HideOnMobile";
+import exampleImage from "@/assets/images/lateral-flow-test-example.jpg";
 
 import NextLink from "next/link";
 import { InfoCard } from "@/components/ui/InfoCard";
@@ -14,6 +15,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/Accordion";
+import Image from "next/image";
 
 export default function Home() {
   return (
@@ -58,6 +60,20 @@ export default function Home() {
             Then upload the image here to the Lateral Flow Test Analyzer and you will receive the
             result in just a few seconds.
           </p>
+
+          <Card className="my-8 flex flex-col gap-4 rounded-lg bg-slate-50 px-6 pb-6 pt-4">
+            <strong className="leading-normal">
+              This is how you should position the lateral flow test in the image:
+            </strong>
+            <Image
+              src={exampleImage}
+              alt="Lateral flow test example"
+              width={1680}
+              height={1260}
+              className="m-0 rounded-lg"
+            />
+          </Card>
+
           <p>
             You can then display the analyzed image information in a chart. You also have the option
             of downloading the result as an Excel file for further processing.
