@@ -1,24 +1,24 @@
 "use client";
 
-import { forwardRef } from "react";
-import * as TabsPrimitive from "@radix-ui/react-tabs";
-
+import { forwardRef, ComponentPropsWithoutRef, ElementRef } from "react";
+import { Root, List, Trigger, Content } from "@radix-ui/react-tabs";
 import { cn } from "@/utils/helpers";
 
-type TabsListProps = React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>;
-type TabsListElement = React.ElementRef<typeof TabsPrimitive.List>;
+// Types
+type TabsListProps = ComponentPropsWithoutRef<typeof List>;
+type TabsListElement = ElementRef<typeof List>;
 
-type TabsTriggerProps = React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>;
-type TabsTriggerElement = React.ElementRef<typeof TabsPrimitive.Trigger>;
+type TabsTriggerProps = ComponentPropsWithoutRef<typeof Trigger>;
+type TabsTriggerElement = ElementRef<typeof Trigger>;
 
-type TabsContentProps = React.ComponentPropsWithoutRef<typeof TabsPrimitive.Content>;
-type TabsContentElement = React.ElementRef<typeof TabsPrimitive.Content>;
+type TabsContentProps = ComponentPropsWithoutRef<typeof Content>;
+type TabsContentElement = ElementRef<typeof Content>;
 
 // Components
-const Tabs = TabsPrimitive.Root;
+const Tabs = Root;
 
 const TabsList = forwardRef<TabsListElement, TabsListProps>(({ className, ...props }, ref) => (
-  <TabsPrimitive.List
+  <List
     ref={ref}
     className={cn(
       "inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground",
@@ -27,11 +27,11 @@ const TabsList = forwardRef<TabsListElement, TabsListProps>(({ className, ...pro
     {...props}
   />
 ));
-TabsList.displayName = TabsPrimitive.List.displayName;
+TabsList.displayName = List.displayName;
 
 const TabsTrigger = forwardRef<TabsTriggerElement, TabsTriggerProps>(
   ({ className, ...props }, ref) => (
-    <TabsPrimitive.Trigger
+    <Trigger
       ref={ref}
       className={cn(
         "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm",
@@ -41,11 +41,11 @@ const TabsTrigger = forwardRef<TabsTriggerElement, TabsTriggerProps>(
     />
   ),
 );
-TabsTrigger.displayName = TabsPrimitive.Trigger.displayName;
+TabsTrigger.displayName = Trigger.displayName;
 
 const TabsContent = forwardRef<TabsContentElement, TabsContentProps>(
   ({ className, ...props }, ref) => (
-    <TabsPrimitive.Content
+    <Content
       ref={ref}
       className={cn(
         "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
@@ -55,6 +55,6 @@ const TabsContent = forwardRef<TabsContentElement, TabsContentProps>(
     />
   ),
 );
-TabsContent.displayName = TabsPrimitive.Content.displayName;
+TabsContent.displayName = Content.displayName;
 
 export { Tabs, TabsList, TabsTrigger, TabsContent };
