@@ -28,7 +28,7 @@ export const metadata: Metadata = {
       "With our trained neural network, we can analyse your lateral flow test in just one click. Learn more!",
     images: [
       {
-        url: "/thumbnail/lateral-flow-test-analyzer-thumbnail.jpg",
+        url: `${process.env.NEXT_PUBLIC_BASE_URL}/thumbnail/lateral-flow-test-analyzer-thumbnail.jpg`,
         width: 1200,
         height: 630,
         alt: "Lateral Flow Test Analyzer Preview",
@@ -40,7 +40,9 @@ export const metadata: Metadata = {
     title: "Lateral Flow Test Analyzer - How it works",
     description:
       "With our trained neural network, we can analyse your lateral flow test in just one click. Learn more!",
-    images: ["/thumbnail/og-image.png"],
+    images: [
+      `${process.env.NEXT_PUBLIC_BASE_URL}/thumbnail/lateral-flow-test-analyzer-thumbnail.jpg`,
+    ],
   },
 };
 
