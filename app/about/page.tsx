@@ -28,7 +28,7 @@ export const metadata: Metadata = {
       "With our trained neural network, we can analyse your lateral flow test in just one click. Learn more!",
     images: [
       {
-        url: "/thumbnail/og-image.png",
+        url: "/thumbnail/lateral-flow-test-example.jpg",
         width: 1200,
         height: 630,
         alt: "Lateral Flow Test Analyzer Preview",
