@@ -22,7 +22,7 @@ export default function Home() {
     <div className="mx-auto flex flex-col gap-4 px-4 py-4 sm:gap-6 md:py-8 lg:gap-8">
       <Header />
       <Card className="relative flex max-w-none items-start gap-4 p-6 sm:p-10 lg:max-w-none lg:p-14">
-        <HideOnMobile className="w-1/4 shrink-0">
+        <HideOnMobile className="sticky top-10 mt-9 w-1/4 shrink-0">
           <TableOfContents />
         </HideOnMobile>
         <article className="prose pb-2 sm:pb-4">

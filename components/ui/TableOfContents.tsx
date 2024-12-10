@@ -60,32 +60,30 @@ export function TableOfContents() {
   };
 
   return (
-    <nav className="sticky top-12">
-      <ul className="m-0 list-none space-y-2 ps-0">
-        {items.map((item) => (
-          <Fade
-            key={item.id}
-            className={cn("group m-0 flex items-center gap-3 p-0 transition-colors duration-200")}
+    <ul className="m-0 list-none space-y-2 ps-0">
+      {items.map((item) => (
+        <Fade
+          key={item.id}
+          className={cn("group m-0 flex items-center gap-3 p-0 transition-colors duration-200")}
+        >
+          <span
+            className={cn(
+              "h-px w-4 origin-left transition-colors transition-transform group-hover:scale-x-125",
+              activeId === item.id ? "bg-primary" : "bg-muted-foreground",
+              "group-hover:bg-red-500",
+            )}
+          />
+          <button
+            onClick={() => handleClick(item.id)}
+            className={cn(
+              "text-left text-sm transition-all group-hover:translate-x-1 group-hover:text-red-500",
+              activeId === item.id ? "font-medium text-primary" : "text-muted-foreground",
+            )}
           >
-            <span
-              className={cn(
-                "h-px w-4 origin-left transition-colors transition-transform group-hover:scale-x-125",
-                activeId === item.id ? "bg-primary" : "bg-muted-foreground",
-                "group-hover:bg-red-500",
-              )}
-            />
-            <button
-              onClick={() => handleClick(item.id)}
-              className={cn(
-                "text-left text-sm transition-all group-hover:translate-x-1 group-hover:text-red-500",
-                activeId === item.id ? "font-medium text-primary" : "text-muted-foreground",
-              )}
-            >
-              {item.text}
-            </button>
-          </Fade>
-        ))}
-      </ul>
-    </nav>
+            {item.text}
+          </button>
+        </Fade>
+      ))}
+    </ul>
   );
 }
