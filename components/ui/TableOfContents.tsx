@@ -60,7 +60,7 @@ export function TableOfContents() {
   };
 
   return (
-    <nav className="sticky top-12 w-1/4 shrink-0">
+    <nav className="sticky top-12">
       <ul className="m-0 list-none space-y-2 ps-0">
         {items.map((item) => (
           <Fade

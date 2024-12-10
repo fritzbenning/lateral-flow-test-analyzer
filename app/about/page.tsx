@@ -4,6 +4,8 @@ import { Card } from "@/components/ui/Card";
 import { TableOfContents } from "@/components/ui/TableOfContents";
 import { TagLine } from "@/components/ui/TagLine";
 import { Mail, Scan } from "lucide-react";
+import { HideOnMobile } from "@/components/ui/HideOnMobile";
+
 import NextLink from "next/link";
 import { InfoCard } from "@/components/ui/InfoCard";
 import {
@@ -17,8 +19,10 @@ export default function Home() {
   return (
     <div className="mx-auto flex flex-col gap-4 px-4 py-4 sm:gap-6 md:py-8 lg:gap-8">
       <Header />
-      <Card className="prose-sm relative flex max-w-none items-start gap-4 p-10 sm:p-12 lg:max-w-none lg:p-14">
-        <TableOfContents />
+      <Card className="prose-sm relative flex max-w-none items-start gap-4 p-6 sm:p-10 lg:max-w-none lg:p-14">
+        <HideOnMobile className="w-1/4 shrink-0">
+          <TableOfContents />
+        </HideOnMobile>
         <article className="prose-sm pb-2 lg:prose sm:pb-4">
           <TagLine>How it works</TagLine>
           <h1>Lateral Flow Test Analyzer</h1>
@@ -121,9 +125,9 @@ export default function Home() {
               <AccordionContent>
                 Yes, in the beta phase of the Lateral Flow Test Analyzer, we use{" "}
                 <a href="https://roboflow.com/" target="_blank">
-                  Roboflow
-                </a>
-                's infrastructure in the EU to analyze the test image with our AI model.
+                  Roboflow&apos;s
+                </a>{" "}
+                infrastructure in the EU to analyze the test image with our AI model.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-2">
