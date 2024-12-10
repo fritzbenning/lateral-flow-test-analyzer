@@ -19,11 +19,11 @@ export default function Home() {
   return (
     <div className="mx-auto flex flex-col gap-4 px-4 py-4 sm:gap-6 md:py-8 lg:gap-8">
       <Header />
-      <Card className="prose-sm relative flex max-w-none items-start gap-4 p-6 sm:p-10 lg:max-w-none lg:p-14">
+      <Card className="relative flex max-w-none items-start gap-4 p-6 sm:p-10 lg:max-w-none lg:p-14">
         <HideOnMobile className="w-1/4 shrink-0">
           <TableOfContents />
         </HideOnMobile>
-        <article className="prose-sm pb-2 lg:prose sm:pb-4">
+        <article className="prose pb-2 sm:pb-4">
           <TagLine>How it works</TagLine>
           <h1>Lateral Flow Test Analyzer</h1>
           <p>
