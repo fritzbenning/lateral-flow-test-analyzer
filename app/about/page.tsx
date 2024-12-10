@@ -65,13 +65,7 @@ export default function Home() {
             <strong className="leading-normal">
               This is how you should position the lateral flow test in the image:
             </strong>
-            <Image
-              src={exampleImage}
-              alt="Lateral flow test example"
-              width={1680}
-              height={1260}
-              className="m-0 rounded-lg"
-            />
+            <Image src={exampleImage} alt="Lateral flow test example" className="m-0 rounded-lg" />
           </Card>
 
           <p>
