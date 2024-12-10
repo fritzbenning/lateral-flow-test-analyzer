@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -16,6 +17,32 @@ import {
   AccordionTrigger,
 } from "@/components/ui/Accordion";
 import Image from "next/image";
+
+export const metadata: Metadata = {
+  title: "Lateral Flow Test Analyzer - How it works",
+  description:
+    "With our trained neural network, we can analyse your lateral flow test in just one click. Learn more!",
+  openGraph: {
+    title: "Lateral Flow Test Analyzer - How it works",
+    description:
+      "With our trained neural network, we can analyse your lateral flow test in just one click. Learn more!",
+    images: [
+      {
+        url: "/thumbnail/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Lateral Flow Test Analyzer Preview",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Lateral Flow Test Analyzer - How it works",
+    description:
+      "With our trained neural network, we can analyse your lateral flow test in just one click. Learn more!",
+    images: ["/thumbnail/og-image.png"],
+  },
+};
 
 export default function Home() {
   return (
