@@ -1,6 +1,16 @@
 "use client";
 
-import * as React from "react";
+import {
+  createContext,
+  useContext,
+  useId,
+  useMemo,
+  forwardRef,
+  ComponentProps,
+  ReactNode,
+  ComponentType,
+  CSSProperties,
+} from "react";
 import * as RechartsPrimitive from "recharts";
 
 import { cn } from "@/utils/helpers";
@@ -10,8 +20,8 @@ const THEMES = { light: "", dark: ".dark" } as const;
 
 export type ChartConfig = {
   [k in string]: {
-    label?: React.ReactNode;
-    icon?: React.ComponentType;
+    label?: ReactNode;
+    icon?: ComponentType;
   } & (
     | { color?: string; theme?: never }
     | { color?: never; theme: Record<keyof typeof THEMES, string> }
@@ -22,10 +32,30 @@ type ChartContextProps = {
   config: ChartConfig;
 };
 
-const ChartContext = React.createContext<ChartContextProps | null>(null);
+type ChartContainerProps = ComponentProps<"div"> & {
+  config: ChartConfig;
+  children: ComponentProps<typeof RechartsPrimitive.ResponsiveContainer>["children"];
+};
+
+type ChartTooltipContentProps = ComponentProps<typeof RechartsPrimitive.Tooltip> &
+  ComponentProps<"div"> & {
+    hideLabel?: boolean;
+    hideIndicator?: boolean;
+    indicator?: "line" | "dot" | "dashed";
+    nameKey?: string;
+    labelKey?: string;
+  };
+
+type ChartLegendContentProps = ComponentProps<"div"> &
+  Pick<RechartsPrimitive.LegendProps, "payload" | "verticalAlign"> & {
+    hideIcon?: boolean;
+    nameKey?: string;
+  };
+
+const ChartContext = createContext<ChartContextProps | null>(null);
 
 function useChart() {
-  const context = React.useContext(ChartContext);
+  const context = useContext(ChartContext);
 
   if (!context) {
     throw new Error("useChart must be used within a <ChartContainer />");
@@ -34,43 +64,33 @@ function useChart() {
   return context;
 }
 
-const ChartContainer = React.forwardRef<
-  HTMLDivElement,
-  React.ComponentProps<"div"> & {
-    config: ChartConfig;
-    children: React.ComponentProps<
-      typeof RechartsPrimitive.ResponsiveContainer
-    >["children"];
-  }
->(({ id, className, children, config, ...props }, ref) => {
-  const uniqueId = React.useId();
-  const chartId = `chart-${id || uniqueId.replace(/:/g, "")}`;
+const ChartContainer = forwardRef<HTMLDivElement, ChartContainerProps>(
+  ({ id, className, children, config, ...props }, ref) => {
+    const uniqueId = useId();
+    const chartId = `chart-${id || uniqueId.replace(/:/g, "")}`;
 
-  return (
-    <ChartContext.Provider value={{ config }}>
-      <div
-        data-chart={chartId}
-        ref={ref}
-        className={cn(
-          "flex aspect-video justify-center text-xs [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-none [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-sector]:outline-none [&_.recharts-surface]:outline-none",
-          className,
-        )}
-        {...props}
-      >
-        <ChartStyle id={chartId} config={config} />
-        <RechartsPrimitive.ResponsiveContainer>
-          {children}
-        </RechartsPrimitive.ResponsiveContainer>
-      </div>
-    </ChartContext.Provider>
-  );
-});
-ChartContainer.displayName = "Chart";
+    return (
+      <ChartContext.Provider value={{ config }}>
+        <div
+          data-chart={chartId}
+          ref={ref}
+          className={cn(
+            "flex aspect-video justify-center text-xs [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-none [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-sector]:outline-none [&_.recharts-surface]:outline-none",
+            className,
+          )}
+          {...props}
+        >
+          <ChartStyle id={chartId} config={config} />
+          <RechartsPrimitive.ResponsiveContainer>{children}</RechartsPrimitive.ResponsiveContainer>
+        </div>
+      </ChartContext.Provider>
+    );
+  },
+);
+ChartContainer.displayName = "ChartContainer";
 
 const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
-  const colorConfig = Object.entries(config).filter(
-    ([_, config]) => config.theme || config.color,
-  );
+  const colorConfig = Object.entries(config).filter(([_, config]) => config.theme || config.color);
 
   if (!colorConfig.length) {
     return null;
@@ -85,11 +105,10 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
 ${prefix} [data-chart=${id}] {
 ${colorConfig
   .map(([key, itemConfig]) => {
-    const color =
-      itemConfig.theme?.[theme as keyof typeof itemConfig.theme] ||
-      itemConfig.color;
+    const color = itemConfig.theme?.[theme as keyof typeof itemConfig.theme] || itemConfig.color;
     return color ? `  --color-${key}: ${color};` : null;
   })
+  .filter(Boolean)
   .join("\n")}
 }
 `,
@@ -102,17 +121,7 @@ ${colorConfig
 
 const ChartTooltip = RechartsPrimitive.Tooltip;
 
-const ChartTooltipContent = React.forwardRef<
-  HTMLDivElement,
-  React.ComponentProps<typeof RechartsPrimitive.Tooltip> &
-    React.ComponentProps<"div"> & {
-      hideLabel?: boolean;
-      hideIndicator?: boolean;
-      indicator?: "line" | "dot" | "dashed";
-      nameKey?: string;
-      labelKey?: string;
-    }
->(
+const ChartTooltipContent = forwardRef<HTMLDivElement, ChartTooltipContentProps>(
   (
     {
       active,
@@ -133,7 +142,7 @@ const ChartTooltipContent = React.forwardRef<
   ) => {
     const { config } = useChart();
 
-    const tooltipLabel = React.useMemo(() => {
+    const tooltipLabel = useMemo(() => {
       if (hideLabel || !payload?.length) {
         return null;
       }
@@ -148,9 +157,7 @@ const ChartTooltipContent = React.forwardRef<
 
       if (labelFormatter) {
         return (
-          <div className={cn("font-medium", labelClassName)}>
-            {labelFormatter(value, payload)}
-          </div>
+          <div className={cn("font-medium", labelClassName)}>{labelFormatter(value, payload)}</div>
         );
       }
 
@@ -159,15 +166,7 @@ const ChartTooltipContent = React.forwardRef<
       }
 
       return <div className={cn("font-medium", labelClassName)}>{value}</div>;
-    }, [
-      label,
-      labelFormatter,
-      payload,
-      hideLabel,
-      labelClassName,
-      config,
-      labelKey,
-    ]);
+    }, [label, labelFormatter, payload, hideLabel, labelClassName, config, labelKey]);
 
     if (!active || !payload?.length) {
       return null;
@@ -221,7 +220,7 @@ const ChartTooltipContent = React.forwardRef<
                             {
                               "--color-bg": indicatorColor,
                               "--color-border": indicatorColor,
-                            } as React.CSSProperties
+                            } as CSSProperties
                           }
                         />
                       )
@@ -254,22 +253,12 @@ const ChartTooltipContent = React.forwardRef<
     );
   },
 );
-ChartTooltipContent.displayName = "ChartTooltip";
+ChartTooltipContent.displayName = "ChartTooltipContent";
 
 const ChartLegend = RechartsPrimitive.Legend;
 
-const ChartLegendContent = React.forwardRef<
-  HTMLDivElement,
-  React.ComponentProps<"div"> &
-    Pick<RechartsPrimitive.LegendProps, "payload" | "verticalAlign"> & {
-      hideIcon?: boolean;
-      nameKey?: string;
-    }
->(
-  (
-    { className, hideIcon = false, payload, verticalAlign = "bottom", nameKey },
-    ref,
-  ) => {
+const ChartLegendContent = forwardRef<HTMLDivElement, ChartLegendContentProps>(
+  ({ className, hideIcon = false, payload, verticalAlign = "bottom", nameKey }, ref) => {
     const { config } = useChart();
 
     if (!payload?.length) {
@@ -314,45 +303,32 @@ const ChartLegendContent = React.forwardRef<
     );
   },
 );
-ChartLegendContent.displayName = "ChartLegend";
+ChartLegendContent.displayName = "ChartLegendContent";
 
 // Helper to extract item config from a payload.
-function getPayloadConfigFromPayload(
-  config: ChartConfig,
-  payload: unknown,
-  key: string,
-) {
+function getPayloadConfigFromPayload(config: ChartConfig, payload: unknown, key: string) {
   if (typeof payload !== "object" || payload === null) {
     return undefined;
   }
 
   const payloadPayload =
-    "payload" in payload &&
-    typeof payload.payload === "object" &&
-    payload.payload !== null
+    "payload" in payload && typeof payload.payload === "object" && payload.payload !== null
       ? payload.payload
       : undefined;
 
   let configLabelKey: string = key;
 
-  if (
-    key in payload &&
-    typeof payload[key as keyof typeof payload] === "string"
-  ) {
+  if (key in payload && typeof payload[key as keyof typeof payload] === "string") {
     configLabelKey = payload[key as keyof typeof payload] as string;
   } else if (
     payloadPayload &&
     key in payloadPayload &&
     typeof payloadPayload[key as keyof typeof payloadPayload] === "string"
   ) {
-    configLabelKey = payloadPayload[
-      key as keyof typeof payloadPayload
-    ] as string;
+    configLabelKey = payloadPayload[key as keyof typeof payloadPayload] as string;
   }
 
-  return configLabelKey in config
-    ? config[configLabelKey]
-    : config[key as keyof typeof config];
+  return configLabelKey in config ? config[configLabelKey] : config[key as keyof typeof config];
 }
 
 export {
