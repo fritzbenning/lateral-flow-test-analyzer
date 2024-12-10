@@ -9,13 +9,13 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Lateral Flow Test Analyzer - Scan your test!",
+  title: "Lateral Flow Test Analyzer - How it works",
   description:
-    "Analyse your lateral flow test in seconds. Manual analysis is a thing of the past. Easy and free of charge!",
+    "With our trained neural network, we can analyse your lateral flow test in just one click. Learn more!",
   openGraph: {
-    title: "Lateral Flow Test Analyzer - Scan your test!",
+    title: "Lateral Flow Test Analyzer - How it works",
     description:
-      "Analyse your lateral flow test in seconds. Manual analysis is a thing of the past. Easy and free of charge!",
+      "With our trained neural network, we can analyse your lateral flow test in just one click. Learn more!",
     images: [
       {
         url: "/thumbnail/og-image.png",
@@ -27,9 +27,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Lateral Flow Test Analyzer - Scan your test!",
+    title: "Lateral Flow Test Analyzer - How it works",
     description:
-      "Analyse your lateral flow test in seconds. Manual analysis is a thing of the past. Easy and free of charge!",
+      "With our trained neural network, we can analyse your lateral flow test in just one click. Learn more!",
     images: ["/thumbnail/og-image.png"],
   },
   icons: {
