@@ -18,7 +18,7 @@ export const metadata: Metadata = {
       "Analyse your lateral flow test in seconds. Manual analysis is a thing of the past. Easy and free of charge!",
     images: [
       {
-        url: "/thumbnail/lateral-flow-test-example.jpg",
+        url: "/thumbnail/lateral-flow-test-analyzer-thumbnail.jpg",
         width: 1200,
         height: 630,
         alt: "Lateral Flow Test Analyzer Preview",
