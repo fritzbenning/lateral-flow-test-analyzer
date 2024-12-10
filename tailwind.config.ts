@@ -11,16 +11,16 @@ const config: Config = {
   ],
   theme: {
     fontSize: {
-      xs: "pxToRem(12)",
-      sm: "pxToRem(14)",
-      md: "pxToRem(15)",
-      base: "pxToRem(16)",
-      lg: "pxToRem(17)",
-      xl: "pxToRem(20)",
-      "2xl": "pxToRem(24)",
-      "3xl": "pxToRem(30)",
-      "4xl": "pxToRem(36)",
-      "5xl": "pxToRem(48)",
+      xs: pxToRem(12),
+      sm: pxToRem(14),
+      md: pxToRem(15),
+      base: pxToRem(16),
+      lg: pxToRem(17),
+      xl: pxToRem(20),
+      "2xl": pxToRem(24),
+      "3xl": pxToRem(30),
+      "4xl": pxToRem(36),
+      "5xl": pxToRem(48),
     },
     extend: {
       backgroundImage: {
